@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static MapGenerator.MapFragment;
 using Random = UnityEngine.Random;
 
 public class MapGenerator : MonoBehaviour
@@ -21,11 +22,11 @@ public class MapGenerator : MonoBehaviour
         public float mapFragmentSize;
         public GameObject mapFragmentObject;
         public int amountOfTilesOnFragment;
-        public Tile tile;
-        public List<Tile> tiles;
+        public TileClass tile;
+        public List<List<TileClass>> tiles;
         public const float tileHeigth = 0.01f;
 
-        public MapFragment(float mapFragmentSize, GameObject mapFragmentObject, int amountOfTilesOnFragment, Tile tile, List<Tile> tiles)
+        public MapFragment(float mapFragmentSize, GameObject mapFragmentObject, int amountOfTilesOnFragment, TileClass tile, List<List<TileClass>> tiles)
         {
             this.mapFragmentSize = mapFragmentSize;
             this.mapFragmentObject = mapFragmentObject;
@@ -39,13 +40,13 @@ public class MapGenerator : MonoBehaviour
         }
 
         [Serializable]
-        public class Tile
+        public class TileClass
         {
-            public GameObject tileObject;
+            public Tile tileScript;
 
-            public Tile(GameObject tileObject)
+            public TileClass(Tile tileScript)
             {
-                this.tileObject = tileObject;
+                this.tileScript = tileScript;
             }
         }
 
@@ -58,10 +59,43 @@ public class MapGenerator : MonoBehaviour
         {
             float tileSize = mapFragmentSize / amountOfTilesOnFragment;
 
-            tile.tileObject.transform.localScale = new Vector3(tileSize, 1, tileSize);
+            tile.tileScript.gameObject.transform.localScale = new Vector3(tileSize, 1, tileSize);
         }
 
+        public MapFragment GenerateMapFragment(Vector3 positionToSpawn, MapFragment mapFragmentPrefab, Transform transform)
+        {
+            MapFragment mapFragment = new MapFragment(mapFragmentPrefab.mapFragmentSize, mapFragmentPrefab.mapFragmentObject, mapFragmentPrefab.amountOfTilesOnFragment, mapFragmentPrefab.tile, new List<List<TileClass>>());
 
+            GameObject mapFragmentObject = Instantiate(mapFragment.mapFragmentObject, positionToSpawn, transform.rotation);
+            mapFragment.mapFragmentObject = mapFragmentObject;
+
+            GenerateTilesOnMapFragment(mapFragment);
+
+            return mapFragment;
+        }
+
+        public void GenerateTilesOnMapFragment(MapFragment mapFragment)
+        {
+            float halfOfTileSize = mapFragment.tile.tileScript.gameObject.GetComponent<MeshRenderer>().bounds.size.x / 2;
+            float halfOfFragmentSize = mapFragment.mapFragmentObject.GetComponent<MeshRenderer>().bounds.size.x / 2;
+            Vector3 positionOfFragment = mapFragment.mapFragmentObject.transform.position;
+
+            for (float x = positionOfFragment.x - halfOfFragmentSize + halfOfTileSize; x <= positionOfFragment.x + halfOfFragmentSize - halfOfTileSize; x += halfOfTileSize * 2)
+            {
+                List<TileClass> tileRow = new List<TileClass>();
+
+                for (float z = positionOfFragment.z - halfOfFragmentSize + halfOfTileSize; z <= positionOfFragment.z + halfOfFragmentSize - halfOfTileSize; z += halfOfTileSize * 2)
+                {
+                    Tile tileScript = Instantiate(mapFragment.tile.tileScript, new Vector3(x, mapFragment.mapFragmentObject.transform.position.y + tileHeigth, z), mapFragment.mapFragmentObject.transform.rotation);
+                    tileScript.transform.parent = mapFragment.mapFragmentObject.transform;
+
+                    TileClass tile = new TileClass(tileScript);
+                    tileRow.Add(tile);
+                }
+
+                mapFragment.tiles.Add(tileRow);
+            }
+        }
     }
 
     [Serializable]
@@ -80,8 +114,8 @@ public class MapGenerator : MonoBehaviour
                 List<float> xRow = new List<float>();
                 for (int x = 0; x < size; x++)
                 {
-                    float xCoord = (float)x / size * scale + Random.Range(0f, 100f);
-                    float yCoord = (float)y / size * scale + Random.Range(0f, 100f);
+                    float xCoord = (float)x / size * scale;
+                    float yCoord = (float)y / size * scale;
                     float sample = Mathf.PerlinNoise(xCoord, yCoord);
 
                     xRow.Add(sample);
@@ -90,45 +124,25 @@ public class MapGenerator : MonoBehaviour
             }
 
         }
-
-    }
-
-
-
-    public void GenerateMapFragment(Vector3 positionToSpawn)
-    {
-        MapFragment mapFragment = new MapFragment(mapFragmentPrefab.mapFragmentSize, mapFragmentPrefab.mapFragmentObject, mapFragmentPrefab.amountOfTilesOnFragment, mapFragmentPrefab.tile, new List<MapFragment.Tile>());
-        
-        GameObject mapFragmentObject = Instantiate(mapFragment.mapFragmentObject,positionToSpawn,transform.rotation);
-        mapFragment.mapFragmentObject = mapFragmentObject;
-
-        GenerateTilesOnMapFragment(mapFragment);
-
-        mapFragments.Add(mapFragment);
-    }
-
-    public void GenerateTilesOnMapFragment(MapFragment mapFragment)
-    {
-        float halfOfTileSize = mapFragment.tile.tileObject.GetComponent<MeshRenderer>().bounds.size.x/2;
-        float halfOfFragmentSize = mapFragment.mapFragmentObject.GetComponent<MeshRenderer>().bounds.size.x / 2;
-        Vector3 positionOfFragment = mapFragment.mapFragmentObject.transform.position;
-
-        for (float x = positionOfFragment.x - halfOfFragmentSize + halfOfTileSize; x <= positionOfFragment.x + halfOfFragmentSize - halfOfTileSize; x += halfOfTileSize * 2)
+        public void SetTileTypes(List<List<TileClass>> tiles)
         {
-            for(float z = positionOfFragment.z - halfOfFragmentSize + halfOfTileSize; z <= positionOfFragment.z + halfOfFragmentSize - halfOfTileSize; z += halfOfTileSize * 2)
+            for (int i = 0; i < tiles.Count; i++)
             {
-                GameObject tileObject = Instantiate(mapFragment.tile.tileObject, new Vector3(x, mapFragment.mapFragmentObject.transform.position.y + MapFragment.tileHeigth,z), mapFragment.mapFragmentObject.transform.rotation);
-                tileObject.transform.parent = mapFragment.mapFragmentObject.transform;
-
-                MapFragment.Tile tile = new MapFragment.Tile(tileObject);
-                mapFragment.tiles.Add(tile);
+                for (int y = 0; y < tiles.Count; y++)
+                {
+                    tiles[i][y].tileScript.ChangeTileType(noiseSamples[i][y]);
+                }
             }
         }
+
     }
 
     private void Start()
     {
         noise.GenerateNoiseSamples();
-        GenerateMapFragment(Vector3.zero);
+
+        MapFragment fragment = mapFragmentPrefab.GenerateMapFragment(Vector3.zero, mapFragmentPrefab, transform);
+        mapFragments.Add(fragment);
+        noise.SetTileTypes(fragment.tiles);
     }
 }

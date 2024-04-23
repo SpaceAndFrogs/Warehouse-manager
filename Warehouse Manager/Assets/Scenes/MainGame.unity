@@ -428,6 +428,9 @@ MonoBehaviour:
         type: 3}
     tiles: []
   mapFragments: []
+  noise:
+    size: 10
+    scale: 20
 --- !u!4 &671528877
 Transform:
   m_ObjectHideFlags: 0

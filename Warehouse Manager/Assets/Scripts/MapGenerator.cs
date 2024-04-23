@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class MapGenerator : MonoBehaviour
     MapFragment mapFragmentPrefab;
     [SerializeField]
     List<MapFragment> mapFragments;
+    [SerializeField]
+    Noise noise;
 
     [Serializable]
     public class MapFragment
@@ -21,7 +25,7 @@ public class MapGenerator : MonoBehaviour
         public List<Tile> tiles;
         public const float tileHeigth = 0.01f;
 
-        public MapFragment(float mapFragmentSize, GameObject mapFragmentObject, int amountOfTilesOnFragment, Tile tile, List<Tile> tiles) 
+        public MapFragment(float mapFragmentSize, GameObject mapFragmentObject, int amountOfTilesOnFragment, Tile tile, List<Tile> tiles)
         {
             this.mapFragmentSize = mapFragmentSize;
             this.mapFragmentObject = mapFragmentObject;
@@ -54,11 +58,42 @@ public class MapGenerator : MonoBehaviour
         {
             float tileSize = mapFragmentSize / amountOfTilesOnFragment;
 
-            tile.tileObject.transform.localScale= new Vector3(tileSize, 1, tileSize);
+            tile.tileObject.transform.localScale = new Vector3(tileSize, 1, tileSize);
         }
 
-        
+
     }
+
+    [Serializable]
+    public class Noise
+    {
+        public int size;
+        public float scale;
+        public List<List<float>> noiseSamples = new List<List<float>>();
+
+        public void GenerateNoiseSamples()
+        {
+            noiseSamples.Clear();
+
+            for (int y = 0; y < size; y++)
+            {
+                List<float> xRow = new List<float>();
+                for (int x = 0; x < size; x++)
+                {
+                    float xCoord = (float)x / size * scale + Random.Range(0f, 100f);
+                    float yCoord = (float)y / size * scale + Random.Range(0f, 100f);
+                    float sample = Mathf.PerlinNoise(xCoord, yCoord);
+
+                    xRow.Add(sample);
+                }
+                noiseSamples.Add(xRow);
+            }
+
+        }
+
+    }
+
+
 
     public void GenerateMapFragment(Vector3 positionToSpawn)
     {
@@ -93,6 +128,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Start()
     {
+        noise.GenerateNoiseSamples();
         GenerateMapFragment(Vector3.zero);
     }
 }

@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using static TileTypes;
-using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "TileType", menuName = "Tile Types", order = 1)]
 public class TileTypes : ScriptableObject

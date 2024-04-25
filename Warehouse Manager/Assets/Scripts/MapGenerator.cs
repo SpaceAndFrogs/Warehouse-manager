@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,6 +61,8 @@ public class MapGenerator : MonoBehaviour
             {
                 directionOfButton = direction;
                 this.button = button;
+                TextMeshProUGUI textMesh = button.gameObject.GetComponentInChildren<TextMeshProUGUI>();
+                textMesh.text = direction.ToString();
             }
         }
 

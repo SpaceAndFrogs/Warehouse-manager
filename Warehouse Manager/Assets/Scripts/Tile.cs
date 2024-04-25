@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
@@ -19,6 +18,16 @@ public class Tile : MonoBehaviour
                 
                 material.color = tileTypes.tileTypesRanges[i].color;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Button button = other.GetComponent<Button>();
+
+        if (button != null)
+        {
+            other.gameObject.SetActive(false);
         }
     }
 }

@@ -1,0 +1,68 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PathFinder : MonoBehaviour
+{
+    public static PathFinder instance;
+
+    void Awake()
+    {
+        if(instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+
+        instance = this;
+    }
+
+    public Tile[] FindPath(Tile startTile, Tile endTile)
+    {
+        List<Tile> openList = new List<Tile>();
+        List<Tile> closeList = new List<Tile>();
+
+        openList.Add(startTile);
+
+        while(openList.Count > 0)
+        {
+            Tile currentTile = openList[0];
+
+            for(int i = 1; i < openList.Count; i++)
+            {
+                if(openList[i].fCost < currentTile.fCost || openList[i].fCost == currentTile.fCost && openList[i].hCost < currentTile.hCost)
+                {
+                    currentTile = openList[i];
+                }
+            }
+
+            openList.Remove(currentTile);
+            closeList.Add(currentTile);
+
+            if(currentTile == endTile)
+            {
+                return closeList.ToArray();
+            }
+
+            foreach(Tile tile in currentTile.neighborTiles)
+            {
+                if (!tile.walkable || closeList.Contains(tile))
+                {
+                    continue;
+                }
+
+                float newMovementCostToNeighbour = currentTile.gCost + Vector3.Distance(currentTile.transform.position, tile.transform.position);
+
+                if(newMovementCostToNeighbour < tile.gCost || !openList.Contains(tile))
+                {
+                    tile.gCost = newMovementCostToNeighbour;
+                    tile.hCost = Vector3.Distance(endTile.transform.position, tile.transform.position);
+
+                    openList.Add(tile);
+                }
+            }
+        }
+
+        return closeList.ToArray();
+    }
+}

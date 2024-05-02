@@ -15,6 +15,7 @@ public class TileTypes : ScriptableObject
         public TileType tileType;
         public Vector2 tileRange;
         public Color color;
+        public bool walkable;
     }
 
 }

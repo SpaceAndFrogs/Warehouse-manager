@@ -13,6 +13,19 @@ public class Tile : MonoBehaviour
     [SerializeField]
     Rigidbody rB;
 
+    public bool walkable
+    {
+        get; private set;
+    }
+
+    public float gCost;
+    public float hCost;
+
+    public float fCost
+    {
+        get { return gCost + hCost; }
+    }
+
     public List<Tile> neighborTiles = new List<Tile>();
     public void ChangeTileType(float noiseSample)
     {
@@ -22,6 +35,7 @@ public class Tile : MonoBehaviour
             {
                 Material material = meshRenderer.material;
 
+                walkable = tileTypes.tileTypesRanges[i].walkable;
                 
                 material.color = tileTypes.tileTypesRanges[i].color;
             }

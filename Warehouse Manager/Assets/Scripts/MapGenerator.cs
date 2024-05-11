@@ -3,19 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-public delegate void MapGeneratorEventHandler(object sender, MapGeneratorEventArgs args);
-
-public class MapGeneratorEventArgs : EventArgs
-{
-    public List<MapGenerator.MapFragment> mapFragments = new List<MapGenerator.MapFragment>();
-    public float sizeOfTile;
-
-    public MapGeneratorEventArgs(List<MapGenerator.MapFragment> mapFragments, float sizeOfTile)
-    {
-        this.mapFragments = mapFragments;
-        this.sizeOfTile = sizeOfTile;
-    }
-}
 
 public class MapGenerator : MonoBehaviour
 {
@@ -25,8 +12,6 @@ public class MapGenerator : MonoBehaviour
     List<MapFragment> mapFragments;
     [SerializeField]
     Noise noise;
-
-    public event MapGeneratorEventHandler mapFragmentGenerated;
 
     public static MapGenerator instance { get; private set; }
 
@@ -239,9 +224,6 @@ public class MapGenerator : MonoBehaviour
 
         noise.SetTileTypes(mapFragments[mapFragments.Count - 1].tiles);
 
-        float halfOfTileSize = mapFragmentPrefab.tile.tileScript.gameObject.GetComponent<MeshRenderer>().bounds.size.x;
-
-        mapFragmentGenerated?.Invoke(this, new MapGeneratorEventArgs(mapFragments, halfOfTileSize));
     }
 
     public void GenerateTilesOnMapFragment()

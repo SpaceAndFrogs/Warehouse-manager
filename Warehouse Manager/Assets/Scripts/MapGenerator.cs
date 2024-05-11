@@ -107,7 +107,7 @@ public class MapGenerator : MonoBehaviour
             }
 
         }
-        public void SetTileTypes(List<List<MapFragment.TileClass>> tiles)
+        public void SetTileTypes(List<List<MapFragment.TileClass>> tiles, MapFragmentScript mapFragmentScript)
         {
             GenerateNoiseSamples();
 
@@ -118,6 +118,8 @@ public class MapGenerator : MonoBehaviour
                     tiles[i][y].tileScript.ChangeTileType(noiseSamples[i][y]);
                 }
             }
+
+            mapFragmentScript.ChangeFragmentTexture(noiseSamples);
         }
 
     }
@@ -222,15 +224,17 @@ public class MapGenerator : MonoBehaviour
 
         GenerateNewFragmentsButtons(mapFragmentPrefab);
 
-        noise.SetTileTypes(mapFragments[mapFragments.Count - 1].tiles);
+        MapFragmentScript mapFragmentScript = mapFragmentObject.GetComponent<MapFragmentScript>();  
+
+        noise.SetTileTypes(mapFragments[mapFragments.Count - 1].tiles, mapFragmentScript);
 
     }
 
     public void GenerateTilesOnMapFragment()
     {
         MapFragment mapFragment = mapFragments[mapFragments.Count - 1];
-        float halfOfTileSize = mapFragmentPrefab.tile.tileScript.gameObject.GetComponent<MeshRenderer>().bounds.size.x / 2;
         float halfOfFragmentSize = mapFragmentPrefab.mapFragmentObject.GetComponent<MeshRenderer>().bounds.size.x / 2;
+        float halfOfTileSize = halfOfFragmentSize * mapFragmentPrefab.tile.tileScript.transform.localScale.x;
         Vector3 positionOfFragment = mapFragment.mapFragmentObject.transform.position;
         float x = positionOfFragment.x - halfOfFragmentSize + halfOfTileSize;
         

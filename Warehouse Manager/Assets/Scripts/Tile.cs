@@ -9,8 +9,6 @@ public class Tile : MonoBehaviour
     [SerializeField]
     TileTypes tileTypes;
     [SerializeField]
-    MeshRenderer meshRenderer;
-    [SerializeField]
     Rigidbody rB;
 
     public bool walkable
@@ -33,11 +31,7 @@ public class Tile : MonoBehaviour
         {
             if(noiseSample >= tileTypes.tileTypesRanges[i].tileRange.x && noiseSample < tileTypes.tileTypesRanges[i].tileRange.y)
             {
-                Material material = meshRenderer.material;
-
                 walkable = tileTypes.tileTypesRanges[i].walkable;
-                
-                material.color = tileTypes.tileTypesRanges[i].color;
             }
         }
     }

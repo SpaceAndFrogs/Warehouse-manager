@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapFragmentScript : MonoBehaviour
 {
@@ -45,5 +46,15 @@ public class MapFragmentScript : MonoBehaviour
 
         material.mainTexture = texture;
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Button button = other.GetComponent<Button>();
+
+        if (button != null)
+        {
+            other.gameObject.SetActive(false);
+        }
     }
 }

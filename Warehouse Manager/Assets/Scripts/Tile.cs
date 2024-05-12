@@ -8,8 +8,6 @@ public class Tile : MonoBehaviour
 {
     [SerializeField]
     TileTypes tileTypes;
-    [SerializeField]
-    Rigidbody rB;
 
     public bool walkable
     {
@@ -25,6 +23,7 @@ public class Tile : MonoBehaviour
     }
 
     public List<Tile> neighborTiles = new List<Tile>();
+
     public void ChangeTileType(float noiseSample)
     {
         for(int i = 0;i<tileTypes.tileTypesRanges.Count;i++)
@@ -36,17 +35,6 @@ public class Tile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Button button = other.GetComponent<Button>();
-
-        if (button != null)
-        {
-            other.gameObject.SetActive(false);
-        }
-    }
-
-
     public void AddTileToNeighborTiles(Tile tile)
     {
         if(neighborTiles.Contains(tile)) 
@@ -54,16 +42,69 @@ public class Tile : MonoBehaviour
         neighborTiles.Add(tile);
     }
 
-    void OnCollisionStay(Collision collision)
+    private void Start()
     {
-        if (neighborTiles.Count == 8)
-        { return; }
+        CheckForNeighbours();
+    }
 
-        Tile hittedTile = collision.gameObject.GetComponent<Tile>();
+    void CheckForNeighbours()
+    {
+        RaycastHit hit;
 
-        if(hittedTile == null)
-        { return; }
+        if (Physics.Raycast(transform.position, Vector3.back, out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
 
-        AddTileToNeighborTiles(hittedTile);
+        if (Physics.Raycast(transform.position, Vector3.forward, out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
+
+        if (Physics.Raycast(transform.position, Vector3.left, out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
+
+        if (Physics.Raycast(transform.position, Vector3.right, out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
+
+        if (Physics.Raycast(transform.position, new Vector3(1, 0, 1), out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
+
+        if (Physics.Raycast(transform.position, new Vector3(1, 0, -1), out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
+
+        if (Physics.Raycast(transform.position, new Vector3(-1, 0, 1), out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
+
+        if (Physics.Raycast(transform.position, new Vector3(-1, 0, -1), out hit, Mathf.Infinity))
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            { AddTileToNeighborTiles(tile); }
+        }
     }
 }

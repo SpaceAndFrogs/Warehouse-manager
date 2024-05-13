@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour
@@ -104,22 +105,22 @@ public class MapGenerator : MonoBehaviour
                     xRow.Add(sample);
                 }
                 noiseSamples.Add(xRow);
+
             }
 
         }
-        public void SetTileTypes(List<List<MapFragment.TileClass>> tiles, MapFragmentScript mapFragmentScript)
+        public void SetTileTypes(List<List<MapFragment.TileClass>> tiles)
         {
-            GenerateNoiseSamples();
 
-            for (int i = 0; i < tiles.Count; i++)
-            {               
-                for (int y = 0; y < tiles.Count; y++)
+            for (int i = 0; i < noiseSamples.Count; i++)
+            {
+                for (int j = 0; j < noiseSamples.Count; j++)
                 {
-                    tiles[i][y].tileScript.ChangeTileType(noiseSamples[i][y]);
-                }
-            }
 
-            mapFragmentScript.ChangeFragmentTexture(noiseSamples);
+                    tiles[i][j].tileScript.ChangeTileType(noiseSamples[i][j]);
+
+                }
+            }            
         }
 
     }
@@ -220,13 +221,17 @@ public class MapGenerator : MonoBehaviour
 
         mapFragments.Add(mapFragment);
 
+        MapFragmentScript mapFragmentScript = mapFragmentObject.GetComponent<MapFragmentScript>();
+
+        noise.GenerateNoiseSamples();
+
+        mapFragmentScript.ChangeFragmentTexture(noise.noiseSamples);
+
         GenerateTilesOnMapFragment();
 
+        noise.SetTileTypes(mapFragments[mapFragments.Count - 1].tiles);
+
         GenerateNewFragmentsButtons(mapFragmentPrefab);
-
-        MapFragmentScript mapFragmentScript = mapFragmentObject.GetComponent<MapFragmentScript>();  
-
-        noise.SetTileTypes(mapFragments[mapFragments.Count - 1].tiles, mapFragmentScript);
 
     }
 
@@ -245,8 +250,7 @@ public class MapGenerator : MonoBehaviour
 
             for (int y = 0; y < mapFragment.amountOfTilesOnFragment; y++)
             {
-                Tile tileScript = Instantiate(mapFragment.tile.tileScript, new Vector3(x, mapFragment.mapFragmentObject.transform.position.y + mapFragment.tileHeigth, z), mapFragment.mapFragmentObject.transform.rotation);
-                tileScript.transform.parent = mapFragment.mapFragmentObject.transform;
+                Tile tileScript = Instantiate(mapFragment.tile.tileScript, new Vector3(x, mapFragment.mapFragmentObject.transform.position.y + mapFragment.tileHeigth, z), transform.rotation);
 
                 MapFragment.TileClass tile = new MapFragment.TileClass(tileScript);
                 tileRow.Add(tile);

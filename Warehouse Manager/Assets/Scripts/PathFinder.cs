@@ -30,7 +30,7 @@ public class PathFinder : MonoBehaviour
 
             for(int i = 1; i < openList.Count; i++)
             {
-                if(openList[i].fCost < currentTile.fCost || openList[i].fCost == currentTile.fCost && openList[i].hCost < currentTile.hCost)
+                if(openList[i].fCost < currentTile.fCost || (openList[i].fCost == currentTile.fCost && openList[i].hCost < currentTile.hCost))
                 {
                     currentTile = openList[i];
                 }
@@ -40,8 +40,8 @@ public class PathFinder : MonoBehaviour
             closeList.Add(currentTile);
 
             if(currentTile == endTile)
-            {
-                return closeList.ToArray();
+            {               
+                return RetracePath(startTile, endTile).ToArray();
             }
 
             foreach(Tile tile in currentTile.neighborTiles)
@@ -57,6 +57,7 @@ public class PathFinder : MonoBehaviour
                 {
                     tile.gCost = newMovementCostToNeighbour;
                     tile.hCost = Vector3.Distance(endTile.transform.position, tile.transform.position);
+                    tile.parentTile = currentTile;
 
                     openList.Add(tile);
                 }
@@ -64,5 +65,22 @@ public class PathFinder : MonoBehaviour
         }
 
         return closeList.ToArray();
+    }
+
+    List<Tile> RetracePath(Tile startTile, Tile endTile)
+    {
+        List<Tile> path = new List<Tile>();
+
+        Tile currentTile = endTile;
+
+        while(currentTile != startTile) 
+        {
+            path.Add(currentTile);
+            currentTile = currentTile.parentTile;
+        }
+
+        path.Reverse();
+
+        return path;
     }
 }

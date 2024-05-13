@@ -6,7 +6,7 @@ public class Worker : MonoBehaviour
 {
     public Tile endNode; 
     public Tile startNode;
-    Tile[] path = new Tile[0];
+    public Tile[] path = new Tile[0];
     [SerializeField]
     WorkerData workerData;
 
@@ -14,6 +14,8 @@ public class Worker : MonoBehaviour
     {
         path = PathFinder.instance.FindPath(startNode, endNode);
         StartCoroutine(FollowPath());
+
+        Debug.Log("Path length: " + path.Length);
     }
 
     IEnumerator FollowPath()
@@ -23,13 +25,15 @@ public class Worker : MonoBehaviour
         direction.Normalize();
         while (i < path.Length)
         {
+
+            direction = path[i].transform.position - transform.position;
+            direction.Normalize();
             transform.position += direction * workerData.moveSpeed * Time.deltaTime;
 
             if(Vector3.Distance(transform.position, path[i].transform.position)<= workerData.proxyMargin)
-            {
-                direction = path[i].transform.position - transform.position;
-                direction.Normalize();
+            { 
                 i++;
+                Debug.Log("Index: " + i);
             }
             yield return new WaitForEndOfFrame();
         }

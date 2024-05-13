@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static MapGenerator;
 
 public class MapFragmentScript : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class MapFragmentScript : MonoBehaviour
 
         Color32[] pixels = new Color32[noiseSamples.Count * noiseSamples.Count];
 
-        float noiseSample = 0;
+        float noiseSample;
 
         int k = 0;
 
@@ -31,7 +32,7 @@ public class MapFragmentScript : MonoBehaviour
                 {
                     if (noiseSample >= tileTypes.tileTypesRanges[r].tileRange.x && noiseSample < tileTypes.tileTypesRanges[r].tileRange.y)
                     {
-                        pixels[k] = tileTypes.tileTypesRanges[r].color;
+                        texture.SetPixel(i, j, tileTypes.tileTypesRanges[r].color);
                     }
                 }
 
@@ -39,12 +40,13 @@ public class MapFragmentScript : MonoBehaviour
             }
         }
 
-
-        texture.SetPixels32(pixels);
+        texture.filterMode = FilterMode.Point;
 
         texture.Apply();
 
         material.mainTexture = texture;
+
+        transform.rotation = Quaternion.Euler(0, 180, 0);
 
     }
 

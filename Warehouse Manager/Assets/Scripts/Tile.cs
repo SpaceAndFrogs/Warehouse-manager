@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
@@ -9,10 +10,9 @@ public class Tile : MonoBehaviour
     [SerializeField]
     TileTypes tileTypes;
 
-    public bool walkable
-    {
-        get; private set;
-    }
+    public Tile parentTile;
+
+    public bool walkable;
 
     public float gCost;
     public float hCost;
@@ -24,17 +24,6 @@ public class Tile : MonoBehaviour
 
     public List<Tile> neighborTiles = new List<Tile>();
 
-    public void ChangeTileType(float noiseSample)
-    {
-        for(int i = 0;i<tileTypes.tileTypesRanges.Count;i++)
-        {
-            if(noiseSample >= tileTypes.tileTypesRanges[i].tileRange.x && noiseSample < tileTypes.tileTypesRanges[i].tileRange.y)
-            {
-                walkable = tileTypes.tileTypesRanges[i].walkable;
-            }
-        }
-    }
-
     public void AddTileToNeighborTiles(Tile tile)
     {
         if(neighborTiles.Contains(tile)) 
@@ -45,6 +34,27 @@ public class Tile : MonoBehaviour
     private void Start()
     {
         CheckForNeighbours();
+    }
+
+    public void ChangeTileType(float noiseSample)
+    {
+        for (int r = 0; r < tileTypes.tileTypesRanges.Count; r++)
+        {
+            if (noiseSample >= tileTypes.tileTypesRanges[r].tileRange.x && noiseSample < tileTypes.tileTypesRanges[r].tileRange.y)
+            {
+
+                walkable = tileTypes.tileTypesRanges[r].walkable;
+
+                if (walkable)
+                {
+                    gameObject.name = "true";
+                }
+                else
+                {
+                    gameObject.name = "false";
+                }
+            }
+        }
     }
 
     void CheckForNeighbours()

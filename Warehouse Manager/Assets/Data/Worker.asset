@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Worker
   m_EditorClassIdentifier: 
   moveSpeed: 1
-  proxyMargin: 0.1
+  proxyMargin: 0.125

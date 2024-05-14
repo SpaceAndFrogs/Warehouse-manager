@@ -64,7 +64,7 @@ public class PathFinder : MonoBehaviour
             }
         }
 
-        return closeList.ToArray();
+        return null;
     }
 
     List<Tile> RetracePath(Tile startTile, Tile endTile)

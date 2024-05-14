@@ -125,6 +125,18 @@ public class MapGenerator : MonoBehaviour
 
     }
 
+    public int GetAmountOfAllTiles()
+    {
+        int amountOfTiles = 0;
+
+        for(int i = 0; i < mapFragments.Count; i ++)
+        {
+            amountOfTiles += mapFragments[i].tiles.Count;
+        }
+
+        return amountOfTiles;
+    }
+
     public void AddListenerToButton(MapFragment mapFragment, MapFragment mapPrefab, MapFragment.NewMapFragmentButton newMapFragmentButton)
     {
         float lengthOfFragmentSide = mapFragment.mapFragmentObject.GetComponent<MeshRenderer>().bounds.size.x;

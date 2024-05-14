@@ -44,15 +44,6 @@ public class Tile : MonoBehaviour
             {
 
                 walkable = tileTypes.tileTypesRanges[r].walkable;
-
-                if (walkable)
-                {
-                    gameObject.name = "true";
-                }
-                else
-                {
-                    gameObject.name = "false";
-                }
             }
         }
     }

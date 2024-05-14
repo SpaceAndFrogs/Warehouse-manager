@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileTypes: {fileID: 11400000, guid: 45f1a747d2be33848a400f1e0656432d, type: 2}
+  parentTile: {fileID: 0}
+  walkable: 0
   gCost: 0
   hCost: 0
   neighborTiles: []
@@ -68,5 +70,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2.220446e-16, z: 1}
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
   m_Center: {x: 0, y: 0, z: 0}

@@ -10,9 +10,22 @@ public class Worker : MonoBehaviour
     [SerializeField]
     WorkerData workerData;
 
+    TaskManager.Tasks currentTask = TaskManager.Tasks.None;
+
+
+    public void GetTask(TaskManager.Task task)
+    {
+        Debug.Log("Get task;");
+
+        endNode = task.tileWithTask;
+        currentTask = task.task;
+        GetPathToTarget();
+    }
     public void GetPathToTarget()
     {
+        Debug.Log("Get path;");
         path = PathFinder.instance.FindPath(startNode, endNode);
+        StopCoroutine(FollowPath());
         StartCoroutine(FollowPath());
 
         Debug.Log("Path length: " + path.Length);

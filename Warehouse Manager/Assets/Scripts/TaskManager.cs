@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class TaskManager : MonoBehaviour
 {
+    public static TaskManager instance { get; private set; }
+
     public List<Task> tasks = new List<Task>();
 
     public Tasks currentTask;
@@ -24,6 +26,17 @@ public class TaskManager : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        if(instance != null) 
+        {
+            Destroy(instance);
+        }else
+        {
+            instance = this;
+        }
+    }
+
     private void Update()
     {        
         CheckForInput();
@@ -32,30 +45,31 @@ public class TaskManager : MonoBehaviour
 
     void CheckForInput()
     {
-        Debug.Log("Input check");
         if(Input.GetKeyDown(KeyCode.Mouse0)) 
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
-
-            Debug.Log("Send raycast");
 
             if (Physics.Raycast(ray, out hitInfo))
             {
                 
                 Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
 
-                Debug.Log("Raycast hitted: " + hitInfo.collider.gameObject.name);
-
                 if (tile == null)
                     return;
 
-                Debug.Log("Add task");
+                if (!tile.walkable)
+                    return;
 
                 tasks.Add(new Task(currentTask,tile));
             }
 
         }
+    }
+
+    public void ReturnWorker(Worker worker)
+    {
+        freeWorkers.Add(worker);
     }
 
     void GiveTasksToWorkers()
@@ -66,7 +80,6 @@ public class TaskManager : MonoBehaviour
         if (freeWorkers.Count == 0)
             return;
 
-        Debug.Log("Give tasks");
         List<Task> givenTasks = new List<Task>();
 
         for(int i = 0; i < tasks.Count; i++)
@@ -75,8 +88,6 @@ public class TaskManager : MonoBehaviour
 
             if (workerForTask == null)
                 continue;
-
-            Debug.Log("Closest worker found");
 
             workerForTask.GetTask(tasks[i]);
 
@@ -96,8 +107,6 @@ public class TaskManager : MonoBehaviour
         int currentClosestPath = MapGenerator.instance.GetAmountOfAllTiles();
         Worker currentClosestWorker = null;
 
-        Debug.Log("Find closest worker");
-
         for (int i = 0; i < freeWorkers.Count; i++)
         {
             Tile[] path = PathFinder.instance.FindPath(freeWorkers[i].startNode, endTile);
@@ -115,8 +124,6 @@ public class TaskManager : MonoBehaviour
 
         if (currentClosestWorker! != null)
             return currentClosestWorker;
-
-        Debug.Log("Closest worker not found");
 
         return null;
     }

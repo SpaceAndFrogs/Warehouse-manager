@@ -13,9 +13,13 @@ public class Worker : MonoBehaviour
     TaskManager.Tasks currentTask = TaskManager.Tasks.None;
 
 
+    private void Start()
+    {
+        ReturnWorker();
+    }
+
     public void GetTask(TaskManager.Task task)
     {
-        Debug.Log("Get task;");
 
         endNode = task.tileWithTask;
         currentTask = task.task;
@@ -23,12 +27,9 @@ public class Worker : MonoBehaviour
     }
     public void GetPathToTarget()
     {
-        Debug.Log("Get path;");
         path = PathFinder.instance.FindPath(startNode, endNode);
         StopCoroutine(FollowPath());
         StartCoroutine(FollowPath());
-
-        Debug.Log("Path length: " + path.Length);
     }
 
     IEnumerator FollowPath()
@@ -46,10 +47,16 @@ public class Worker : MonoBehaviour
             if(Vector3.Distance(transform.position, path[i].transform.position)<= workerData.proxyMargin)
             { 
                 i++;
-                Debug.Log("Index: " + i);
             }
             yield return new WaitForEndOfFrame();
         }
+
+        ReturnWorker();
+    }
+
+    void ReturnWorker()
+    {
+        TaskManager.instance.ReturnWorker(this);
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -46,7 +46,12 @@ public class PathFinder : MonoBehaviour
 
             foreach(Tile tile in currentTile.neighborTiles)
             {
-                if (!tile.walkable || closeList.Contains(tile))
+                if (!tile.walkable && tile != endTile)
+                {
+                    continue;
+                }
+
+                if(closeList.Contains(tile))
                 {
                     continue;
                 }

@@ -10,6 +10,8 @@ public class Tile : MonoBehaviour
     [SerializeField]
     TileTypes tileTypes;
 
+    public TileTypes.TileType tileType;
+
     public Tile parentTile;
 
     public bool walkable;
@@ -36,14 +38,14 @@ public class Tile : MonoBehaviour
         CheckForNeighbours();
     }
 
-    public void ChangeTileType(float noiseSample)
+    public void SetTileType(float noiseSample)
     {
         for (int r = 0; r < tileTypes.tileTypesRanges.Count; r++)
         {
             if (noiseSample >= tileTypes.tileTypesRanges[r].tileRange.x && noiseSample < tileTypes.tileTypesRanges[r].tileRange.y)
             {
-
                 walkable = tileTypes.tileTypesRanges[r].walkable;
+                tileType = tileTypes.tileTypesRanges[r].tileType;
             }
         }
     }

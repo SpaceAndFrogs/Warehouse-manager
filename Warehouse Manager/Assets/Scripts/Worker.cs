@@ -10,7 +10,7 @@ public class Worker : MonoBehaviour
     [SerializeField]
     WorkerData workerData;
 
-    TaskManager.Tasks currentTask = TaskManager.Tasks.None;
+    TaskManager.Task currentTask = null;
 
 
     private void Start()
@@ -22,7 +22,7 @@ public class Worker : MonoBehaviour
     {
 
         endNode = task.tileWithTask;
-        currentTask = task.task;
+        currentTask = task;
         GetPathToTarget();
     }
     public void GetPathToTarget()
@@ -44,13 +44,34 @@ public class Worker : MonoBehaviour
             direction.Normalize();
             transform.position += direction * workerData.moveSpeed * Time.deltaTime;
 
-            if(Vector3.Distance(transform.position, path[i].transform.position)<= workerData.proxyMargin)
+            if(Vector3.Distance(transform.position, path[i].transform.position)<= workerData.proxyMargin && i < path.Length - 1)
+            { 
+                i++;
+            }
+
+            if(Vector3.Distance(transform.position, path[i].transform.position)<= workerData.proxyMarginOfFinalTile && i == path.Length - 1)
             { 
                 i++;
             }
             yield return new WaitForEndOfFrame();
         }
 
+        StopCoroutine(StartTask());
+        StartCoroutine(StartTask());
+    }
+
+    IEnumerator StartTask()
+    {
+        float timer = 0;
+
+        while(timer <= currentTask.task.taskTime)
+        {
+
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        currentTask = null;
         ReturnWorker();
     }
 

@@ -7,4 +7,5 @@ public class WorkerData : ScriptableObject
 {
     public float moveSpeed;
     public float proxyMargin;
+    public float proxyMarginOfFinalTile;
 }

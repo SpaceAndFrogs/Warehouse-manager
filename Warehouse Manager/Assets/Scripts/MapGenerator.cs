@@ -117,7 +117,7 @@ public class MapGenerator : MonoBehaviour
                 for (int j = 0; j < noiseSamples.Count; j++)
                 {
 
-                    tiles[i][j].tileScript.ChangeTileType(noiseSamples[i][j]);
+                    tiles[i][j].tileScript.SetTileType(noiseSamples[i][j]);
 
                 }
             }            

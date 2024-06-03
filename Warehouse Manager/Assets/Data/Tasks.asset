@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 806333dfff09d219f9b278cc3ad112b4, type: 3}
+  m_Name: Tasks
+  m_EditorClassIdentifier: 
+  tasks:
+  - taskTime: 0
+    taskType: 0
+    buttonSprite: {fileID: 0}
+    nameOfButton: None
+  - taskTime: 1.5
+    taskType: 2
+    buttonSprite: {fileID: 0}
+    nameOfButton: Chop
+  - taskTime: 3
+    taskType: 3
+    buttonSprite: {fileID: 0}
+    nameOfButton: Dry
+  - taskTime: 2
+    taskType: 4
+    buttonSprite: {fileID: 0}
+    nameOfButton: Mine
+  - taskTime: 3
+    taskType: 5
+    buttonSprite: {fileID: 0}
+    nameOfButton: Build

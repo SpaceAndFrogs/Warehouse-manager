@@ -19,6 +19,15 @@ public class Tile : MonoBehaviour
     public float gCost;
     public float hCost;
 
+    public MapFragmentScript mapFragmentScript;
+    /*{
+        private get; set;
+    }*/
+    public Vector2 tileCords;
+    /*{
+        private get; set;
+    }*/
+
     public float fCost
     {
         get { return gCost + hCost; }
@@ -48,6 +57,25 @@ public class Tile : MonoBehaviour
                 tileType = tileTypes.tileTypesRanges[r].tileType;
             }
         }
+    }
+
+    public void ChangeTileType(TileTypes.TileType tileTypeToChange)
+    {
+        int tileTypeRangesIndex = 0; 
+
+        for (int r = 0; r < tileTypes.tileTypesRanges.Count; r++)
+        {
+            if(tileTypeToChange == tileTypes.tileTypesRanges[r].tileType)
+            {
+                tileTypeRangesIndex = r;
+                break;
+            }
+        }
+
+        mapFragmentScript.ChangeTileOnMap(tileCords,tileTypes.tileTypesRanges[tileTypeRangesIndex].color);
+
+        walkable = tileTypes.tileTypesRanges[tileTypeRangesIndex].walkable;
+        tileType = tileTypes.tileTypesRanges[tileTypeRangesIndex].tileType;
     }
 
     void CheckForNeighbours()

@@ -11,15 +11,13 @@ public class MapFragmentScript : MonoBehaviour
     TileTypes tileTypes;
     public void ChangeFragmentTexture(List<List<float>> noiseSamples)
     {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
         Material material = m_Renderer.materials[0];
 
         Texture2D texture = new Texture2D(noiseSamples.Count,noiseSamples.Count);
 
-        Color32[] pixels = new Color32[noiseSamples.Count * noiseSamples.Count];
-
         float noiseSample;
-
-        int k = 0;
 
         for(int i = 0; i < noiseSamples.Count; i ++)
         {
@@ -35,7 +33,6 @@ public class MapFragmentScript : MonoBehaviour
                     }
                 }
 
-                k++;
             }
         }
 
@@ -47,6 +44,22 @@ public class MapFragmentScript : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 180, 0);
 
+    }
+
+    public void ChangeTileOnMap(Vector2 tileCords, Color tileColor)
+    {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        Material material = m_Renderer.materials[0];
+
+        Texture2D texture = (Texture2D)material.mainTexture;
+
+        texture.SetPixel((int)tileCords.x, (int)tileCords.y, tileColor);
+
+        texture.Apply();
+
+        material.mainTexture = texture;
+
+        transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
     private void OnTriggerEnter(Collider other)

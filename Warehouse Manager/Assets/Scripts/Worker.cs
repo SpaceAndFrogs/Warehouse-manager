@@ -66,10 +66,11 @@ public class Worker : MonoBehaviour
 
         while(timer <= currentTask.task.taskTime)
         {
-
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+
+        currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
 
         currentTask = null;
         ReturnWorker();

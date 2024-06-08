@@ -16,6 +16,8 @@ public class TasksTypes : ScriptableObject
         public TaskType taskType;
         public Sprite buttonSprite;
         public string nameOfButton;
+
+        public TileTypes.TileType tileTypeAfterTask;
         public Task(float taskTime, TaskType taskType, Sprite buttonSprite, string nameOfButton)
         {
             this.taskTime = taskTime;

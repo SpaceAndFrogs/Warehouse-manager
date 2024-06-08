@@ -255,6 +255,8 @@ public class MapGenerator : MonoBehaviour
         Vector3 positionOfFragment = mapFragment.mapFragmentObject.transform.position;
         float x = positionOfFragment.x - halfOfFragmentSize + halfOfTileSize;
         
+        
+
         for (int i = 0; i < mapFragment.amountOfTilesOnFragment; i++ )
         {
             float z = positionOfFragment.z - halfOfFragmentSize + halfOfTileSize;
@@ -265,6 +267,8 @@ public class MapGenerator : MonoBehaviour
                 Tile tileScript = Instantiate(mapFragment.tile.tileScript, new Vector3(x, mapFragment.mapFragmentObject.transform.position.y + mapFragment.tileHeigth, z), transform.rotation);
 
                 MapFragment.TileClass tile = new MapFragment.TileClass(tileScript);
+                tile.tileScript.mapFragmentScript = mapFragment.mapFragmentObject.GetComponent<MapFragmentScript>();
+                tile.tileScript.tileCords = new Vector2(i,y);
                 tileRow.Add(tile);
 
                 z += halfOfTileSize * 2;

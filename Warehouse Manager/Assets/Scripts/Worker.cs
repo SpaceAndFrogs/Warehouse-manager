@@ -64,16 +64,32 @@ public class Worker : MonoBehaviour
     {
         float timer = 0;
 
-        while(timer <= currentTask.task.taskTime)
+        if(currentTask.task.taskType != TasksTypes.TaskType.Build)
         {
-            timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+            while(timer <= currentTask.task.taskTime)
+            {
+                timer += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
 
-        currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
+            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
+        }else
+        {
+            while(timer <= currentTask.building.buildingTime)
+            {
+                timer += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+
+            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
+
+            GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
+            newBuilding.transform.parent = currentTask.tileWithTask.transform;        
+        }
 
         currentTask = null;
         ReturnWorker();
+        yield break;
     }
 
     void ReturnWorker()

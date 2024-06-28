@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207953150890068acba51bfb909ca00e, type: 3}
+  m_Name: Buildings
+  m_EditorClassIdentifier: 
+  buildings:
+  - buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
+      type: 3}
+    buildingSprite: {fileID: 0}
+    buildingType: 1
+    nameOfButton: Floor
+    buildingTime: 1
+  - buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
+      type: 3}
+    buildingSprite: {fileID: 0}
+    buildingType: 2
+    nameOfButton: Wall
+    buildingTime: 2

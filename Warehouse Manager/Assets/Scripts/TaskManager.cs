@@ -14,23 +14,37 @@ public class TaskManager : MonoBehaviour
 
     public TasksTypes.Task currentTask;
 
+    public Buildings.Building currentBuilding;
+
     public List<Worker> freeWorkers = new List<Worker>();
 
     [SerializeField]
-    Transform uiCanvasTransform;
+    Transform tasksCanvasTransform;
+
+    [SerializeField]
+    Transform buildingsCanvasTransform;
+
     [SerializeField]
     Button buttonPrefab;
 
     [SerializeField]
     TasksTypes tasksTypes;
+
+    [SerializeField]
+    Buildings buildings;
+    [SerializeField]
+    Button backToTasksButton;
+
     public class Task
     {
         public TasksTypes.Task task;
         public Tile tileWithTask;
-        public Task(TasksTypes.Task task, Tile tileWithTask)
+        public Buildings.Building building;
+        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building)
         {
             this.task = task;
             this.tileWithTask = tileWithTask;
+            this.building = building;
         }
     }
 
@@ -39,16 +53,55 @@ public class TaskManager : MonoBehaviour
         for(int i = 0; i < tasksTypes.tasks.Count; i ++)
         {
             int index = i;
-            Button newButton = Instantiate(buttonPrefab,uiCanvasTransform);
+            Button newButton = Instantiate(buttonPrefab,tasksCanvasTransform);
             newButton.name = "Button: " + tasksTypes.tasks[i].nameOfButton;
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = tasksTypes.tasks[i].nameOfButton;
             newButton.onClick.AddListener(() => SetCurrentTask(index));
+
+            if(tasksTypes.tasks[i].taskType == TasksTypes.TaskType.Build)
+            {
+                CreateBuildingButtons();
+            }
         }
+    }
+
+    void CreateBuildingButtons()
+    {
+        Button backButton = Instantiate(buttonPrefab, buildingsCanvasTransform);
+        backButton.name = "Button: Back To Tasks";
+        backButton.GetComponentInChildren<TextMeshProUGUI>().text = "Back To Tasks";
+        backButton.onClick.AddListener(() => BackToTaskButtons());
+
+        for(int i = 0; i < buildings.buildings.Count; i ++)
+        {
+            int index = i;
+            Button newButton = Instantiate(buttonPrefab, buildingsCanvasTransform);
+            newButton.name = "Button: " + buildings.buildings[i].nameOfButton;
+            newButton.GetComponentInChildren<TextMeshProUGUI>().text = buildings.buildings[i].nameOfButton;
+            newButton.onClick.AddListener(() => SetCurrentBuilding(index));
+        }
+    }
+
+    public void BackToTaskButtons()
+    {
+        tasksCanvasTransform.gameObject.SetActive(true);
+        buildingsCanvasTransform.gameObject.SetActive(false);
     }
 
     public void SetCurrentTask(int indexOfTask)
     {
         currentTask = tasksTypes.tasks[indexOfTask];
+
+        if(tasksTypes.tasks[indexOfTask].taskType == TasksTypes.TaskType.Build)
+        {
+            tasksCanvasTransform.gameObject.SetActive(false);
+            buildingsCanvasTransform.gameObject.SetActive(true);
+        }
+    }
+
+    public void SetCurrentBuilding(int indexOfBuilding)
+    {
+        currentBuilding = buildings.buildings[indexOfBuilding];
     }
 
     private void Awake()
@@ -91,7 +144,7 @@ public class TaskManager : MonoBehaviour
                 if(!IsTileCompatibleWithTask(tile))
                     return;
 
-                tasks.Add(new Task(currentTask,tile));
+                tasks.Add(new Task(currentTask,tile, currentBuilding));
             }
 
         }

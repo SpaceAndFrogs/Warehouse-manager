@@ -84,7 +84,7 @@ public class Worker : MonoBehaviour
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
 
             GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
-            newBuilding.transform.parent = currentTask.tileWithTask.transform;        
+            currentTask.tileWithTask.building = newBuilding;        
         }
 
         currentTask = null;

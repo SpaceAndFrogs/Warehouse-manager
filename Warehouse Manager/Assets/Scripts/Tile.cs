@@ -19,14 +19,16 @@ public class Tile : MonoBehaviour
     public float gCost;
     public float hCost;
 
-    public MapFragmentScript mapFragmentScript;
-    /*{
+    public GameObject building = null;
+
+    public MapFragmentScript mapFragmentScript
+    {
         private get; set;
-    }*/
-    public Vector2 tileCords;
-    /*{
+    }
+    public Vector2 tileCords
+    {
         private get; set;
-    }*/
+    }
 
     public float fCost
     {

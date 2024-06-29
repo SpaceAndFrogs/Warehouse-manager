@@ -11,7 +11,12 @@ public class PlayerMovement : MonoBehaviour
     float scrollSpeed;
 
     [SerializeField]
+    float minDistanceToAnchor;
+
+    [SerializeField]
     Transform cameraTransform;
+
+
 
     void Update()
     {
@@ -42,6 +47,11 @@ public class PlayerMovement : MonoBehaviour
             Vector3 direction = CalculateNormalizedDirection(cameraTransform.position,transform.position);
 
             cameraTransform.position += direction * scrollSpeed * Time.deltaTime;
+
+            if(Vector3.Distance(cameraTransform.position, transform.position) < minDistanceToAnchor)
+            {
+                cameraTransform.position -= direction * scrollSpeed * Time.deltaTime;
+            }
         }
         else if(Input.mouseScrollDelta.y<0)
         {

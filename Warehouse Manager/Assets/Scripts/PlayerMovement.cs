@@ -11,19 +11,34 @@ public class PlayerMovement : MonoBehaviour
     float scrollSpeed;
 
     [SerializeField]
+    float rotationSpeed;
+
+    [SerializeField]
     float minDistanceToAnchor;
 
     [SerializeField]
     Transform cameraTransform;
 
 
-
+    Vector2 lastMousePosition;
     void Update()
     {
         CheckForInputs();
     }
 
     void CheckForInputs()
+    {
+        CheckAxisMovement();
+
+        CheckScroll();
+    }
+
+    Vector3 CalculateNormalizedDirection(Vector3 startPoint, Vector3 endPoint)
+    {
+        return endPoint - startPoint;
+    }
+
+    void CheckAxisMovement()
     {
         if(Input.GetKey(KeyCode.W))
         {
@@ -41,7 +56,10 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.position += Vector3.right*horizontalVerticalSpeed*Time.deltaTime;
         }
+    }
 
+    void CheckScroll()
+    {
         if(Input.mouseScrollDelta.y>0)
         {
             Vector3 direction = CalculateNormalizedDirection(cameraTransform.position,transform.position);
@@ -60,10 +78,21 @@ public class PlayerMovement : MonoBehaviour
             cameraTransform.position += direction * scrollSpeed * Time.deltaTime;
         }
 
-    }
+        if(Input.GetKeyDown(KeyCode.Mouse2))
+        {
+            lastMousePosition = Input.mousePosition;
+        }
 
-    Vector3 CalculateNormalizedDirection(Vector3 startPoint, Vector3 endPoint)
-    {
-        return endPoint - startPoint;
+        if(Input.GetKey(KeyCode.Mouse2))
+        {
+            Vector2 currentMousePosition = Input.mousePosition;
+
+            if(currentMousePosition.x != lastMousePosition.x)
+            {
+                transform.eulerAngles += new Vector3(0,currentMousePosition.x - lastMousePosition.x,0) * rotationSpeed * Time.deltaTime;
+            }
+
+            lastMousePosition = currentMousePosition;
+        }
     }
 }

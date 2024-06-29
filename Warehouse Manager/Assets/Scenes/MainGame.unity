@@ -1132,6 +1132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   horizontalVerticalSpeed: 5
   scrollSpeed: 5
+  rotationSpeed: 0
+  minDistanceToAnchor: 1
   cameraTransform: {fileID: 1823688467}
 --- !u!4 &1836431371
 Transform:

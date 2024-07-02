@@ -28,6 +28,14 @@ public class Worker : MonoBehaviour
     public void GetPathToTarget()
     {
         path = PathFinder.instance.FindPath(startNode, endNode);
+
+        if(path == null)
+        {
+            currentTask = null;
+            endNode = null;
+            return;
+        }
+
         StopCoroutine(FollowPath());
         StartCoroutine(FollowPath());
     }

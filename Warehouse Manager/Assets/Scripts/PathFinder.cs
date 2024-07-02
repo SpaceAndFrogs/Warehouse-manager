@@ -16,9 +16,28 @@ public class PathFinder : MonoBehaviour
 
         instance = this;
     }
+    
+    bool CheckIfEndTileIsCLosed(Tile[] endTileNeighbours)
+    {
+        for(int i = 0; i < endTileNeighbours.Length; i ++)
+        {
+            if(endTileNeighbours[i].walkable)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public Tile[] FindPath(Tile startTile, Tile endTile)
     {
+        if(CheckIfEndTileIsCLosed(endTile.neighborTiles.ToArray()))
+        {
+            return null;
+        }
+
+
         List<Tile> openList = new List<Tile>();
         List<Tile> closeList = new List<Tile>();
 

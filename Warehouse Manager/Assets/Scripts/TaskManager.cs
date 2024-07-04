@@ -10,13 +10,21 @@ public class TaskManager : MonoBehaviour
 {
     public static TaskManager instance { get; private set; }
 
-    public List<Task> tasks = new List<Task>();
+    public List<Task> buildingTasks = new List<Task>();
+
+    public List<Task> pickTasks = new List<Task>();
+    public List<Task> packTasks = new List<Task>();
+
+    [SerializeField]
+    OrdersManager ordersManager;
 
     public TasksTypes.Task currentTask;
 
     public Buildings.Building currentBuilding;
 
-    public List<Worker> freeWorkers = new List<Worker>();
+    public List<Worker> freeBuilders = new List<Worker>();
+    public List<Worker> freePickWorkers = new List<Worker>();
+    public List<Worker> freePackWorkers = new List<Worker>();
 
     [SerializeField]
     Transform tasksCanvasTransform;
@@ -123,7 +131,9 @@ public class TaskManager : MonoBehaviour
     private void Update()
     {        
         CheckForInput();
-        GiveTasksToWorkers();
+        GiveTasksToBuilders();
+        GiveTasksToPick();
+        GiveTasksToPack();
     }
 
     void CheckForInput()
@@ -144,7 +154,7 @@ public class TaskManager : MonoBehaviour
                 if(!IsTileCompatibleWithTask(tile))
                     return;
 
-                tasks.Add(new Task(currentTask,tile, currentBuilding));
+                buildingTasks.Add(new Task(currentTask,tile, currentBuilding));
             }
 
         }
@@ -182,36 +192,104 @@ public class TaskManager : MonoBehaviour
 
     public void ReturnWorker(Worker worker)
     {
-        freeWorkers.Add(worker);
+        switch(worker.workerData.workerType)
+        {
+            case WorkerData.WorkerType.Builder:
+            {
+                freeBuilders.Add(worker);
+                break;
+            }
+        }
+        
     }
 
-    void GiveTasksToWorkers()
+    void GiveTasksToBuilders()
     {
-        if (tasks.Count == 0)
+        if (buildingTasks.Count == 0)
             return;
 
-        if (freeWorkers.Count == 0)
+        if (freeBuilders.Count == 0)
             return;
 
-        List<Task> givenTasks = new List<Task>();
+        List<Task> givenBuildingTasks = new List<Task>();
 
-        for(int i = 0; i < tasks.Count; i++)
+        for(int i = 0; i < buildingTasks.Count; i++)
         {
-            Worker workerForTask = FindClosestWorker(tasks[i].tileWithTask);
+            Worker workerForTask = FindClosestWorker(buildingTasks[i].tileWithTask);
 
             if (workerForTask == null)
                 continue;
 
-            workerForTask.GetTask(tasks[i]);
+            workerForTask.GetTask(buildingTasks[i]);
 
-            givenTasks.Add(tasks[i]);
+            givenBuildingTasks.Add(buildingTasks[i]);
 
-            freeWorkers.Remove(workerForTask);
+            freeBuilders.Remove(workerForTask);
         }
 
-        for(int i = 0;i < givenTasks.Count;i++)
+        for(int i = givenBuildingTasks.Count - 1; i >= 0; i--)
         {
-            tasks.Remove(givenTasks[i]);
+            buildingTasks.Remove(givenBuildingTasks[i]);
+        }
+    }
+
+    void GiveTasksToPick()
+    {
+        if (ordersManager.ordersOnPick.Count == 0)
+            return;
+
+        if (freePickWorkers.Count == 0)
+            return;
+
+        List<Task> givenPickTasks = new List<Task>();
+
+        for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
+        {
+            Worker workerForTask = freePickWorkers[0];
+
+            if (workerForTask == null)
+                continue;
+
+            workerForTask.GetTask(pickTasks[i]);
+
+            givenPickTasks.Add(pickTasks[i]);
+
+            freePickWorkers.Remove(workerForTask);
+        }
+
+        for(int i = givenPickTasks.Count - 1; i >= 0; i--)
+        {
+            pickTasks.Remove(givenPickTasks[i]);
+        }
+    }
+
+    void GiveTasksToPack()
+    {
+        if (ordersManager.ordersOnPack.Count == 0)
+            return;
+
+        if (freePackWorkers.Count == 0)
+            return;
+
+        List<Task> givenPackTasks = new List<Task>();
+
+        for(int i = 0; i < ordersManager.ordersOnPack.Count; i++)
+        {
+            Worker workerForTask = freePackWorkers[0];
+
+            if (workerForTask == null)
+                continue;
+
+            workerForTask.GetTask(packTasks[i]);
+
+            givenPackTasks.Add(packTasks[i]);
+
+            freePackWorkers.Remove(workerForTask);
+        }
+
+        for(int i = givenPackTasks.Count - 1; i >= 0; i--)
+        {
+            packTasks.Remove(givenPackTasks[i]);
         }
     }
 
@@ -220,16 +298,16 @@ public class TaskManager : MonoBehaviour
         int currentClosestPath = MapGenerator.instance.GetAmountOfAllTiles();
         Worker currentClosestWorker = null;
 
-        for (int i = 0; i < freeWorkers.Count; i++)
+        for (int i = 0; i < freeBuilders.Count; i++)
         {
-            Tile[] path = PathFinder.instance.FindPath(freeWorkers[i].startNode, endTile);
+            Tile[] path = PathFinder.instance.FindPath(freeBuilders[i].startNode, endTile);
 
             if(path == null)
                 continue;
 
             if(path.Length < currentClosestPath)
             {
-                currentClosestWorker = freeWorkers[i];
+                currentClosestWorker = freeBuilders[i];
                 currentClosestPath = path.Length;
             }
 

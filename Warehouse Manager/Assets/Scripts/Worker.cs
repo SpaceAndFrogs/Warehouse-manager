@@ -7,8 +7,8 @@ public class Worker : MonoBehaviour
     public Tile endNode; 
     public Tile startNode;
     public Tile[] path = new Tile[0];
-    [SerializeField]
-    WorkerData workerData;
+    
+    public WorkerData workerData;
 
     TaskManager.Task currentTask = null;
 

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b03f5afec8b594b96542cd09660aad, type: 3}
-  m_Name: Worker
+  m_Name: Builder
   m_EditorClassIdentifier: 
   moveSpeed: 1
   proxyMargin: 0.125

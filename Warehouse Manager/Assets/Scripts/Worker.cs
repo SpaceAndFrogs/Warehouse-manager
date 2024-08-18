@@ -12,6 +12,9 @@ public class Worker : MonoBehaviour
 
     TaskManager.Task currentTask = null;
 
+    public Tile packStationTile;
+    public Tile pickStashTile;
+    public bool goingToPickStash =false;
 
     private void Start()
     {
@@ -20,9 +23,30 @@ public class Worker : MonoBehaviour
 
     public void GetTask(TaskManager.Task task)
     {
-
-        endNode = task.tileWithTask;
         currentTask = task;
+
+        switch(task.task.taskClass)
+        {
+            case TasksTypes.TaskClass.Building:
+            {
+                StartBuildingTask();
+                break;
+            }
+            case TasksTypes.TaskClass.Pick:
+            {
+                break;
+            }
+            case TasksTypes.TaskClass.Pack:
+            {
+                break;
+            }
+        }
+        
+    }
+
+    void StartBuildingTask()
+    {
+        endNode = currentTask.tileWithTask;        
         GetPathToTarget();
     }
     public void GetPathToTarget()
@@ -64,11 +88,48 @@ public class Worker : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        StopCoroutine(StartTask());
-        StartCoroutine(StartTask());
+        switch(currentTask.task.taskClass)
+        {
+            case TasksTypes.TaskClass.Building:
+            {
+                StopCoroutine(StartBuildTask());
+                StartCoroutine(StartBuildTask());
+                break;
+            }
+            case TasksTypes.TaskClass.Pick:
+            {
+                if(goingToPickStash)
+                {
+                    goingToPickStash = false;
+                    endNode = packStationTile;
+                    GetPathToTarget();
+                }else
+                {
+                    StopCoroutine(StartPackTask());
+                    StartCoroutine(StartPackTask());
+                }
+                break;
+            }
+        }     
     }
 
-    IEnumerator StartTask()
+    IEnumerator StartPackTask()
+    {
+        float timer = 0;
+
+        while(timer <= currentTask.task.taskTime)
+        {
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+
+        currentTask = null;
+        ReturnWorker();
+        yield break;
+    }
+
+    IEnumerator StartBuildTask()
     {
         float timer = 0;
 

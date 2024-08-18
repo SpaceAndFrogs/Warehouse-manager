@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Buildings
   m_EditorClassIdentifier: 
   buildings:
-  - buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
+  - buildingObject: {fileID: 6777885033127159899, guid: 7a852ed501291d94dabeab7f6d348e95,
       type: 3}
     buildingSprite: {fileID: 0}
     buildingType: 1
@@ -24,4 +24,10 @@ MonoBehaviour:
     buildingSprite: {fileID: 0}
     buildingType: 2
     nameOfButton: Wall
+    buildingTime: 2
+  - buildingObject: {fileID: 6540884834192702674, guid: 3bf1404117ec951dab66f5971651ed21,
+      type: 3}
+    buildingSprite: {fileID: 0}
+    buildingType: 2
+    nameOfButton: PackStation
     buildingTime: 2

@@ -35,6 +35,9 @@ public class Tile : MonoBehaviour
         get { return gCost + hCost; }
     }
 
+    [SerializeField]
+    GameObject outlineObject;
+
     public List<Tile> neighborTiles = new List<Tile>();
 
     public void AddTileToNeighborTiles(Tile tile)
@@ -46,7 +49,17 @@ public class Tile : MonoBehaviour
 
     private void Start()
     {
+        outlineObject.SetActive(false);
         CheckForNeighbours();
+    }
+
+    private void OnMouseEnter() 
+    {
+        outlineObject.SetActive(true);
+    }
+    private void OnMouseExit() 
+    {
+        outlineObject.SetActive(false);
     }
 
     public void SetTileType(float noiseSample)

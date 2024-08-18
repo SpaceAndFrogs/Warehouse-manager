@@ -66,7 +66,7 @@ public class Worker : MonoBehaviour
 
     IEnumerator FollowPath()
     {
-        int i = 1;
+        int i = 0;
         Vector3 direction = path[i].transform.position - transform.position;
         direction.Normalize();
         while (i < path.Length)

@@ -37,7 +37,7 @@ public class OrdersManager : MonoBehaviour
             continue;
 
             if(!IsThereItemsOnRacks())
-            return;
+            continue;
 
             int amountOfOrders = Random.Range((int)1, maxAmountOfOrders+1);
             
@@ -56,7 +56,7 @@ public class OrdersManager : MonoBehaviour
     {
         for(int i = 0; i < racks.Count; i++)
         {
-            if(racks[i].amountOfItems > acks[i].amountOfItems -  racks[i].reservedAmountOfItems > 0)
+            if(racks[i].amountOfItems > racks[i].amountOfItems -  racks[i].reservedAmountOfItems > 0)
             {
                 return true;
             }

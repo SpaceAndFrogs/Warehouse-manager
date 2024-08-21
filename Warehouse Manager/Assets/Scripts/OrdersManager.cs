@@ -33,7 +33,7 @@ public class OrdersManager : MonoBehaviour
     {
         while(true)
         {
-            if(racks.Count == 0;)
+            if(racks.Count == 0)
             continue;
 
             if(!IsThereItemsOnRacks())

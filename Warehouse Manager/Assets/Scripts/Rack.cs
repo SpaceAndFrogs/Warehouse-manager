@@ -9,4 +9,6 @@ public class Rack : MonoBehaviour
     public int amountOfItems;
 
     public int reservedAmountOfItems;
+
+    public Tile tileWithRack;
 }

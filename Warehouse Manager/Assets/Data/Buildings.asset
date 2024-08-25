@@ -25,9 +25,21 @@ MonoBehaviour:
     buildingType: 2
     nameOfButton: Wall
     buildingTime: 2
-  - buildingObject: {fileID: 6540884834192702674, guid: 3bf1404117ec951dab66f5971651ed21,
+  - buildingObject: {fileID: 8851040814126902023, guid: bc79e1c80a568930fa534ae24c06e261,
       type: 3}
     buildingSprite: {fileID: 0}
-    buildingType: 2
+    buildingType: 3
     nameOfButton: PackStation
+    buildingTime: 2
+  - buildingObject: {fileID: 8851040814126902023, guid: 022421ad66fb3053cac56c25d6ff12c0,
+      type: 3}
+    buildingSprite: {fileID: 0}
+    buildingType: 5
+    nameOfButton: Pick Stash
+    buildingTime: 2
+  - buildingObject: {fileID: 8851040814126902023, guid: d73822cd51e84e8d39f39ebce2cb7e96,
+      type: 3}
+    buildingSprite: {fileID: 0}
+    buildingType: 4
+    nameOfButton: Rack
     buildingTime: 2

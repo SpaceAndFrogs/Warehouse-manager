@@ -17,7 +17,7 @@ public class RackPanel : MonoBehaviour
         public TextMeshProUGUI itemOnRack;
         public TextMeshProUGUI currentAmountOfItemsOnRack;
 
-        public TextMeshProUGUI desiredAmountOfItemsOnRack;
+        public TMP_InputField desiredAmountOfItemsOnRack;
         public TextMeshProUGUI maxAmountOfItemsOnRack;
     }
     void Update()
@@ -29,7 +29,6 @@ public class RackPanel : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo))
             {
-                Debug.Log("Something hitted");
                 Rack rack = hitInfo.collider.gameObject.GetComponent<Rack>();
 
                 if (rack == null)
@@ -38,7 +37,6 @@ public class RackPanel : MonoBehaviour
                 if(currentRack == rack)
                     return;
 
-                Debug.Log("Rack hitted");
 
                 currentRack = rack;
 
@@ -46,6 +44,11 @@ public class RackPanel : MonoBehaviour
             }
 
         }
+    }
+
+    void Start()
+    {
+        panel.desiredAmountOfItemsOnRack.onValueChanged.AddListener(ChangeDesiredAmount);
     }
 
     void OpenPanelForRack()
@@ -61,5 +64,10 @@ public class RackPanel : MonoBehaviour
     {
         currentRack = null;
         panel.panelObject.SetActive(false);
+    }
+
+    void ChangeDesiredAmount(string newText)
+    {
+        currentRack.desiredAmountOfItems = int.Parse(newText);
     }
 }

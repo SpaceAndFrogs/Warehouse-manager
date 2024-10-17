@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
@@ -136,9 +137,14 @@ public class TaskManager : MonoBehaviour
         GiveTasksToPack();
     }
 
+    bool IsMouseOverUi()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
     void CheckForInput()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0)) 
+        if(Input.GetKeyDown(KeyCode.Mouse0) && !IsMouseOverUi()) 
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;

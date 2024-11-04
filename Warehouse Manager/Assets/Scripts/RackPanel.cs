@@ -71,6 +71,7 @@ public class RackPanel : MonoBehaviour
             }
 
         }
+        UpdateRackPanel();
     }
 
     void Start()
@@ -87,6 +88,8 @@ public class RackPanel : MonoBehaviour
 
     void UpdateRackPanel()
     {
+        if(currentRack == null)
+        return;
         panel.currentAmountOfItemsOnRack.text = currentRack.amountOfItems.ToString();
         panel.desiredAmountOfItemsOnRack.text = currentRack.desiredAmountOfItems.ToString();
         panel.maxAmountOfItemsOnRack.text = currentRack.maxAmountOfItems.ToString();

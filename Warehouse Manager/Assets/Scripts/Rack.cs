@@ -13,4 +13,18 @@ public class Rack : MonoBehaviour
     public Tile tileWithRack;
     public int desiredAmountOfItems = 0;
     public int maxAmountOfItems = 0;
+
+    void Update()
+    {
+        CheckAmountOfItems();
+    }
+
+    void CheckAmountOfItems()
+    {
+        if(amountOfItems < desiredAmountOfItems)
+        {
+            int amountOfItemsToBuy = desiredAmountOfItems - amountOfItems;
+            amountOfItems += amountOfItemsToBuy; 
+        }
+    }
 }

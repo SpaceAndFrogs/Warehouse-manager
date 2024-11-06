@@ -6,7 +6,7 @@ using System;
 [CreateAssetMenu(fileName = "BuildingData", menuName = "Buildings", order = 1)]
 public class Buildings : ScriptableObject
 {
-    public enum BuildingType {None, Floor, Wall, PackStation, Rack, PickStash}
+    public enum BuildingType {None, Floor, Wall, PackStation, Rack, PickStash, OrdersStation}
 
     public List<Building> buildings = new List<Building>();
 

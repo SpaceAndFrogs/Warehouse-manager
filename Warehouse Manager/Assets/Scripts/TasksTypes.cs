@@ -23,5 +23,10 @@ public class TasksTypes : ScriptableObject
 
         public TileTypes.TileType tileTypeAfterTask;
 
+        public Task(TaskClass taskClass)
+        {
+            this.taskClass = taskClass;
+        }
+
     }
 }

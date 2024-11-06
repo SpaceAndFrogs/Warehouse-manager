@@ -43,3 +43,9 @@ MonoBehaviour:
     buildingType: 4
     nameOfButton: Rack
     buildingTime: 2
+  - buildingObject: {fileID: 8851040814126902023, guid: e8842d96db0d44eadab574137eb1a53c,
+      type: 3}
+    buildingSprite: {fileID: 0}
+    buildingType: 6
+    nameOfButton: OrderStation
+    buildingTime: 2

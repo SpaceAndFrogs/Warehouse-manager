@@ -49,11 +49,13 @@ public class TaskManager : MonoBehaviour
         public TasksTypes.Task task;
         public Tile tileWithTask;
         public Buildings.Building building;
-        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building)
+        public OrdersManager.Order order;
+        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building,OrdersManager.Order order)
         {
             this.task = task;
             this.tileWithTask = tileWithTask;
             this.building = building;
+            this.order = order;
         }
     }
 
@@ -133,8 +135,20 @@ public class TaskManager : MonoBehaviour
     {        
         CheckForInput();
         GiveTasksToBuilders();
+        ConvertOrdersToTasks();
         GiveTasksToPick();
         GiveTasksToPack();
+    }
+
+    void ConvertOrdersToTasks()
+    {
+        for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
+        {
+            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null, ordersManager.ordersOnPick[i]);
+            pickTasks.Add(newPickTask);
+        }
+
+        ordersManager.ordersOnPick.Clear();
     }
 
     bool IsMouseOverUi()
@@ -160,7 +174,7 @@ public class TaskManager : MonoBehaviour
                 if(!IsTileCompatibleWithTask(tile))
                     return;
 
-                buildingTasks.Add(new Task(currentTask,tile, currentBuilding));
+                buildingTasks.Add(new Task(currentTask,tile, currentBuilding,null));
             }
 
         }
@@ -205,6 +219,16 @@ public class TaskManager : MonoBehaviour
                 freeBuilders.Add(worker);
                 break;
             }
+            case WorkerData.WorkerType.Pick:
+            {
+                freePickWorkers.Add(worker);
+                break;
+            }
+            case WorkerData.WorkerType.Pack:
+            {
+                freePackWorkers.Add(worker);
+                break;
+            }
         }
         
     }
@@ -241,7 +265,7 @@ public class TaskManager : MonoBehaviour
 
     void GiveTasksToPick()
     {
-        if (ordersManager.ordersOnPick.Count == 0)
+        if (pickTasks.Count == 0)
             return;
 
         if (freePickWorkers.Count == 0)
@@ -249,7 +273,7 @@ public class TaskManager : MonoBehaviour
 
         List<Task> givenPickTasks = new List<Task>();
 
-        for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
+        for(int i = 0; i < pickTasks.Count; i++)
         {
             Worker workerForTask = freePickWorkers[0];
 
@@ -263,7 +287,7 @@ public class TaskManager : MonoBehaviour
             freePickWorkers.Remove(workerForTask);
         }
 
-        for(int i = givenPickTasks.Count - 1; i >= 0; i--)
+        for(int i = 0; i < givenPickTasks.Count; i++)
         {
             pickTasks.Remove(givenPickTasks[i]);
         }

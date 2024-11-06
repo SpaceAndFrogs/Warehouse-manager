@@ -34,6 +34,7 @@ public class Worker : MonoBehaviour
             }
             case TasksTypes.TaskClass.Pick:
             {
+                StartPickTask();
                 break;
             }
             case TasksTypes.TaskClass.Pack:
@@ -44,6 +45,11 @@ public class Worker : MonoBehaviour
         
     }
 
+    void StartPickTask()
+    {
+        endNode = currentTask.order.racksWithItems[0].tileWithRack;
+        GetPathToTarget();
+    }
     void StartBuildingTask()
     {
         endNode = currentTask.tileWithTask;        
@@ -96,7 +102,7 @@ public class Worker : MonoBehaviour
                 StartCoroutine(StartBuildTask());
                 break;
             }
-            case TasksTypes.TaskClass.Pick:
+            case TasksTypes.TaskClass.Pack:
             {
                 if(goingToPickStash)
                 {
@@ -108,6 +114,23 @@ public class Worker : MonoBehaviour
                     StopCoroutine(StartPackTask());
                     StartCoroutine(StartPackTask());
                 }
+                break;
+            }
+            case TasksTypes.TaskClass.Pick:
+            {
+                currentTask.order.racksWithItems.RemoveAt(0);
+                if(currentTask.order.racksWithItems.Count > 0)
+                {
+                    endNode = currentTask.order.racksWithItems[0].tileWithRack;
+                }else if(endNode == pickStashTile)
+                {
+                    StopCoroutine(FollowPath());
+                }else
+                {
+                    endNode = pickStashTile;
+                }
+
+                GetPathToTarget();
                 break;
             }
         }     
@@ -153,12 +176,34 @@ public class Worker : MonoBehaviour
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
 
             GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
-            currentTask.tileWithTask.building = newBuilding;        
+            currentTask.tileWithTask.building = newBuilding;
+
+            CheckIfBuildingIsRack(newBuilding);
+
+            CheckIfBuildingIsOrdersStation(newBuilding);
         }
 
         currentTask = null;
         ReturnWorker();
         yield break;
+    }
+
+    void CheckIfBuildingIsRack(GameObject building)
+    {
+        Rack rack = building.GetComponent<Rack>();
+            if(rack != null)
+            {
+                rack.tileWithRack = currentTask.tileWithTask;
+            }
+    }
+
+    void CheckIfBuildingIsOrdersStation(GameObject building)
+    {
+        OrdersStation ordersStation= building.GetComponent<OrdersStation>();
+            if(ordersStation != null)
+            {
+                ordersStation.tileWithStation = currentTask.tileWithTask;
+            }  
     }
 
     void ReturnWorker()

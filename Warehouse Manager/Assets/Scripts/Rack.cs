@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Rack : MonoBehaviour
 {
@@ -13,10 +14,16 @@ public class Rack : MonoBehaviour
     public Tile tileWithRack;
     public int desiredAmountOfItems = 0;
     public int maxAmountOfItems = 0;
+    public static event Action<Rack>? OnRackSpawned;
 
     void Update()
     {
         CheckAmountOfItems();
+    }
+
+    void Start()
+    {
+        OnRackSpawned?.Invoke(this);
     }
 
     void CheckAmountOfItems()
@@ -27,4 +34,5 @@ public class Rack : MonoBehaviour
             amountOfItems += amountOfItemsToBuy; 
         }
     }
+
 }

@@ -29,15 +29,47 @@ public class OrdersManager : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        Rack.OnRackSpawned += AddRack;
+        OrdersStation.OnStationSpawned += AddOrdersStation;
+    }
+    void OnDisable()
+    {
+        Rack.OnRackSpawned -= AddRack;
+        OrdersStation.OnStationSpawned -= AddOrdersStation;
+    }
+
+    void AddRack(Rack rack)
+    {
+        racks.Add(rack);
+    }
+
+    void AddOrdersStation(OrdersStation ordersStation)
+    {
+        this.ordersStation = ordersStation;
+    }
+
+    void Start()
+    {
+        StartCoroutine(GenerateOrders());
+    }
+
     IEnumerator GenerateOrders()
     {
         while(true)
         {
             if(racks.Count == 0)
-            continue;
+            {
+                yield return new WaitForEndOfFrame();
+                continue;
+            }
 
             if(!IsThereItemsOnRacks())
-            continue;
+            {
+                yield return new WaitForEndOfFrame();
+                continue;
+            }
 
             int amountOfOrders = Random.Range((int)1, maxAmountOfOrders+1);
             
@@ -140,7 +172,7 @@ public class OrdersManager : MonoBehaviour
             
             int rackIndex = Random.Range(0,racks.Count);
             int amountOfItemsFromRack = Random.Range(1,racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems+1);
-            while(usedRacksIndexs.Contains(rackIndex))
+            if(!usedRacksIndexs.Contains(rackIndex))
             {
                 rackIndex = Random.Range(0,racks.Count);
                 amountOfItemsFromRack = Random.Range(1,racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems+1);

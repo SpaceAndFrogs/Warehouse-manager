@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Worker : MonoBehaviour
 {
@@ -16,9 +17,12 @@ public class Worker : MonoBehaviour
     public Tile pickStashTile;
     public bool goingToPickStash =false;
 
+    public static event Action<Worker>? OnWorkerSpawned;
+
     private void Start()
     {
         ReturnWorker();
+        OnWorkerSpawned?.Invoke(this);
     }
 
     public void GetTask(TaskManager.Task task)
@@ -181,6 +185,8 @@ public class Worker : MonoBehaviour
             CheckIfBuildingIsRack(newBuilding);
 
             CheckIfBuildingIsOrdersStation(newBuilding);
+
+            CheckIfBuildingPackStation(newBuilding);
         }
 
         currentTask = null;
@@ -203,6 +209,23 @@ public class Worker : MonoBehaviour
             if(ordersStation != null)
             {
                 ordersStation.tileWithStation = currentTask.tileWithTask;
+            }  
+    }
+
+    void CheckIfBuildingPackStation(GameObject building)
+    {
+        PackStation packStation= building.GetComponent<PackStation>();
+            if(packStation != null)
+            {
+                packStation.tileWithStation = currentTask.tileWithTask;
+            }  
+    }
+    void CheckIfBuildingPickStash(GameObject building)
+    {
+        PickStash pickStash= building.GetComponent<PickStash>();
+            if(pickStash != null)
+            {
+                pickStash.tileWithStash = currentTask.tileWithTask;
             }  
     }
 

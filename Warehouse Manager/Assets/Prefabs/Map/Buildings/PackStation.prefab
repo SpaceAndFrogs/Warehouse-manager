@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6511687928818003316}
   - component: {fileID: 6835610730845378970}
   - component: {fileID: 1250729781356637582}
+  - component: {fileID: -4767153077085969477}
   m_Layer: 0
   m_Name: PackStation
   m_TagString: Untagged
@@ -105,3 +106,17 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-4767153077085969477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851040814126902023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04806c326a5e6ef0eb48d1a050768bf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  havePackWorker: 0
+  tileWithStation: {fileID: 0}

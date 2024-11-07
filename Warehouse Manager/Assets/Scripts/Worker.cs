@@ -11,7 +11,7 @@ public class Worker : MonoBehaviour
     
     public WorkerData workerData;
 
-    TaskManager.Task currentTask = null;
+    public TaskManager.Task currentTask = null;
 
     public Tile packStationTile;
     public Tile pickStashTile;

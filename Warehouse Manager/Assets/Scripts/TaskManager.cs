@@ -308,8 +308,15 @@ public class TaskManager : MonoBehaviour
 
         for(int i = 0; i < packTasks.Count; i++)
         {
-            Worker workerForTask = freePackWorkers[0];
-
+            Worker workerForTask = null;
+            for(int j = 0; j < freePackWorkers.Count; j++)
+            {
+                if(workerForTask.currentTask != null)
+                {
+                    workerForTask = freePackWorkers[j];
+                }
+            }
+             
             if (workerForTask == null)
                 continue;
 

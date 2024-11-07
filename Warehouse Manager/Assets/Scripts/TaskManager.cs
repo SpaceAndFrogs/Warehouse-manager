@@ -50,12 +50,15 @@ public class TaskManager : MonoBehaviour
         public Tile tileWithTask;
         public Buildings.Building building;
         public OrdersManager.Order order;
-        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building,OrdersManager.Order order)
+
+        public Tile tileOfPickStashWithOrder;
+        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building,OrdersManager.Order order,Tile tileOfPickStashWithOrder)
         {
             this.task = task;
             this.tileWithTask = tileWithTask;
             this.building = building;
             this.order = order;
+            this.tileOfPickStashWithOrder = tileOfPickStashWithOrder;
         }
     }
 
@@ -144,7 +147,7 @@ public class TaskManager : MonoBehaviour
     {
         for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
         {
-            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null, ordersManager.ordersOnPick[i]);
+            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null, ordersManager.ordersOnPick[i],null);
             pickTasks.Add(newPickTask);
         }
 
@@ -174,7 +177,7 @@ public class TaskManager : MonoBehaviour
                 if(!IsTileCompatibleWithTask(tile))
                     return;
 
-                buildingTasks.Add(new Task(currentTask,tile, currentBuilding,null));
+                buildingTasks.Add(new Task(currentTask,tile, currentBuilding,null,null));
             }
 
         }
@@ -295,7 +298,7 @@ public class TaskManager : MonoBehaviour
 
     void GiveTasksToPack()
     {
-        if (ordersManager.ordersOnPack.Count == 0)
+        if (packTasks.Count == 0)
             return;
 
         if (freePackWorkers.Count == 0)
@@ -303,7 +306,7 @@ public class TaskManager : MonoBehaviour
 
         List<Task> givenPackTasks = new List<Task>();
 
-        for(int i = 0; i < ordersManager.ordersOnPack.Count; i++)
+        for(int i = 0; i < packTasks.Count; i++)
         {
             Worker workerForTask = freePackWorkers[0];
 

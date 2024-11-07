@@ -10,6 +10,19 @@ public class PickPackStationsManager : MonoBehaviour
     public List<Worker> packWorkers = new List<Worker>();
     public List<Worker> pickWorkers = new List<Worker>();
 
+    public static PickPackStationsManager instance;
+
+    void Start()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void OnEnable()
     {
         PackStation.OnPackStationSpawned += AddNewPackStation;
@@ -33,7 +46,7 @@ public class PickPackStationsManager : MonoBehaviour
     {
         for(int i = 0; i < packWorkers.Count; i++)
         {
-            if(packWorkers[i].packStationTile != null)
+            if(packWorkers[i].packStationTile == null)
             {
                 packWorkers[i].packStationTile = packStation.tileWithStation;
                 packStation.havePackWorker = true;

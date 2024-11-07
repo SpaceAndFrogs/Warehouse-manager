@@ -15,14 +15,43 @@ public class Worker : MonoBehaviour
 
     public Tile packStationTile;
     public Tile pickStashTile;
-    public bool goingToPickStash =false;
+    public bool goingToPickStash =true;
 
     public static event Action<Worker>? OnWorkerSpawned;
+    public static event Action<Tile, OrdersManager.Order>? OnOrderAddedToStash;
 
     private void Start()
     {
         ReturnWorker();
         OnWorkerSpawned?.Invoke(this);
+    }
+
+    void FindPickStash()
+    {
+        
+        PickStash pickStashWithLeastOrders = PickPackStationsManager.instance.pickStashes[0];
+        for(int i = 1; i < PickPackStationsManager.instance.pickStashes.Count; i++)
+        {
+            if(workerData.workerType == WorkerData.WorkerType.Pick)
+            {
+                if(pickStashWithLeastOrders.orders.Count == 0)
+                {
+                    pickStashWithLeastOrders = PickPackStationsManager.instance.pickStashes[i];
+                }
+                else if(pickStashWithLeastOrders.orders.Count > PickPackStationsManager.instance.pickStashes[i].orders.Count)
+                {
+                    pickStashWithLeastOrders = PickPackStationsManager.instance.pickStashes[i];
+                }
+            }else
+            {
+                if(pickStashWithLeastOrders.orders.Count < PickPackStationsManager.instance.pickStashes[i].orders.Count)
+                {
+                    pickStashWithLeastOrders = PickPackStationsManager.instance.pickStashes[i];
+                }
+            }
+        }
+        pickStashTile = pickStashWithLeastOrders.tileWithStash;
+        
     }
 
     public void GetTask(TaskManager.Task task)
@@ -43,10 +72,17 @@ public class Worker : MonoBehaviour
             }
             case TasksTypes.TaskClass.Pack:
             {
+                StartPackTask();
                 break;
             }
         }
         
+    }
+
+    void StartPackTask()
+    {
+        endNode = currentTask.tileOfPickStashWithOrder;
+        GetPathToTarget();
     }
 
     void StartPickTask()
@@ -115,22 +151,36 @@ public class Worker : MonoBehaviour
                     GetPathToTarget();
                 }else
                 {
-                    StopCoroutine(StartPackTask());
-                    StartCoroutine(StartPackTask());
+                    StopCoroutine(StartPackOrder());
+                    StartCoroutine(StartPackOrder());
+                    goingToPickStash = true;
                 }
                 break;
             }
             case TasksTypes.TaskClass.Pick:
             {
-                currentTask.order.racksWithItems.RemoveAt(0);
                 if(currentTask.order.racksWithItems.Count > 0)
                 {
+                    currentTask.order.racksWithItems.RemoveAt(0);
+                }
+                
+                if(currentTask.order.racksWithItems.Count > 0)
+                {        
+                               
                     endNode = currentTask.order.racksWithItems[0].tileWithRack;
+                    
                 }else if(endNode == pickStashTile)
                 {
+                    OnOrderAddedToStash?.Invoke(pickStashTile,currentTask.order);
+                    currentTask.task.taskClass = TasksTypes.TaskClass.Pack;
+                    currentTask.tileOfPickStashWithOrder = pickStashTile;
+                    TaskManager.instance.packTasks.Add(currentTask);
+                    ReturnWorker();
                     StopCoroutine(FollowPath());
+                    break;
                 }else
                 {
+                    FindPickStash();
                     endNode = pickStashTile;
                 }
 
@@ -140,7 +190,7 @@ public class Worker : MonoBehaviour
         }     
     }
 
-    IEnumerator StartPackTask()
+    IEnumerator StartPackOrder()
     {
         float timer = 0;
 
@@ -186,7 +236,9 @@ public class Worker : MonoBehaviour
 
             CheckIfBuildingIsOrdersStation(newBuilding);
 
-            CheckIfBuildingPackStation(newBuilding);
+            CheckIfBuildingIsPackStation(newBuilding);
+
+            CheckIfBuildingIsPickStash(newBuilding);
         }
 
         currentTask = null;
@@ -212,7 +264,7 @@ public class Worker : MonoBehaviour
             }  
     }
 
-    void CheckIfBuildingPackStation(GameObject building)
+    void CheckIfBuildingIsPackStation(GameObject building)
     {
         PackStation packStation= building.GetComponent<PackStation>();
             if(packStation != null)
@@ -220,7 +272,7 @@ public class Worker : MonoBehaviour
                 packStation.tileWithStation = currentTask.tileWithTask;
             }  
     }
-    void CheckIfBuildingPickStash(GameObject building)
+    void CheckIfBuildingIsPickStash(GameObject building)
     {
         PickStash pickStash= building.GetComponent<PickStash>();
             if(pickStash != null)

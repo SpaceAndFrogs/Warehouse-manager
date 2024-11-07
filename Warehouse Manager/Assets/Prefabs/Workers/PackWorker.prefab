@@ -154,4 +154,4 @@ MonoBehaviour:
   workerData: {fileID: 11400000, guid: 3d4808f97db91640fb7025c0a4d9ce18, type: 2}
   packStationTile: {fileID: 0}
   pickStashTile: {fileID: 0}
-  goingToPickStash: 0
+  goingToPickStash: 1

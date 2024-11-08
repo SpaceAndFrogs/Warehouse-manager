@@ -76,6 +76,8 @@ public class TaskManager : MonoBehaviour
             {
                 CreateBuildingButtons();
             }
+            tasksCanvasTransform.gameObject.SetActive(true);
+            buildingsCanvasTransform.gameObject.SetActive(false);
         }
     }
 

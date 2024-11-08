@@ -2281,7 +2281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   racks: []
-  timeBetweenOrders: 10
+  timeBetweenOrders: 0.1
   maxAmountOfOrders: 1
   items: {fileID: 11400000, guid: 516308de50cceaa67bca7932d6684da3, type: 2}
   ordersStation: {fileID: 0}

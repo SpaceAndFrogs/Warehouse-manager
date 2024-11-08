@@ -15,9 +15,7 @@ public class TaskManager : MonoBehaviour
 
     public List<Task> pickTasks = new List<Task>();
     public List<Task> packTasks = new List<Task>();
-
-    [SerializeField]
-    OrdersManager ordersManager;
+    public OrdersManager ordersManager;
 
     public TasksTypes.Task currentTask;
 

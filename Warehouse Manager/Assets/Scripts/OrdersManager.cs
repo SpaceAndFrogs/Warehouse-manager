@@ -15,7 +15,6 @@ public class OrdersManager : MonoBehaviour
     int maxAmountOfOrders;
     [SerializeField]
     Items items;
-    public OrdersStation ordersStation;
 
     public class Order
     {
@@ -32,22 +31,15 @@ public class OrdersManager : MonoBehaviour
     void OnEnable()
     {
         Rack.OnRackSpawned += AddRack;
-        OrdersStation.OnStationSpawned += AddOrdersStation;
     }
     void OnDisable()
     {
         Rack.OnRackSpawned -= AddRack;
-        OrdersStation.OnStationSpawned -= AddOrdersStation;
     }
 
     void AddRack(Rack rack)
     {
         racks.Add(rack);
-    }
-
-    void AddOrdersStation(OrdersStation ordersStation)
-    {
-        this.ordersStation = ordersStation;
     }
 
     void Start()
@@ -130,10 +122,10 @@ public class OrdersManager : MonoBehaviour
     {
         for(int i = 0; i < racks.Count; i ++)
         {
-            int currentRackPathLength = PathFinder.instance.FindPath(ordersStation.tileWithStation,racks[i].tileWithRack).Length;
+            int currentRackPathLength = PathFinder.instance.FindPath(PickPackStationsManager.instance.ordersStation.tileWithStation,racks[i].tileWithRack).Length;
             for(int j = i+1; j < racks.Count; j++)
             {
-                int lastPathLength = PathFinder.instance.FindPath(ordersStation.tileWithStation,racks[i].tileWithRack).Length;
+                int lastPathLength = PathFinder.instance.FindPath(PickPackStationsManager.instance.ordersStation.tileWithStation,racks[i].tileWithRack).Length;
                 if(currentRackPathLength>lastPathLength)
                 {
                     Rack currentRack = racks[i];

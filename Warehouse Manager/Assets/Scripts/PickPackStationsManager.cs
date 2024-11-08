@@ -10,6 +10,8 @@ public class PickPackStationsManager : MonoBehaviour
     public List<Worker> packWorkers = new List<Worker>();
     public List<Worker> pickWorkers = new List<Worker>();
 
+    public OrdersStation ordersStation = null;
+
     public static PickPackStationsManager instance;
 
     void Start()
@@ -28,6 +30,7 @@ public class PickPackStationsManager : MonoBehaviour
         PackStation.OnPackStationSpawned += AddNewPackStation;
         Worker.OnWorkerSpawned += AddNewWorker;
         PickStash.OnPickStashSpawned += AddNewPickStash;
+        OrdersStation.OnStationSpawned += AddOrderStation;
     }
 
     void OnDisable()
@@ -35,6 +38,7 @@ public class PickPackStationsManager : MonoBehaviour
         PackStation.OnPackStationSpawned -= AddNewPackStation;
         Worker.OnWorkerSpawned -= AddNewWorker;
         PickStash.OnPickStashSpawned -= AddNewPickStash;
+        OrdersStation.OnStationSpawned -= AddOrderStation;
     }
 
     void AddNewPickStash(PickStash pickStash)
@@ -50,6 +54,7 @@ public class PickPackStationsManager : MonoBehaviour
             {
                 packWorkers[i].packStationTile = packStation.tileWithStation;
                 packStation.havePackWorker = true;
+                packWorkers[i].GoToStation();
                 break;
             }
         }
@@ -68,6 +73,7 @@ public class PickPackStationsManager : MonoBehaviour
                 {
                     packStations[i].havePackWorker = true;
                     worker.packStationTile = packStations[i].tileWithStation;
+                    worker.GoToStation();
                     break;
                 }
             }
@@ -76,6 +82,10 @@ public class PickPackStationsManager : MonoBehaviour
         }else if(worker.workerData.workerType == WorkerData.WorkerType.Pick)
         {
             pickWorkers.Add(worker);
+            if(ordersStation != null)
+            {
+                worker.GoToStation();
+            }            
             return;
         }else
         {
@@ -83,5 +93,14 @@ public class PickPackStationsManager : MonoBehaviour
         }
 
 
+    }
+
+    void AddOrderStation(OrdersStation ordersStation)
+    {
+        this.ordersStation = ordersStation;
+        for(int i = 0; i < pickWorkers.Count; i++)
+        {
+            pickWorkers[i].GoToStation();
+        }
     }
 }

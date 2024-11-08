@@ -26,6 +26,28 @@ public class Worker : MonoBehaviour
         OnWorkerSpawned?.Invoke(this);
     }
 
+    public void GoToStation()
+    {
+        switch(workerData.workerType)
+        {
+            case WorkerData.WorkerType.Pack:
+            {
+                endNode = packStationTile;
+                break;
+            }
+            case WorkerData.WorkerType.Pick:
+            {
+                endNode = PickPackStationsManager.instance.ordersStation.tileWithStation;
+                break;
+            }
+        }
+
+        if(endNode != null)
+        {
+            GetPathToTarget();
+        }
+    }
+
     void FindPickStash()
     {
         
@@ -132,6 +154,11 @@ public class Worker : MonoBehaviour
                 i++;
             }
             yield return new WaitForEndOfFrame();
+        }
+
+        if(currentTask == null)
+        {
+            yield break;
         }
 
         switch(currentTask.task.taskClass)

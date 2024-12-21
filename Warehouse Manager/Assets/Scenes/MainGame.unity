@@ -2287,7 +2287,7 @@ MonoBehaviour:
   ordersOnPick: []
   ordersOnPack: []
   racks: []
-  timeBetweenOrders: 0.1
+  timeBetweenOrders: 1
   maxAmountOfOrders: 1
   items: {fileID: 11400000, guid: 516308de50cceaa67bca7932d6684da3, type: 2}
 --- !u!4 &1352405502

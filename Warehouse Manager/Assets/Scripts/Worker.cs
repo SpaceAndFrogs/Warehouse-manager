@@ -135,21 +135,22 @@ public class Worker : MonoBehaviour
     IEnumerator FollowPath()
     {
         int i = 0;
-        Vector3 direction = path[i].transform.position - transform.position;
+        Vector3 fixedPositionOfTile = new Vector3(path[i].transform.position.x,transform.position.y,path[i].transform.position.z);
+        Vector3 direction = fixedPositionOfTile - transform.position;
         direction.Normalize();
         while (i < path.Length)
         {
-
-            direction = path[i].transform.position - transform.position;
+            fixedPositionOfTile = new Vector3(path[i].transform.position.x,transform.position.y,path[i].transform.position.z);
+            direction = fixedPositionOfTile - transform.position;
             direction.Normalize();
             transform.position += direction * workerData.moveSpeed * Time.deltaTime;
 
-            if(Vector3.Distance(transform.position, path[i].transform.position)<= workerData.proxyMargin && i < path.Length - 1)
+            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= workerData.proxyMargin && i < path.Length - 1)
             { 
                 i++;
             }
 
-            if(Vector3.Distance(transform.position, path[i].transform.position)<= workerData.proxyMarginOfFinalTile && i == path.Length - 1)
+            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= workerData.proxyMarginOfFinalTile && i == path.Length - 1)
             { 
                 i++;
             }

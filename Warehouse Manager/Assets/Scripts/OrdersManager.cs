@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class OrdersManager : MonoBehaviour
 {
+    [SerializeField]
     public List<Order> ordersOnPick = new List<Order>();
+    [SerializeField]
     public List<Order> ordersOnPack = new List<Order>();
     public List<Rack> racks = new List<Rack>();
 
@@ -16,15 +19,18 @@ public class OrdersManager : MonoBehaviour
     [SerializeField]
     Items items;
 
+    [System.Serializable]
     public class Order
     {
         public List<Rack> racksWithItems = new List<Rack>();
+        public List<int> amountOfItemsFromRacks = new List<int>();
         public float orderPrice;
 
-        public Order(List<Rack> racksWithItems, float orderPrice)
+        public Order(List<Rack> racksWithItems, float orderPrice, List<int> amountOfItemsFromRacks)
         {
             this.racksWithItems = racksWithItems;
             this.orderPrice = orderPrice;
+            this.amountOfItemsFromRacks = amountOfItemsFromRacks;
         }
     }
 
@@ -91,10 +97,12 @@ public class OrdersManager : MonoBehaviour
 
     Order MakeOrder()
     {
-        List<Items.Item> itemsInOrder = DrawItemsForOrder();
+        (List<Items.Item>, List<int>) items = DrawItemsForOrder();
+        List<Items.Item> itemsInOrder = items.Item1;
+        List<int> amountOfItemsFromRacks = items.Item2;
         List<Rack> sortedRacks = SortRacksByItems(itemsInOrder);
         float priceOfOrder = CheckPriceOfOrder(itemsInOrder);
-        return new Order(sortedRacks, priceOfOrder);
+        return new Order(sortedRacks, priceOfOrder, amountOfItemsFromRacks);
     }
 
     List<Rack> SortRacksByItems(List<Items.Item> itemsInOrder)
@@ -146,10 +154,11 @@ public class OrdersManager : MonoBehaviour
         return price;
     }
 
-    List<Items.Item> DrawItemsForOrder()
+    (List<Items.Item>, List<int>) DrawItemsForOrder()
     {
 
         List<Items.Item> drawnItems = new List<Items.Item>();
+        List<int> amountOfItemsFromRacks = new List<int>();
 
         int maxAmountOfItems = 1;
         for(int i = 0; i < racks.Count; i ++)
@@ -161,8 +170,32 @@ public class OrdersManager : MonoBehaviour
         List<int> usedRacksIndexs = new List<int>();
         for(int i = 0; i < amountOfItems; i++)
         {
-            
-            int rackIndex = Random.Range(0,racks.Count);
+            List<int> racksChecked = new List<int>();
+            int rackIndex = -1;
+
+            while(true)
+            {
+                rackIndex = Random.Range(0,racks.Count);
+                if(!racksChecked.Contains(rackIndex))
+                {
+                    racksChecked.Add(rackIndex);
+                }
+
+                if(racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems > 0)
+                {
+                    break;
+                }
+
+                if(racksChecked.Count == racks.Count)
+                {
+                    break;
+                }
+            }
+
+            if(rackIndex == -1)
+            {
+                continue;
+            }
             int amountOfItemsFromRack = Random.Range(1,racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems+1);
             if(!usedRacksIndexs.Contains(rackIndex))
             {
@@ -179,6 +212,12 @@ public class OrdersManager : MonoBehaviour
 
             i += amountOfItemsFromRack-1;
 
+            for(int j = 0 ; j < amountOfItemsFromRack; j++)
+            {
+                amountOfItemsFromRacks.Add(1);
+            }
+            
+
             for(int j = 0; j < amountOfItemsFromRack; j++)
             {
                 drawnItems.Add(racks[rackIndex].itemOnRack);
@@ -186,6 +225,6 @@ public class OrdersManager : MonoBehaviour
             
         }
 
-        return drawnItems;
+        return (drawnItems, amountOfItemsFromRacks);
     }
 }

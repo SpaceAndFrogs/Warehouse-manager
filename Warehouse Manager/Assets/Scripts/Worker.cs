@@ -188,7 +188,9 @@ public class Worker : MonoBehaviour
             {
                 if(currentTask.order.racksWithItems.Count > 0)
                 {
+                    TakeItemsFromRack();
                     currentTask.order.racksWithItems.RemoveAt(0);
+                    currentTask.order.amountOfItemsFromRacks.RemoveAt(0);
                 }
                 
                 if(currentTask.order.racksWithItems.Count > 0)
@@ -217,6 +219,11 @@ public class Worker : MonoBehaviour
         }     
     }
 
+    void TakeItemsFromRack()
+    {
+        currentTask.order.racksWithItems[0].GiveItems(currentTask.order.amountOfItemsFromRacks[0]);
+    }
+
     IEnumerator StartPackOrder()
     {
         float timer = 0;
@@ -238,36 +245,27 @@ public class Worker : MonoBehaviour
         float timer = 0;
 
         if(currentTask.task.taskType != TasksTypes.TaskType.Build)
+        yield break;
+        
+        while(timer <= currentTask.building.buildingTime)
         {
-            while(timer <= currentTask.task.taskTime)
-            {
-                timer += Time.deltaTime;
-                yield return new WaitForEndOfFrame();
-            }
-
-            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
-        }else
-        {
-            while(timer <= currentTask.building.buildingTime)
-            {
-                timer += Time.deltaTime;
-                yield return new WaitForEndOfFrame();
-            }
-
-            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
-
-            GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
-            currentTask.tileWithTask.building = newBuilding;
-
-            CheckIfBuildingIsRack(newBuilding);
-
-            CheckIfBuildingIsOrdersStation(newBuilding);
-
-            CheckIfBuildingIsPackStation(newBuilding);
-
-            CheckIfBuildingIsPickStash(newBuilding);
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
         }
 
+        currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
+
+        GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
+        currentTask.tileWithTask.building = newBuilding;
+
+        CheckIfBuildingIsRack(newBuilding);
+
+        CheckIfBuildingIsOrdersStation(newBuilding);
+
+        CheckIfBuildingIsPackStation(newBuilding);
+
+        CheckIfBuildingIsPickStash(newBuilding);
+        
         currentTask = null;
         ReturnWorker();
         yield break;

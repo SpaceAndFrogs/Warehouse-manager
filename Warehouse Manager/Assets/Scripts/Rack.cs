@@ -35,4 +35,9 @@ public class Rack : MonoBehaviour
         }
     }
 
+    public void GiveItems(int amountOfItemsToGive)
+    {
+        amountOfItems -= amountOfItemsToGive;
+        reservedAmountOfItems -= amountOfItemsToGive;
+    }
 }

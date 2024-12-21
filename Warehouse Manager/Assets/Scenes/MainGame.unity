@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2297.8528, g: 2486.4963, b: 3735.8835, a: 1}
+  m_IndirectSpecularColor: {r: 2259.8013, g: 2399.2932, b: 3491.0513, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -264,6 +264,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d659b35290c904987d1e3c168c9db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingTasks: []
+  pickTasks: []
+  packTasks: []
   ordersManager: {fileID: 1352405501}
   currentTask:
     taskTime: 0
@@ -1309,6 +1312,7 @@ MonoBehaviour:
   pickStashes: []
   packWorkers: []
   pickWorkers: []
+  ordersStation: {fileID: 0}
 --- !u!4 &659691926
 Transform:
   m_ObjectHideFlags: 0
@@ -1632,8 +1636,8 @@ MonoBehaviour:
   packWorkerPrefab: {fileID: 7320657417775280965, guid: 23ffbc808edbd6f8883e8e25eebb5f3f,
     type: 3}
   amountOfBuildersToSpawnAtStart: 1
-  amountOfPickWorkersToSpawnAtStart: 3
-  amountOfPackWorkersToSpawnAtStart: 2
+  amountOfPickWorkersToSpawnAtStart: 1
+  amountOfPackWorkersToSpawnAtStart: 1
 --- !u!4 &1052336507
 Transform:
   m_ObjectHideFlags: 0
@@ -2280,11 +2284,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d4cb51dcb25884582fd8674a44e0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ordersOnPick: []
+  ordersOnPack: []
   racks: []
   timeBetweenOrders: 0.1
   maxAmountOfOrders: 1
   items: {fileID: 11400000, guid: 516308de50cceaa67bca7932d6684da3, type: 2}
-  ordersStation: {fileID: 0}
 --- !u!4 &1352405502
 Transform:
   m_ObjectHideFlags: 0

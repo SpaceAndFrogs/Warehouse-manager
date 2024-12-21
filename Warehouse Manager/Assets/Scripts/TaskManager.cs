@@ -13,6 +13,7 @@ public class TaskManager : MonoBehaviour
 
     public List<Task> buildingTasks = new List<Task>();
 
+    [SerializeField]
     public List<Task> pickTasks = new List<Task>();
     public List<Task> packTasks = new List<Task>();
     public OrdersManager ordersManager;
@@ -42,6 +43,7 @@ public class TaskManager : MonoBehaviour
     [SerializeField]
     Button backToTasksButton;
 
+    [System.Serializable]
     public class Task
     {
         public TasksTypes.Task task;
@@ -278,16 +280,16 @@ public class TaskManager : MonoBehaviour
 
         for(int i = 0; i < pickTasks.Count; i++)
         {
+            if(freePickWorkers.Count == 0)
+                break;
+                
             Worker workerForTask = freePickWorkers[0];
-
-            if (workerForTask == null)
-                continue;
 
             workerForTask.GetTask(pickTasks[i]);
 
             givenPickTasks.Add(pickTasks[i]);
 
-            freePickWorkers.Remove(workerForTask);
+            freePickWorkers.RemoveAt(0);
         }
 
         for(int i = 0; i < givenPickTasks.Count; i++)
@@ -308,17 +310,15 @@ public class TaskManager : MonoBehaviour
 
         for(int i = 0; i < packTasks.Count; i++)
         {
-            Worker workerForTask = null;
-            for(int j = 0; j < freePackWorkers.Count; j++)
+            if(freePackWorkers.Count == 0)
             {
-                if(workerForTask.currentTask != null)
-                {
-                    workerForTask = freePackWorkers[j];
-                }
+                break;
             }
-             
-            if (workerForTask == null)
-                continue;
+            
+            
+            
+
+            Worker workerForTask = freePackWorkers[0];
 
             workerForTask.GetTask(packTasks[i]);
 

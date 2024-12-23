@@ -235,7 +235,7 @@ public class Worker : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-
+        CashManager.instance.GetCash(currentTask.order.orderPrice);
         currentTask = null;
         ReturnWorker();
         yield break;

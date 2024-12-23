@@ -179,6 +179,11 @@ public class TaskManager : MonoBehaviour
                 if(!IsTileCompatibleWithTask(tile))
                     return;
 
+                if(currentBuilding.cost > CashManager.instance.AmountOfCash())
+                    return;
+
+                CashManager.instance.SpendCash(currentBuilding.cost);
+
                 buildingTasks.Add(new Task(currentTask,tile, currentBuilding,null,null));
             }
 

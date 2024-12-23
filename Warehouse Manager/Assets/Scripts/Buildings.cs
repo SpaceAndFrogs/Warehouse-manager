@@ -18,6 +18,7 @@ public class Buildings : ScriptableObject
         public BuildingType buildingType;
         public string nameOfButton;
         public float buildingTime;
+        public float cost;
 
     }
 }

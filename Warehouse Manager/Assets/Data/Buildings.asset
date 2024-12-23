@@ -19,33 +19,39 @@ MonoBehaviour:
     buildingType: 1
     nameOfButton: Floor
     buildingTime: 1
+    cost: 5
   - buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
       type: 3}
     buildingSprite: {fileID: 0}
     buildingType: 2
     nameOfButton: Wall
     buildingTime: 2
+    cost: 5
   - buildingObject: {fileID: 8851040814126902023, guid: bc79e1c80a568930fa534ae24c06e261,
       type: 3}
     buildingSprite: {fileID: 0}
     buildingType: 3
     nameOfButton: PackStation
     buildingTime: 2
+    cost: 5
   - buildingObject: {fileID: 8851040814126902023, guid: 022421ad66fb3053cac56c25d6ff12c0,
       type: 3}
     buildingSprite: {fileID: 0}
     buildingType: 5
     nameOfButton: Pick Stash
     buildingTime: 2
+    cost: 5
   - buildingObject: {fileID: 8851040814126902023, guid: d73822cd51e84e8d39f39ebce2cb7e96,
       type: 3}
     buildingSprite: {fileID: 0}
     buildingType: 4
     nameOfButton: Rack
     buildingTime: 2
+    cost: 5
   - buildingObject: {fileID: 8851040814126902023, guid: e8842d96db0d44eadab574137eb1a53c,
       type: 3}
     buildingSprite: {fileID: 0}
     buildingType: 6
     nameOfButton: OrderStation
     buildingTime: 2
+    cost: 5

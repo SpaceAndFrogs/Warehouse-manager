@@ -16,7 +16,8 @@ public class Items : ScriptableObject
     {
         public ItemType itemType;
         public Sprite sprite;
-        public float price;
+        public Vector2 minMaxBuyPrice;
+        public Vector2 minMaxPercentageOfDemandPrice;
         public string name;
     }
 }

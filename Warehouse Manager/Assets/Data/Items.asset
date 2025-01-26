@@ -15,9 +15,11 @@ MonoBehaviour:
   items:
   - itemType: 0
     sprite: {fileID: 0}
-    price: 1
+    minMaxBuyPrice: {x: 1, y: 10}
+    minMaxPercentageOfDemandPrice: {x: 50, y: 50}
     name: test 1
   - itemType: 1
     sprite: {fileID: 0}
-    price: 1
+    minMaxBuyPrice: {x: 1, y: 10}
+    minMaxPercentageOfDemandPrice: {x: 50, y: 50}
     name: test 2

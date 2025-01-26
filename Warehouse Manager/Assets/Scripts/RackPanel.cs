@@ -118,6 +118,18 @@ public class RackPanel : MonoBehaviour
 
     void ChangeDesiredAmount(string newText)
     {
-        currentRack.desiredAmountOfItems = int.Parse(newText);
+        int desiredAmount = int.Parse(newText);
+        int itemIndex = -1;
+
+        for(int i = 0; i < items.items.Count; i++)
+        {
+            if(items.items[i].itemType == currentRack.itemOnRack.itemType)
+            {
+                itemIndex = i;
+                break;
+            }
+        }
+        currentRack.desiredAmountOfItems = desiredAmount;
+        PricesManager.instance.UpdateAmountOfItemsInSale(desiredAmount, itemIndex);
     }
 }

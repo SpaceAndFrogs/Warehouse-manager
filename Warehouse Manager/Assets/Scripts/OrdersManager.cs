@@ -75,7 +75,10 @@ public class OrdersManager : MonoBehaviour
             {
                 Order order = MakeOrder();
 
-                ordersOnPick.Add(order);
+                if(order != null)
+                {
+                    ordersOnPick.Add(order);
+                }               
             }
             yield return new WaitForSeconds(timeBetweenOrders);
         }
@@ -98,6 +101,10 @@ public class OrdersManager : MonoBehaviour
     Order MakeOrder()
     {
         (List<Items.Item>, List<int>) items = DrawItemsForOrder();
+        if(items.Item1 == null || items.Item2 == null)
+        {
+            return null;
+        }
         List<Items.Item> itemsInOrder = items.Item1;
         List<int> amountOfItemsFromRacks = items.Item2;
         List<Rack> sortedRacks = SortRacksByItems(itemsInOrder);
@@ -149,7 +156,9 @@ public class OrdersManager : MonoBehaviour
         float price = 0;
         for(int i = 0; i < itemsInOrder.Count; i++)
         {
-            price += itemsInOrder[i].price;
+            string priceText = PricesManager.instance.itemPricesScripts[i].sellPriceInput.text;
+            priceText = priceText.Remove(priceText.Length - 1);
+            price += float.Parse(priceText);
         }
         return price;
     }
@@ -181,6 +190,33 @@ public class OrdersManager : MonoBehaviour
                     racksChecked.Add(rackIndex);
                 }
 
+                int itemIndex = -1;
+                for(int j = 0; j < items.items.Count; j++)
+                {
+                    if(racks[rackIndex].itemOnRack.itemType == PricesManager.instance.itemPricesScripts[j].itemType)
+                    {
+                        itemIndex = j;
+                        break;
+                    }
+                }
+
+                if(itemIndex == -1)
+                {
+                    Debug.Log("No item found");
+                    
+                    return (null,null);
+                }
+
+                if(PricesManager.instance.itemPricesScripts[itemIndex].sellingLocked)
+                {
+                    Debug.Log("Selling locked");
+                    if(racksChecked.Count == racks.Count)
+                    {
+                        return (null,null);
+                    }
+                    continue;
+                }
+
                 if(racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems > 0)
                 {
                     break;
@@ -188,14 +224,10 @@ public class OrdersManager : MonoBehaviour
 
                 if(racksChecked.Count == racks.Count)
                 {
-                    break;
+                    return (null,null);
                 }
             }
 
-            if(rackIndex == -1)
-            {
-                continue;
-            }
             int amountOfItemsFromRack = Random.Range(1,racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems+1);
             if(!usedRacksIndexs.Contains(rackIndex))
             {

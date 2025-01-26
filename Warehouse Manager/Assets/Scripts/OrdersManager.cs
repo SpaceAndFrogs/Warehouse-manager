@@ -188,6 +188,16 @@ public class OrdersManager : MonoBehaviour
                 if(!racksChecked.Contains(rackIndex))
                 {
                     racksChecked.Add(rackIndex);
+
+                    if(racksChecked.Count == racks.Count && usedRacksIndexs.Contains(rackIndex))
+                    {
+                        if(racksChecked.Count == racks.Count)
+                        {
+                            return (null,null);
+                        }
+
+                        continue; 
+                    }
                 }
 
                 int itemIndex = -1;
@@ -219,6 +229,7 @@ public class OrdersManager : MonoBehaviour
 
                 if(racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems > 0)
                 {
+                    usedRacksIndexs.Add(rackIndex);
                     break;
                 }
 
@@ -228,12 +239,7 @@ public class OrdersManager : MonoBehaviour
                 }
             }
 
-            int amountOfItemsFromRack = Random.Range(1,racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems+1);
-            if(!usedRacksIndexs.Contains(rackIndex))
-            {
-                rackIndex = Random.Range(0,racks.Count);
-                amountOfItemsFromRack = Random.Range(1,racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems+1);
-            }
+            int amountOfItemsFromRack = Random.Range(1,racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems);
 
             usedRacksIndexs.Add(rackIndex);
 

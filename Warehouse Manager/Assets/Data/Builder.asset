@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b03f5afec8b594b96542cd09660aad, type: 3}
   m_Name: Builder
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  workerType: 0
+  minMaxMoveSpeed: {x: 0.5, y: 1.5}
+  minMaxWorkSpeed: {x: 0.5, y: 1.5}
+  name: johnny
   proxyMargin: 0.125
   proxyMarginOfFinalTile: 0.5

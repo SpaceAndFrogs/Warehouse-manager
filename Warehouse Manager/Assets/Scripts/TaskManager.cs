@@ -222,7 +222,7 @@ public class TaskManager : MonoBehaviour
 
     public void ReturnWorker(Worker worker)
     {
-        switch(worker.workerData.workerType)
+        switch(worker.stats.workerType)
         {
             case WorkerData.WorkerType.Builder:
             {

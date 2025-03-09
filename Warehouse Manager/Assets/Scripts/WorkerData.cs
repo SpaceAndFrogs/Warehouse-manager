@@ -8,7 +8,9 @@ public class WorkerData : ScriptableObject
     public enum WorkerType {Builder, Pick, Pack}
 
     public WorkerType workerType;
-    public float moveSpeed;
+    public Vector2 minMaxMoveSpeed;
+    public Vector2 minMaxWorkSpeed;
+    public string name;
     public float proxyMargin;
     public float proxyMarginOfFinalTile;
 }

@@ -63,7 +63,7 @@ public class PickPackStationsManager : MonoBehaviour
 
     void AddNewWorker(Worker worker)
     {
-        if(worker.workerData.workerType == WorkerData.WorkerType.Pack)
+        if(worker.stats.workerType == WorkerData.WorkerType.Pack)
         {
             packWorkers.Add(worker);
             
@@ -79,7 +79,7 @@ public class PickPackStationsManager : MonoBehaviour
             }
 
             return;
-        }else if(worker.workerData.workerType == WorkerData.WorkerType.Pick)
+        }else if(worker.stats.workerType == WorkerData.WorkerType.Pick)
         {
             pickWorkers.Add(worker);
             if(ordersStation != null)

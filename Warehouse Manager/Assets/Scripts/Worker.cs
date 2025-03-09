@@ -9,7 +9,7 @@ public class Worker : MonoBehaviour
     public Tile startNode;
     public Tile[] path = new Tile[0];
     
-    public WorkerData workerData;
+    public Stats stats;
 
     public TaskManager.Task currentTask = null;
 
@@ -28,7 +28,7 @@ public class Worker : MonoBehaviour
 
     public void GoToStation()
     {
-        switch(workerData.workerType)
+        switch(stats.workerType)
         {
             case WorkerData.WorkerType.Pack:
             {
@@ -54,7 +54,7 @@ public class Worker : MonoBehaviour
         PickStash pickStashWithLeastOrders = PickPackStationsManager.instance.pickStashes[0];
         for(int i = 1; i < PickPackStationsManager.instance.pickStashes.Count; i++)
         {
-            if(workerData.workerType == WorkerData.WorkerType.Pick)
+            if(stats.workerType == WorkerData.WorkerType.Pick)
             {
                 if(pickStashWithLeastOrders.orders.Count == 0)
                 {
@@ -143,14 +143,14 @@ public class Worker : MonoBehaviour
             fixedPositionOfTile = new Vector3(path[i].transform.position.x,transform.position.y,path[i].transform.position.z);
             direction = fixedPositionOfTile - transform.position;
             direction.Normalize();
-            transform.position += direction * workerData.moveSpeed * Time.deltaTime;
+            transform.position += direction * stats.moveSpeed * Time.deltaTime;
 
-            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= workerData.proxyMargin && i < path.Length - 1)
+            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMargin && i < path.Length - 1)
             { 
                 i++;
             }
 
-            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= workerData.proxyMarginOfFinalTile && i == path.Length - 1)
+            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMarginOfFinalTile && i == path.Length - 1)
             { 
                 i++;
             }
@@ -322,5 +322,24 @@ public class Worker : MonoBehaviour
         startNode = tile; 
     }
 
-    
+    public class Stats
+    {
+        public WorkerData.WorkerType workerType;
+        public float moveSpeed;
+        public float workSpeed;
+        public float salary;
+        public float proxyMargin;
+        public float proxyMarginOfFinalTile;
+        public string name;
+        public Stats(float moveSpeed, float workSpeed, float salary, WorkerData.WorkerType workerType, float proxyMargin, float proxyMarginOfFinalTile, string name)
+        {
+            this.moveSpeed = moveSpeed;
+            this.workSpeed = workSpeed;
+            this.salary = salary;
+            this.workerType = workerType;
+            this.proxyMargin = proxyMargin;
+            this.proxyMarginOfFinalTile = proxyMarginOfFinalTile;
+            this.name = name;
+        }
+    }
 }

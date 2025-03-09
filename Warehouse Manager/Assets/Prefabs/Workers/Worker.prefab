@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 720062394785637295}
   - component: {fileID: 7320657417775280965}
   m_Layer: 3
-  m_Name: PickWorker
+  m_Name: Worker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -156,10 +156,27 @@ public class OrdersManager : MonoBehaviour
         float price = 0;
         for(int i = 0; i < itemsInOrder.Count; i++)
         {
-            string priceText = PricesManager.instance.itemPricesScripts[i].sellPriceInput.text;
-            priceText = priceText.Remove(priceText.Length - 1);
-            price += float.Parse(priceText);
+            price += FindPriceOfItem(itemsInOrder[i].itemType);
         }
+        return price;
+    }
+
+    float FindPriceOfItem(Items.ItemType itemType)
+    {
+        float price = 0;
+
+        for(int i = 0; i < PricesManager.instance.itemPricesScripts.Count; i++)
+        {
+            if(itemType == PricesManager.instance.itemPricesScripts[i].itemType)
+            {
+                string priceText = PricesManager.instance.itemPricesScripts[i].sellPriceInput.text;
+                priceText = priceText.Remove(priceText.Length - 1);
+                price = float.Parse(priceText);
+
+                break;
+            }
+        }
+
         return price;
     }
 

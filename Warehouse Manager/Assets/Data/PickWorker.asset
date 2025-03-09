@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: PickWorker
   m_EditorClassIdentifier: 
   workerType: 1
-  moveSpeed: 1
+  minMaxMoveSpeed: {x: 0.5, y: 1.5}
+  minMaxWorkSpeed: {x: 0.5, y: 1.5}
+  name: Michale
   proxyMargin: 0.125
   proxyMarginOfFinalTile: 0.5

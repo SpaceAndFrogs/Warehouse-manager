@@ -90,7 +90,7 @@ public class PricesManager : MonoBehaviour
 
             if(amountOfAllItems == 0)
             {
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(TimeManager.instance.GetOneWeek());
                 continue;
             }
 
@@ -144,7 +144,7 @@ public class PricesManager : MonoBehaviour
                 pricesPanel.pricesPanelObject.SetActive(false);
             }
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(TimeManager.instance.GetOneWeek());
         }
     }
 

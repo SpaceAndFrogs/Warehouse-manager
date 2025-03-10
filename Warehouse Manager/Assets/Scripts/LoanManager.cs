@@ -87,7 +87,7 @@ public class LoanManager : MonoBehaviour
             }
 
             UpdateCounters();
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(TimeManager.instance.GetOneWeek());
         }
     }
 

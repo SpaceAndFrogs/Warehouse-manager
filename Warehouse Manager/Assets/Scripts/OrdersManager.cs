@@ -80,7 +80,7 @@ public class OrdersManager : MonoBehaviour
                     ordersOnPick.Add(order);
                 }               
             }
-            yield return new WaitForSeconds(timeBetweenOrders);
+            yield return new WaitForSeconds(TimeManager.instance.GetOneHour());
         }
         
     }

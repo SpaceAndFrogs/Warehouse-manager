@@ -83,7 +83,7 @@ public class WorkersManager : MonoBehaviour
             MakeCandidateRecord(workersPanel.candidates.records.Count,WorkerData.WorkerType.Builder);
             MakeCandidateRecord(workersPanel.candidates.records.Count,WorkerData.WorkerType.Pick);
             MakeCandidateRecord(workersPanel.candidates.records.Count,WorkerData.WorkerType.Pack);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(TimeManager.instance.GetOneDay());
         }
     }
 

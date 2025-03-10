@@ -44,6 +44,11 @@ public class TimeManager : MonoBehaviour
         return oneHourInSeconds*24;
     }
 
+    public float GetOneWeek()
+    {
+        return oneHourInSeconds*168;
+    }
+
     public float GetOneMounth()
     {
         return oneHourInSeconds*720;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 public class TimeManager : MonoBehaviour
@@ -20,6 +21,7 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         AddListeners();
+        timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
     }
 
     void MakeInstance()
@@ -66,15 +68,18 @@ public class TimeManager : MonoBehaviour
         if(timeScale != 0)
         {
             Time.timeScale += timeScale;
+            timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }
         else
         {
             Time.timeScale = timeScale;
+            timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }
         
         if(Time.timeScale < 0)
         {
             Time.timeScale = 0;
+            timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }
     }
 
@@ -84,5 +89,6 @@ public class TimeManager : MonoBehaviour
         public Button stopTimeButton;
         public Button speedUpTimeButton;
         public Button slowDownTimeButton;
+        public TextMeshProUGUI currentSpeedTMP;
     }
 }

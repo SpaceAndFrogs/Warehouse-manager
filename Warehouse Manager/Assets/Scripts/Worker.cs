@@ -9,6 +9,7 @@ public class Worker : MonoBehaviour
     public Tile startNode;
     public Tile[] path = new Tile[0];
     
+    [SerializeField]
     public Stats stats;
 
     public TaskManager.Task currentTask = null;
@@ -322,6 +323,7 @@ public class Worker : MonoBehaviour
         startNode = tile; 
     }
 
+    [System.Serializable]
     public class Stats
     {
         public WorkerData.WorkerType workerType;

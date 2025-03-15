@@ -42,19 +42,19 @@ public class PlayerMovement : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.W))
         {
-            transform.position += Vector3.forward*horizontalVerticalSpeed*Time.deltaTime;
+            transform.position += Vector3.forward*horizontalVerticalSpeed*Time.unscaledDeltaTime;
         }
         if(Input.GetKey(KeyCode.S))
         {
-            transform.position += Vector3.back*horizontalVerticalSpeed*Time.deltaTime;
+            transform.position += Vector3.back*horizontalVerticalSpeed*Time.unscaledDeltaTime;
         }
         if(Input.GetKey(KeyCode.A))
         {
-            transform.position += Vector3.left*horizontalVerticalSpeed*Time.deltaTime;
+            transform.position += Vector3.left*horizontalVerticalSpeed*Time.unscaledDeltaTime;
         }
         if(Input.GetKey(KeyCode.D))
         {
-            transform.position += Vector3.right*horizontalVerticalSpeed*Time.deltaTime;
+            transform.position += Vector3.right*horizontalVerticalSpeed*Time.unscaledDeltaTime;
         }
     }
 
@@ -64,18 +64,18 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 direction = CalculateNormalizedDirection(cameraTransform.position,transform.position);
 
-            cameraTransform.position += direction * scrollSpeed * Time.deltaTime;
+            cameraTransform.position += direction * scrollSpeed * Time.unscaledDeltaTime;
 
-            if(Vector3.Distance(cameraTransform.position, transform.position) < minDistanceToAnchor)
+            if (Vector3.Distance(cameraTransform.position, transform.position) < minDistanceToAnchor)
             {
-                cameraTransform.position -= direction * scrollSpeed * Time.deltaTime;
+                cameraTransform.position -= direction * scrollSpeed * Time.unscaledDeltaTime;
             }
         }
         else if(Input.mouseScrollDelta.y<0)
         {
             Vector3 direction = CalculateNormalizedDirection(transform.position, cameraTransform.position);
 
-            cameraTransform.position += direction * scrollSpeed * Time.deltaTime;
+            cameraTransform.position += direction * scrollSpeed * Time.unscaledDeltaTime;
         }
 
         if(Input.GetKeyDown(KeyCode.Mouse2))
@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
             if(currentMousePosition.x != lastMousePosition.x)
             {
-                transform.eulerAngles += new Vector3(0,currentMousePosition.x - lastMousePosition.x,0) * rotationSpeed * Time.deltaTime;
+                transform.eulerAngles += new Vector3(0,currentMousePosition.x - lastMousePosition.x,0) * rotationSpeed * Time.unscaledDeltaTime;
             }
 
             lastMousePosition = currentMousePosition;

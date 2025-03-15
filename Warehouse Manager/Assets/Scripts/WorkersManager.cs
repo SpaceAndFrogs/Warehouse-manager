@@ -28,6 +28,8 @@ public class WorkersManager : MonoBehaviour
     TextAsset firstNamesFile;
     [SerializeField]
     TextAsset lastNamesFile;
+    [SerializeField]
+    List<Worker> workers = new List<Worker>();
     void Awake()
     {
         LoadNames();
@@ -46,12 +48,28 @@ public class WorkersManager : MonoBehaviour
     void Start()
     {
         AddListeners();
+        StartCoroutine(PaySalaries());
+    }
+
+    IEnumerator PaySalaries()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(TimeManager.instance.GetOneMounth());
+
+            for (int i = 0; i < workers.Count; i++)
+            {
+                float salary = workers[i].stats.salary;
+                CashManager.instance.SpendCash(salary);
+            }        
+        }
     }
 
     public void SpawnWorker(Worker.Stats stats, WorkerRecordScript workerRecordScript)
     {
         Worker worker = Instantiate(workerPrefab,posToSpawnWorkers, transform.rotation);
         worker.stats = stats;
+        workers.Add(worker);
 
         workersPanel.candidates.records.Remove(workerRecordScript);
 

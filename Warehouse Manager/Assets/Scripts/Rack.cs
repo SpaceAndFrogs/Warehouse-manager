@@ -31,8 +31,23 @@ public class Rack : MonoBehaviour
         if(amountOfItems < desiredAmountOfItems)
         {
             int amountOfItemsToBuy = desiredAmountOfItems - amountOfItems;
+            PayForItems(amountOfItemsToBuy);
             amountOfItems += amountOfItemsToBuy; 
         }
+    }
+
+    void PayForItems(int amountOfItems)
+    {
+        float priceOfItem = 0;
+        for(int i = 0; i < PricesManager.instance.itemPricesScripts.Count; i++)
+        {
+            if(PricesManager.instance.itemPricesScripts[i].itemType == itemOnRack.itemType)
+            {
+                priceOfItem = float.Parse(PricesManager.instance.itemPricesScripts[i].buyPrice.text);
+            }
+        }
+
+        CashManager.instance.SpendCash(priceOfItem * amountOfItems);
     }
 
     public void GiveItems(int amountOfItemsToGive)

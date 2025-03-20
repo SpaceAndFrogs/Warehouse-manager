@@ -119,6 +119,7 @@ public class RackPanel : MonoBehaviour
     void ChangeDesiredAmount(string newText)
     {
         int desiredAmount = int.Parse(newText);
+        
         int itemIndex = -1;
 
         for(int i = 0; i < items.items.Count; i++)

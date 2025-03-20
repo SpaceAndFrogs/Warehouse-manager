@@ -135,6 +135,10 @@ public class Worker : MonoBehaviour
 
     IEnumerator FollowPath()
     {
+        if(path.Length == 0)
+        {
+            Debug.Log("null path");
+        }
         int i = 0;
         Vector3 fixedPositionOfTile = new Vector3(path[i].transform.position.x,transform.position.y,path[i].transform.position.z);
         Vector3 direction = fixedPositionOfTile - transform.position;
@@ -146,7 +150,7 @@ public class Worker : MonoBehaviour
             direction.Normalize();
             transform.position += direction * stats.moveSpeed * Time.deltaTime;
 
-            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMargin && i < path.Length - 1)
+            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMargin && i < path.Length-1)
             { 
                 i++;
             }

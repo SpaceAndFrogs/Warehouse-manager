@@ -37,7 +37,12 @@ public class PathFinder : MonoBehaviour
             return null;
         }
 
-
+        if(endTile == startTile)
+        {
+            Tile[] path = new Tile[1];
+            path[0] = endTile;
+            return path;
+        }
         List<Tile> openList = new List<Tile>();
         List<Tile> closeList = new List<Tile>();
 

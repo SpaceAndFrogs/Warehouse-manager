@@ -43,7 +43,9 @@ public class Rack : MonoBehaviour
         {
             if(PricesManager.instance.itemPricesScripts[i].itemType == itemOnRack.itemType)
             {
-                priceOfItem = float.Parse(PricesManager.instance.itemPricesScripts[i].buyPrice.text);
+                string buyPrice = PricesManager.instance.itemPricesScripts[i].buyPrice.text;
+                buyPrice = buyPrice.Substring(0, buyPrice.Length - 1);
+                priceOfItem = float.Parse(buyPrice);
             }
         }
 

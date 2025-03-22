@@ -89,7 +89,7 @@ public class WorkersManager : MonoBehaviour
 
     void SetTileForWorkersSpawn(Vector3 tilePosition)
     {
-        posToSpawnWorkers = tilePosition + new Vector3(0,1,0);
+        posToSpawnWorkers = tilePosition + new Vector3(0,0.1f,0);
         isSettingWorkersSpawn = false;
         workersPanel.workersPanel.SetActive(true);
     }

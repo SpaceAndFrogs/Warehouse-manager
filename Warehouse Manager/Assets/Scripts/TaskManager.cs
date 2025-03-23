@@ -19,8 +19,10 @@ public class TaskManager : MonoBehaviour
     public OrdersManager ordersManager;
 
     public TasksTypes.Task currentTask;
+    [SerializeField]
+    Tile currentTile = null;
 
-    public Buildings.Building currentBuilding;
+    public Buildings.Building currentBuilding = null;
 
     public List<Worker> freeBuilders = new List<Worker>();
     public List<Worker> freePickWorkers = new List<Worker>();
@@ -163,31 +165,224 @@ public class TaskManager : MonoBehaviour
 
     void CheckForInput()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0) && !IsMouseOverUi()) 
+        if(!Input.GetKeyDown(KeyCode.Mouse0) || IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None)
+            return;
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfo;
-
-            if (Physics.Raycast(ray, out hitInfo))
-            {
                 
-                Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
 
-                if (tile == null)
-                    return;
+            if (tile == null)
+                return;
 
-                if(!IsTileCompatibleWithTask(tile))
-                    return;
-
-                if(currentBuilding.cost > CashManager.instance.AmountOfCash())
-                    return;
-
-                CashManager.instance.SpendCash(currentBuilding.cost);
-
-                buildingTasks.Add(new Task(currentTask,tile, currentBuilding,null,null));
+            if(currentTile == null)
+            {
+                currentTile = tile;
             }
-
+            else
+            {
+                if(currentBuilding.buildingType == Buildings.BuildingType.Wall)
+                {
+                    CheckForAmountAndTilesForBuildings(tile, false);
+                }
+                else
+                {
+                    CheckForAmountAndTilesForBuildings(tile, true);
+                }                
+            }
+                                
         }
+    }
+
+    Tile CheckForNextTile(Tile startTile, bool checkX, bool checkMore)
+    {
+        Tile tile = null;
+
+        for(int i = 0; i < startTile.neighborTiles.Count; i++)
+        {
+            if(checkX)
+            {
+                if(checkMore)
+                {
+                    if(startTile.transform.position.x < startTile.neighborTiles[i].transform.position.x && startTile.transform.position.z == startTile.neighborTiles[i].transform.position.z)
+                    {
+                        tile = startTile.neighborTiles[i];
+                        break;
+                    }
+                }
+                else
+                {
+                    if(startTile.transform.position.x > startTile.neighborTiles[i].transform.position.x && startTile.transform.position.z == startTile.neighborTiles[i].transform.position.z)
+                    {
+                        tile = startTile.neighborTiles[i];
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if(checkMore)
+                {
+                    if(startTile.transform.position.z < startTile.neighborTiles[i].transform.position.z && startTile.transform.position.x == startTile.neighborTiles[i].transform.position.x)
+                    {
+                        tile = startTile.neighborTiles[i];
+                        break;
+                    }
+                }
+                else
+                {
+                    if(startTile.transform.position.z > startTile.neighborTiles[i].transform.position.z && startTile.transform.position.x == startTile.neighborTiles[i].transform.position.x)
+                    {
+                        tile = startTile.neighborTiles[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        return tile;
+    }
+
+    void Contour(Tile endTile)
+    {
+        MakeBuildingTask(currentTile);
+        Tile currentTileInCheck = currentTile;
+        while(endTile.transform.position.x != currentTileInCheck.transform.position.x)
+        {
+            if(endTile.transform.position.x > currentTileInCheck.transform.position.x)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, true);
+                MakeBuildingTask(currentTileInCheck);
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, false);
+                MakeBuildingTask(currentTileInCheck);
+            }
+        }
+
+        while(endTile.transform.position.z != currentTileInCheck.transform.position.z)
+        {
+            if(endTile.transform.position.z > currentTileInCheck.transform.position.z)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, true);
+                MakeBuildingTask(currentTileInCheck);
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, false);
+                MakeBuildingTask(currentTileInCheck);
+            }
+        }
+
+        currentTileInCheck = currentTile;
+        while(endTile.transform.position.z != currentTileInCheck.transform.position.z)
+        {
+            if(endTile.transform.position.z > currentTileInCheck.transform.position.z)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, true);
+                MakeBuildingTask(currentTileInCheck);
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, false);
+                MakeBuildingTask(currentTileInCheck);
+            }
+        }
+
+        while(endTile.transform.position.x != currentTileInCheck.transform.position.x)
+        {
+            if(endTile.transform.position.x > currentTileInCheck.transform.position.x)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, true);
+                MakeBuildingTask(currentTileInCheck);
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, false);
+                MakeBuildingTask(currentTileInCheck);
+            }
+        }
+    }
+
+    void Fill(Tile endTile)
+    {
+        Tile currentTileInCheck = currentTile;
+        List<Tile> tilesInZAxis = new List<Tile>();
+        tilesInZAxis.Add(currentTileInCheck);
+        while(endTile.transform.position.z != currentTileInCheck.transform.position.z)
+        {
+            if(endTile.transform.position.z > currentTileInCheck.transform.position.z)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, true);
+                tilesInZAxis.Add(currentTileInCheck);
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, false);
+                tilesInZAxis.Add(currentTileInCheck);
+            }
+        }
+
+        
+
+        for(int i = 0; i < tilesInZAxis.Count; i++)
+        {
+            currentTileInCheck = tilesInZAxis[i];
+            MakeBuildingTask(currentTileInCheck);
+
+            do{
+                if(endTile.transform.position.x > currentTileInCheck.transform.position.x)
+                {
+                    currentTileInCheck = CheckForNextTile(currentTileInCheck, true, true);
+                    MakeBuildingTask(currentTileInCheck);
+                }
+                else
+                {
+                    currentTileInCheck = CheckForNextTile(currentTileInCheck, true, false);
+                    MakeBuildingTask(currentTileInCheck);
+                }
+            }while(endTile.transform.position.x != currentTileInCheck.transform.position.x);
+        }
+    }
+
+    void CheckForAmountAndTilesForBuildings(Tile endTile, bool fill)
+    {
+        if(endTile == currentTile)
+        {
+            MakeBuildingTask(endTile);
+            currentTile = null;
+            return;
+        }
+
+        if(fill)
+        {
+            Fill(endTile);
+        }
+        else
+        {
+            Contour(endTile);
+        }
+
+        currentTile = null;
+            
+    }
+
+    void MakeBuildingTask(Tile tile)
+    {
+        if(!IsTileCompatibleWithTask(tile))
+            return;
+
+        if(currentBuilding.cost > CashManager.instance.AmountOfCash())
+            return;
+
+        CashManager.instance.SpendCash(currentBuilding.cost);
+
+        buildingTasks.Add(new Task(currentTask,tile, currentBuilding,null,null));
     }
 
     bool IsTileCompatibleWithTask(Tile tile)

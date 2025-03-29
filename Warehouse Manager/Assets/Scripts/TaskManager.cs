@@ -272,7 +272,8 @@ public class TaskManager : MonoBehaviour
             currentTileInCheck = tilesInZAxis[i];
             indicators.Add(MakeIndicator(currentTileInCheck));
 
-            do{
+            while(endTile.transform.position.x != currentTileInCheck.transform.position.x)
+            {
                 if(endTile.transform.position.x > currentTileInCheck.transform.position.x)
                 {
                     currentTileInCheck = CheckForNextTile(currentTileInCheck, true, true);
@@ -283,7 +284,7 @@ public class TaskManager : MonoBehaviour
                     currentTileInCheck = CheckForNextTile(currentTileInCheck, true, false);
                     indicators.Add(MakeIndicator(currentTileInCheck));
                 }
-            }while(endTile.transform.position.x != currentTileInCheck.transform.position.x);
+            }
         }
     }
 

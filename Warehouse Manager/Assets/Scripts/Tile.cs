@@ -21,6 +21,8 @@ public class Tile : MonoBehaviour
 
     public GameObject building = null;
 
+    IndicatorsPool.Indicator currentIndicator = null;
+
     public MapFragmentScript mapFragmentScript
     {
         private get; set;
@@ -56,10 +58,40 @@ public class Tile : MonoBehaviour
     private void OnMouseEnter() 
     {
         outlineObject.SetActive(true);
+
+        if(TaskManager.instance.currentBuilding.buildingType == Buildings.BuildingType.None || TaskManager.instance.currentBuilding == null)
+        {
+            return;
+        }
+
+        for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
+        {
+            if(TaskManager.instance.currentBuilding.buildingType == IndicatorsPool.instance.indicators[i].buildingType)
+            {
+                currentIndicator = IndicatorsPool.instance.indicators[i].GetIndicator();
+                currentIndicator.indicatorObject.transform.position = transform.position;
+                return;
+            }
+        }
     }
     private void OnMouseExit() 
     {
         outlineObject.SetActive(false);
+
+        if(currentIndicator == null)
+        {
+            return;
+        }
+
+        for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
+        {
+            if(currentIndicator.buildingType == IndicatorsPool.instance.indicators[i].buildingType)
+            {
+                IndicatorsPool.instance.indicators[i].ReturnIndicator(currentIndicator);
+                currentIndicator = null;
+                return;
+            }
+        }
     }
 
     public void SetTileType(float noiseSample)

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2259.8245, g: 2399.2778, b: 3491.0356, a: 1}
+  m_IndirectSpecularColor: {r: 2260.1606, g: 2401.8948, b: 3499.7583, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -407,6 +407,7 @@ MonoBehaviour:
     buttonSprite: {fileID: 0}
     nameOfButton: 
     tileTypeAfterTask: 0
+  currentTile: {fileID: 0}
   currentBuilding:
     buildingObject: {fileID: 0}
     buildingSprite: {fileID: 0}
@@ -4987,6 +4988,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 692155100}
   m_CullTransparentMesh: 1
+--- !u!1 &695194788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 695194790}
+  - component: {fileID: 695194789}
+  m_Layer: 0
+  m_Name: IndicatorsPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &695194789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695194788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee3097a244ffb0839929b36d3000506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicators:
+  - buildingType: 1
+    indicatorObject: {fileID: 6777885033127159899, guid: 9cd119c6f63e13526bb942c5abd8b08b,
+      type: 3}
+    indicatorsInPool: []
+  - buildingType: 2
+    indicatorObject: {fileID: 6777885033127159899, guid: 23663d50f30a798d88a612ae90cbfea4,
+      type: 3}
+    indicatorsInPool: []
+  - buildingType: 3
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    indicatorsInPool: []
+  - buildingType: 4
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    indicatorsInPool: []
+  - buildingType: 5
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    indicatorsInPool: []
+  - buildingType: 6
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    indicatorsInPool: []
+--- !u!4 &695194790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695194788}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1000, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &720823947
 GameObject:
   m_ObjectHideFlags: 0
@@ -13815,3 +13885,4 @@ SceneRoots:
   - {fileID: 659691926}
   - {fileID: 1690660983}
   - {fileID: 1391344560}
+  - {fileID: 695194790}

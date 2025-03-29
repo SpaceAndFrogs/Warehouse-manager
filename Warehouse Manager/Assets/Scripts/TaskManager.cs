@@ -21,6 +21,9 @@ public class TaskManager : MonoBehaviour
     public TasksTypes.Task currentTask;
     [SerializeField]
     Tile currentTile = null;
+    Tile lastIndicatorEndTile = null;
+
+    List<IndicatorsPool.Indicator> indicators = new List<IndicatorsPool.Indicator>();
 
     public Buildings.Building currentBuilding = null;
 
@@ -52,15 +55,16 @@ public class TaskManager : MonoBehaviour
         public Tile tileWithTask;
         public Buildings.Building building;
         public OrdersManager.Order order;
-
         public Tile tileOfPickStashWithOrder;
-        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building,OrdersManager.Order order,Tile tileOfPickStashWithOrder)
+        public IndicatorsPool.Indicator indicator;
+        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building,IndicatorsPool.Indicator indicator, OrdersManager.Order order,Tile tileOfPickStashWithOrder)
         {
             this.task = task;
             this.tileWithTask = tileWithTask;
             this.building = building;
             this.order = order;
             this.tileOfPickStashWithOrder = tileOfPickStashWithOrder;
+            this.indicator = indicator;
         }
     }
 
@@ -141,17 +145,153 @@ public class TaskManager : MonoBehaviour
     private void Update()
     {        
         CheckForInput();
+        SetIndicators();
         GiveTasksToBuilders();
         ConvertOrdersToTasks();
         GiveTasksToPick();
         GiveTasksToPack();
     }
 
+    void SetIndicators()
+    {
+        if(currentTile == null || IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None)
+            return;
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo))
+        {
+                
+            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+            if (tile == null || lastIndicatorEndTile == tile)
+                return;
+
+            lastIndicatorEndTile = tile;
+
+            ReturnIndicators();
+
+            if(currentBuilding.buildingType == Buildings.BuildingType.Wall)
+            {
+                MakeContourIndicators(tile); 
+            }
+            else
+            {
+                MakeFillIndicators(tile);         
+            }  
+                                
+        }           
+    }
+
+    void MakeContourIndicators(Tile endTile)
+    {
+        Tile currentTileInCheck = currentTile;
+        indicators.Add(MakeIndicator(currentTileInCheck));
+        while(endTile.transform.position.x != currentTileInCheck.transform.position.x)
+        {
+            if(endTile.transform.position.x > currentTileInCheck.transform.position.x)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, true);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, false);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+        }
+
+        while(endTile.transform.position.z != currentTileInCheck.transform.position.z)
+        {
+            if(endTile.transform.position.z > currentTileInCheck.transform.position.z)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, true);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, false);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+        }
+
+        currentTileInCheck = currentTile;
+        while(endTile.transform.position.z != currentTileInCheck.transform.position.z)
+        {
+            if(endTile.transform.position.z > currentTileInCheck.transform.position.z)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, true);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, false);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+        }
+
+        while(endTile.transform.position.x != currentTileInCheck.transform.position.x)
+        {
+            if(endTile.transform.position.x > currentTileInCheck.transform.position.x)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, true);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, true, false);
+                indicators.Add(MakeIndicator(currentTileInCheck));
+            }
+        }
+    }
+
+    void MakeFillIndicators(Tile endTile)
+    {
+        Tile currentTileInCheck = currentTile;
+        List<Tile> tilesInZAxis = new List<Tile>();
+        tilesInZAxis.Add(currentTileInCheck);
+        while(endTile.transform.position.z != currentTileInCheck.transform.position.z)
+        {
+            if(endTile.transform.position.z > currentTileInCheck.transform.position.z)
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, true);
+                tilesInZAxis.Add(currentTileInCheck);
+            }
+            else
+            {
+                currentTileInCheck = CheckForNextTile(currentTileInCheck, false, false);
+                tilesInZAxis.Add(currentTileInCheck);
+            }
+        }
+
+        
+
+        for(int i = 0; i < tilesInZAxis.Count; i++)
+        {
+            currentTileInCheck = tilesInZAxis[i];
+            indicators.Add(MakeIndicator(currentTileInCheck));
+
+            do{
+                if(endTile.transform.position.x > currentTileInCheck.transform.position.x)
+                {
+                    currentTileInCheck = CheckForNextTile(currentTileInCheck, true, true);
+                    indicators.Add(MakeIndicator(currentTileInCheck));
+                }
+                else
+                {
+                    currentTileInCheck = CheckForNextTile(currentTileInCheck, true, false);
+                    indicators.Add(MakeIndicator(currentTileInCheck));
+                }
+            }while(endTile.transform.position.x != currentTileInCheck.transform.position.x);
+        }
+    }
+
     void ConvertOrdersToTasks()
     {
         for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
         {
-            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null, ordersManager.ordersOnPick[i],null);
+            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null,null, ordersManager.ordersOnPick[i],null);
             pickTasks.Add(newPickTask);
         }
 
@@ -192,9 +332,29 @@ public class TaskManager : MonoBehaviour
                 else
                 {
                     CheckForAmountAndTilesForBuildings(tile, true);
-                }                
+                }
+
+                lastIndicatorEndTile = null;
+                ReturnIndicators();
             }
                                 
+        }
+    }
+
+    void ReturnIndicators()
+    {
+        for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
+        {
+            if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType)
+            {
+                for(int j = indicators.Count - 1; j >= 0; j--)
+                {
+                IndicatorsPool.instance.indicators[i].ReturnIndicator(indicators[j]);
+                indicators.RemoveAt(j);
+                }
+
+                return;
+            }
         }
     }
 
@@ -372,6 +532,22 @@ public class TaskManager : MonoBehaviour
             
     }
 
+    IndicatorsPool.Indicator MakeIndicator(Tile tile)
+    {
+        IndicatorsPool.Indicator indicator = null;
+        for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
+        {
+            if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType)
+            {
+                indicator = IndicatorsPool.instance.indicators[i].GetIndicator();
+                indicator.indicatorObject.transform.position = tile.transform.position;
+                break;
+            }
+        }
+
+        return indicator;
+    }
+
     void MakeBuildingTask(Tile tile)
     {
         if(!IsTileCompatibleWithTask(tile))
@@ -380,9 +556,11 @@ public class TaskManager : MonoBehaviour
         if(currentBuilding.cost > CashManager.instance.AmountOfCash())
             return;
 
+        IndicatorsPool.Indicator indicator = MakeIndicator(tile);
+        
         CashManager.instance.SpendCash(currentBuilding.cost);
 
-        buildingTasks.Add(new Task(currentTask,tile, currentBuilding,null,null));
+        buildingTasks.Add(new Task(currentTask, tile, currentBuilding, indicator, null, null));
     }
 
     bool IsTileCompatibleWithTask(Tile tile)

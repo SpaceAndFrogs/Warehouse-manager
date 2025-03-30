@@ -195,8 +195,13 @@ public class Worker : MonoBehaviour
                 if(currentTask.order.racksWithItems.Count > 0)
                 {
                     TakeItemsFromRack();
+
+                    yield return new WaitForSeconds(stats.workSpeed);
+                    
                     currentTask.order.racksWithItems.RemoveAt(0);
                     currentTask.order.amountOfItemsFromRacks.RemoveAt(0);
+
+                    
                 }
                 
                 if(currentTask.order.racksWithItems.Count > 0)
@@ -232,13 +237,7 @@ public class Worker : MonoBehaviour
 
     IEnumerator StartPackOrder()
     {
-        float timer = 0;
-
-        while(timer <= currentTask.task.taskTime)
-        {
-            timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        yield return new WaitForSeconds(stats.workSpeed);
 
         CashManager.instance.GetCash(currentTask.order.orderPrice);
         currentTask = null;
@@ -248,16 +247,11 @@ public class Worker : MonoBehaviour
 
     IEnumerator StartBuildTask()
     {
-        float timer = 0;
 
         if(currentTask.task.taskType != TasksTypes.TaskType.Build)
         yield break;
         
-        while(timer <= currentTask.building.buildingTime)
-        {
-            timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        yield return new WaitForSeconds(stats.workSpeed * currentTask.building.buildingTime);
 
         currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
 

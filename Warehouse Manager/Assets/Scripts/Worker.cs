@@ -257,7 +257,7 @@ public class Worker : MonoBehaviour
 
         for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
         {
-            if(IndicatorsPool.instance.indicators[i].buildingType == currentTask.building.buildingType)
+            if(IndicatorsPool.instance.indicators[i].buildingType == currentTask.building.buildingType && IndicatorsPool.instance.indicators[i].isAffirmative)
             {
                 IndicatorsPool.instance.indicators[i].ReturnIndicator(currentTask.indicator);
             }

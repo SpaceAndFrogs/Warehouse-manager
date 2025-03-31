@@ -25,13 +25,15 @@ public class IndicatorsPool : MonoBehaviour
     {
         public Buildings.BuildingType buildingType;
         public GameObject indicatorObject;
+        public bool isAffirmative;
         public List<Indicator> indicatorsInPool = new List<Indicator>();
 
-        public Indicator(Buildings.BuildingType buildingType, GameObject indicatorObject)
+        public Indicator(Buildings.BuildingType buildingType, GameObject indicatorObject, bool isAffirmative)
         {
             this.buildingType = buildingType;
             this.indicatorObject = indicatorObject;
             this.indicatorsInPool = new List<Indicator>();
+            this.isAffirmative = isAffirmative;
         }
 
 
@@ -54,7 +56,7 @@ public class IndicatorsPool : MonoBehaviour
         void SpawnIndicator()
         {
             GameObject spawnedIndicatorObject = Instantiate(indicatorObject,instance.transform.position, instance.transform.rotation);
-            Indicator indicator = new Indicator(this.buildingType, spawnedIndicatorObject);
+            Indicator indicator = new Indicator(this.buildingType, spawnedIndicatorObject, this.isAffirmative);
             indicatorsInPool.Add(indicator);
         }
 

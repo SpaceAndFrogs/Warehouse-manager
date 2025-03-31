@@ -66,12 +66,25 @@ public class Tile : MonoBehaviour
 
         for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
         {
-            if(TaskManager.instance.currentBuilding.buildingType == IndicatorsPool.instance.indicators[i].buildingType)
+            if(walkable)
             {
-                currentIndicator = IndicatorsPool.instance.indicators[i].GetIndicator();
-                currentIndicator.indicatorObject.transform.position = transform.position;
-                return;
+                if(TaskManager.instance.currentBuilding.buildingType == IndicatorsPool.instance.indicators[i].buildingType && IndicatorsPool.instance.indicators[i].isAffirmative)
+                {
+                    currentIndicator = IndicatorsPool.instance.indicators[i].GetIndicator();
+                    currentIndicator.indicatorObject.transform.position = transform.position;
+                    return;
+                }
             }
+            else
+            {
+                if(TaskManager.instance.currentBuilding.buildingType == IndicatorsPool.instance.indicators[i].buildingType && !IndicatorsPool.instance.indicators[i].isAffirmative)
+                {
+                    currentIndicator = IndicatorsPool.instance.indicators[i].GetIndicator();
+                    currentIndicator.indicatorObject.transform.position = transform.position;
+                    return;
+                }
+            }
+            
         }
     }
     private void OnMouseExit() 
@@ -85,12 +98,25 @@ public class Tile : MonoBehaviour
 
         for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
         {
-            if(currentIndicator.buildingType == IndicatorsPool.instance.indicators[i].buildingType)
+            if(currentIndicator.isAffirmative)
             {
-                IndicatorsPool.instance.indicators[i].ReturnIndicator(currentIndicator);
-                currentIndicator = null;
-                return;
+                if(currentIndicator.buildingType == IndicatorsPool.instance.indicators[i].buildingType && IndicatorsPool.instance.indicators[i].isAffirmative)
+                {
+                    IndicatorsPool.instance.indicators[i].ReturnIndicator(currentIndicator);
+                    currentIndicator = null;
+                    return;
+                }
             }
+            else
+            {
+                if(currentIndicator.buildingType == IndicatorsPool.instance.indicators[i].buildingType && !IndicatorsPool.instance.indicators[i].isAffirmative)
+                {
+                    IndicatorsPool.instance.indicators[i].ReturnIndicator(currentIndicator);
+                    currentIndicator = null;
+                    return;
+                }
+            }
+            
         }
     }
 

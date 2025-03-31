@@ -5021,26 +5021,62 @@ MonoBehaviour:
   - buildingType: 1
     indicatorObject: {fileID: 6777885033127159899, guid: 9cd119c6f63e13526bb942c5abd8b08b,
       type: 3}
+    isAffirmative: 1
     indicatorsInPool: []
   - buildingType: 2
     indicatorObject: {fileID: 6777885033127159899, guid: 23663d50f30a798d88a612ae90cbfea4,
       type: 3}
+    isAffirmative: 1
     indicatorsInPool: []
   - buildingType: 3
     indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
       type: 3}
+    isAffirmative: 1
     indicatorsInPool: []
   - buildingType: 4
     indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
       type: 3}
+    isAffirmative: 1
     indicatorsInPool: []
   - buildingType: 5
     indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
       type: 3}
+    isAffirmative: 1
     indicatorsInPool: []
   - buildingType: 6
     indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
       type: 3}
+    isAffirmative: 1
+    indicatorsInPool: []
+  - buildingType: 1
+    indicatorObject: {fileID: 6777885033127159899, guid: d5ce726a6a573a9d886a0320ef5badf6,
+      type: 3}
+    isAffirmative: 0
+    indicatorsInPool: []
+  - buildingType: 2
+    indicatorObject: {fileID: 6777885033127159899, guid: e1ffda6f16db6478f831eaf17e9ebeed,
+      type: 3}
+    isAffirmative: 0
+    indicatorsInPool: []
+  - buildingType: 3
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+    indicatorsInPool: []
+  - buildingType: 4
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+    indicatorsInPool: []
+  - buildingType: 5
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+    indicatorsInPool: []
+  - buildingType: 6
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
     indicatorsInPool: []
 --- !u!4 &695194790
 Transform:

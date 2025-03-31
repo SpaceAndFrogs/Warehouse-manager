@@ -306,6 +306,14 @@ public class TaskManager : MonoBehaviour
 
     void CheckForInput()
     {
+        if(Input.GetKeyDown(KeyCode.Mouse1) || currentBuilding.buildingType == Buildings.BuildingType.None)
+        {
+            currentTile = null;
+            lastIndicatorEndTile = null;
+            ReturnIndicators();
+            return;
+        }
+
         if(!Input.GetKeyDown(KeyCode.Mouse0) || IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None)
             return;
         
@@ -346,12 +354,27 @@ public class TaskManager : MonoBehaviour
     {
         for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
         {
-            if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType)
+            if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType && IndicatorsPool.instance.indicators[i].isAffirmative)
             {
                 for(int j = indicators.Count - 1; j >= 0; j--)
                 {
-                IndicatorsPool.instance.indicators[i].ReturnIndicator(indicators[j]);
-                indicators.RemoveAt(j);
+                    if(indicators[j].isAffirmative)
+                    {
+                        IndicatorsPool.instance.indicators[i].ReturnIndicator(indicators[j]);
+                        indicators.RemoveAt(j);
+                    }
+                }
+            }
+
+            if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType && !IndicatorsPool.instance.indicators[i].isAffirmative)
+            {
+                for(int j = indicators.Count - 1; j >= 0; j--)
+                {
+                    if(!indicators[j].isAffirmative)
+                    {
+                        IndicatorsPool.instance.indicators[i].ReturnIndicator(indicators[j]);
+                        indicators.RemoveAt(j);
+                    }
                 }
 
                 return;
@@ -538,12 +561,25 @@ public class TaskManager : MonoBehaviour
         IndicatorsPool.Indicator indicator = null;
         for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
         {
-            if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType)
+            if(tile.walkable)
             {
-                indicator = IndicatorsPool.instance.indicators[i].GetIndicator();
-                indicator.indicatorObject.transform.position = tile.transform.position;
-                break;
+                if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType && IndicatorsPool.instance.indicators[i].isAffirmative)
+                {
+                    indicator = IndicatorsPool.instance.indicators[i].GetIndicator();
+                    indicator.indicatorObject.transform.position = tile.transform.position;
+                    break;
+                }
             }
+            else
+            {
+                if(IndicatorsPool.instance.indicators[i].buildingType == currentBuilding.buildingType && !IndicatorsPool.instance.indicators[i].isAffirmative)
+                {
+                    indicator = IndicatorsPool.instance.indicators[i].GetIndicator();
+                    indicator.indicatorObject.transform.position = tile.transform.position;
+                    break;
+                }
+            }
+            
         }
 
         return indicator;

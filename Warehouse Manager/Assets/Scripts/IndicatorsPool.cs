@@ -20,6 +20,37 @@ public class IndicatorsPool : MonoBehaviour
         
     }
 
+    public void ReturnIndicator(Indicator indicator)
+    {
+        for(int i = 0; i < instance.indicators.Count; i++)
+        {
+            if(instance.indicators[i].buildingType == indicator.buildingType)
+            {
+                if(instance.indicators[i].isAffirmative == indicator.isAffirmative)
+                {
+                    instance.indicators[i].ReturnIndicator(indicator);
+                    return;
+                }                
+            }            
+        }
+    }
+
+    public Indicator GetIndicator(bool tileIsWalkable, Buildings.BuildingType buildingType)
+    {
+        for(int i = 0; i < instance.indicators.Count; i++)
+        {
+            if(instance.indicators[i].buildingType == buildingType)
+            {
+                if(tileIsWalkable == instance.indicators[i].isAffirmative)
+                {
+                    return instance.indicators[i].GetIndicator();
+                }
+            }
+        }
+
+        return null;
+    }
+
     [System.Serializable]
     public class Indicator
     {

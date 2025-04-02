@@ -255,13 +255,7 @@ public class Worker : MonoBehaviour
 
         currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
 
-        for(int i = 0; i < IndicatorsPool.instance.indicators.Count; i++)
-        {
-            if(IndicatorsPool.instance.indicators[i].buildingType == currentTask.building.buildingType && IndicatorsPool.instance.indicators[i].isAffirmative)
-            {
-                IndicatorsPool.instance.indicators[i].ReturnIndicator(currentTask.indicator);
-            }
-        }
+        IndicatorsPool.instance.ReturnIndicator(currentTask.indicator);
 
         GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
         currentTask.tileWithTask.building = newBuilding;

@@ -64,7 +64,7 @@ public class Tile : MonoBehaviour
             return;
         }
 
-        currentIndicator = IndicatorsPool.instance.GetIndicator(walkable, TaskManager.instance.currentBuilding.buildingType);
+        currentIndicator = IndicatorsPool.instance.GetIndicator(tileType, TaskManager.instance.currentBuilding.buildingType);
         currentIndicator.indicatorObject.transform.position = transform.position;
     }
     private void OnMouseExit() 

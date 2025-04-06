@@ -226,7 +226,7 @@ public class TaskManager : MonoBehaviour
 
     IndicatorsPool.Indicator MakeIndicator(Tile tile)
     {
-        IndicatorsPool.Indicator indicator = IndicatorsPool.instance.GetIndicator(tile.walkable, currentBuilding.buildingType);
+        IndicatorsPool.Indicator indicator = IndicatorsPool.instance.GetIndicator(tile.tileType, currentBuilding.buildingType);
         indicator.indicatorObject.transform.position = tile.transform.position;
     
         return indicator;
@@ -300,6 +300,15 @@ public class TaskManager : MonoBehaviour
         IndicatorsPool.Indicator indicator = MakeIndicator(tile);
         
         CashManager.instance.SpendCash(currentBuilding.cost);
+
+        if(currentBuilding.buildingType == Buildings.BuildingType.Floor)
+        {
+            currentTask.tileTypeAfterTask = TileTypes.TileType.Floor;
+        }
+        else
+        {
+            currentTask.tileTypeAfterTask = TileTypes.TileType.Other;
+        }
 
         buildingTasks.Add(new Task(currentTask, tile, currentBuilding, indicator, null, null));
     }
@@ -450,10 +459,17 @@ public class TaskManager : MonoBehaviour
         {
             case TileTypes.TileType.Ground:
             {
-                if(currentTask.taskType == TasksTypes.TaskType.Build)
+                if(currentTask.taskType == TasksTypes.TaskType.Build && currentBuilding.buildingType == Buildings.BuildingType.Floor)
                     return true;
 
                 return false;    
+            }
+            case TileTypes.TileType.Floor:
+            {
+                if(currentTask.taskType == TasksTypes.TaskType.Build && currentBuilding.buildingType != Buildings.BuildingType.Floor)
+                    return true;
+
+                return false;
             }
             case TileTypes.TileType.Water:
             {

@@ -399,7 +399,6 @@ MonoBehaviour:
   buildingTasks: []
   pickTasks: []
   packTasks: []
-  ordersManager: {fileID: 1352405501}
   currentTask:
     taskTime: 0
     taskType: 0
@@ -407,7 +406,7 @@ MonoBehaviour:
     buttonSprite: {fileID: 0}
     nameOfButton: 
     tileTypeAfterTask: 0
-  currentTile: {fileID: 0}
+  ordersManager: {fileID: 1352405501}
   currentBuilding:
     buildingObject: {fileID: 0}
     buildingSprite: {fileID: 0}
@@ -5075,6 +5074,16 @@ MonoBehaviour:
     indicatorsInPool: []
   - buildingType: 6
     indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+    indicatorsInPool: []
+  - buildingType: 7
+    indicatorObject: {fileID: 6777885033127159899, guid: 81fa3ad19d6464089add2b482cf9fb6b,
+      type: 3}
+    isAffirmative: 1
+    indicatorsInPool: []
+  - buildingType: 7
+    indicatorObject: {fileID: 6777885033127159899, guid: 999140753e1dc993ea2aa957db1f91cf,
       type: 3}
     isAffirmative: 0
     indicatorsInPool: []

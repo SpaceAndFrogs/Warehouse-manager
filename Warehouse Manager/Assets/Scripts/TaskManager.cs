@@ -24,6 +24,7 @@ public class TaskManager : MonoBehaviour
 
     #region Buildings Variables
     Tile currentTile = null;
+    Tile currentTileBuild = null;
     public Buildings.Building currentBuilding = null;
     #endregion
 
@@ -171,7 +172,7 @@ public class TaskManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo))
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
         {
                 
             Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
@@ -254,6 +255,16 @@ public class TaskManager : MonoBehaviour
         }
     }
 
+    void FillForBuild(Tile endTile)
+    {
+        List<Tile> tiles = Figuers.instance.MakeFiguer(currentTileBuild, endTile, Figuers.FiguersType.Fill);
+
+        for(int i = 0; i < tiles.Count; i++)
+        {
+            MakeBuildTask(tiles[i]);
+        }
+    }
+
     void CheckForAmountAndTilesForBuildings(Tile endTile, bool fill)
     {
         if(endTile == currentTile)
@@ -275,9 +286,47 @@ public class TaskManager : MonoBehaviour
         currentTile = null;
             
     }
+
+    void CheckForAmountAndTilesForBuild(Tile endTile)
+    {
+        if(endTile == currentTileBuild)
+        {
+            MakeBuildTask(endTile);
+            currentTileBuild = null;
+            return;
+        }
+
+        FillForBuild(endTile);
+
+        currentTileBuild = null;
+            
+    }
     #endregion
     
     #region Tasks Methods
+    public void DropTask(Task task)
+    {
+        switch(task.task.taskClass)
+        {
+            case TasksTypes.TaskClass.Build:
+            {
+                buildingTasks.Add(task);
+                return;
+            }
+
+            case TasksTypes.TaskClass.Pick:
+            {
+                pickTasks.Add(task);
+                return;
+            }
+
+            case TasksTypes.TaskClass.Pack:
+            {
+                packTasks.Add(task);
+                return;
+            }
+        }
+    }
     void ConvertOrdersToTasks()
     {
         for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
@@ -295,22 +344,27 @@ public class TaskManager : MonoBehaviour
             return;
 
         if(currentBuilding.cost > CashManager.instance.AmountOfCash())
-            return;
+        return;
 
         IndicatorsPool.Indicator indicator = MakeIndicator(tile);
         
         CashManager.instance.SpendCash(currentBuilding.cost);
-
-        if(currentBuilding.buildingType == Buildings.BuildingType.Floor)
-        {
-            currentTask.tileTypeAfterTask = TileTypes.TileType.Floor;
-        }
-        else
-        {
-            currentTask.tileTypeAfterTask = TileTypes.TileType.Other;
-        }
+        currentTask.tileTypeAfterTask = TileTypeAfterTask();        
 
         buildingTasks.Add(new Task(currentTask, tile, currentBuilding, indicator, null, null));
+    }
+
+    void MakeBuildTask(Tile tile)
+    {
+        if(!IsTileCompatibleWithTask(tile))
+            return;
+
+        if(currentTask.cost > CashManager.instance.AmountOfCash())
+        return;
+        
+        CashManager.instance.SpendCash(currentTask.cost);
+
+        buildingTasks.Add(new Task(currentTask, tile, null, null, null, null));
     }
 
     void GiveTasksToBuilders()
@@ -407,7 +461,26 @@ public class TaskManager : MonoBehaviour
     #endregion
     
     #region Check Methods
-    void CheckForInput()
+
+    TileTypes.TileType TileTypeAfterTask()
+    {
+        if(currentBuilding.buildingType == Buildings.BuildingType.Floor)
+        {
+            return TileTypes.TileType.Floor;
+        }
+        if(currentBuilding.buildingType == Buildings.BuildingType.Wall)
+        {
+            return TileTypes.TileType.Wall;
+        }
+        if(currentBuilding.buildingType == Buildings.BuildingType.Door)
+        {
+            return TileTypes.TileType.Door;
+        }
+
+        return TileTypes.TileType.Other;
+    }
+
+    void CheckBuildingsInput()
     {
         if(Input.GetKeyDown(KeyCode.Mouse1) || currentBuilding.buildingType == Buildings.BuildingType.None)
         {
@@ -423,7 +496,7 @@ public class TaskManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo))
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
         {
                 
             Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
@@ -439,8 +512,8 @@ public class TaskManager : MonoBehaviour
             {
                 if(currentBuilding.buildingType == Buildings.BuildingType.Wall)
                 {
-                    CheckForAmountAndTilesForBuildings(tile, false);
-                }
+                   CheckForAmountAndTilesForBuildings(tile, false);
+                } 
                 else
                 {
                     CheckForAmountAndTilesForBuildings(tile, true);
@@ -453,6 +526,43 @@ public class TaskManager : MonoBehaviour
         }
     }
 
+    void CheckBuildInput()
+    {     
+        if(Input.GetKeyDown(KeyCode.Mouse1) || currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build)
+        {
+            currentTileBuild = null;
+            return;
+        }
+
+        if(!Input.GetKeyDown(KeyCode.Mouse0) || IsMouseOverUi() || currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build)
+            return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
+        {
+            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+            if (tile == null)
+                return;
+            
+            if(currentTileBuild == null)
+            {
+                currentTileBuild = tile;
+            }
+            else
+            {
+                CheckForAmountAndTilesForBuild(tile);
+            }
+        }
+    }
+    void CheckForInput()
+    {
+        CheckBuildingsInput();
+        CheckBuildInput();
+    }
+
     bool IsTileCompatibleWithTask(Tile tile)
     {
         switch(tile.tileType)
@@ -463,6 +573,13 @@ public class TaskManager : MonoBehaviour
                     return true;
 
                 return false;    
+            }
+            case TileTypes.TileType.Wall:
+            {
+                if(currentTask.taskType == TasksTypes.TaskType.Build && currentBuilding.buildingType == Buildings.BuildingType.Door)
+                    return true;
+
+                return false;
             }
             case TileTypes.TileType.Floor:
             {

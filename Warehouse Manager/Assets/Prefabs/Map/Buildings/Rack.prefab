@@ -100,7 +100,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -121,8 +121,11 @@ MonoBehaviour:
   itemOnRack:
     itemType: 0
     sprite: {fileID: 0}
-    price: 0
+    minMaxBuyPrice: {x: 0, y: 0}
+    minMaxPercentageOfDemandPrice: {x: 0, y: 0}
     name: 
   amountOfItems: 0
   reservedAmountOfItems: 0
   tileWithRack: {fileID: 0}
+  desiredAmountOfItems: 0
+  maxAmountOfItems: 0

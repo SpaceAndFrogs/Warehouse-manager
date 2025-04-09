@@ -36,7 +36,6 @@ public class Figuers : MonoBehaviour
             }
         }
 
-        Debug.Log("Amount of tiles: " + tiles.Count);
         return tiles;
     }
 

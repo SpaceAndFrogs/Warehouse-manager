@@ -83,7 +83,7 @@ public class Worker : MonoBehaviour
 
         switch(task.task.taskClass)
         {
-            case TasksTypes.TaskClass.Building:
+            case TasksTypes.TaskClass.Build:
             {
                 StartBuildingTask();
                 break;
@@ -124,6 +124,8 @@ public class Worker : MonoBehaviour
 
         if(path == null)
         {
+            Debug.Log("Drop task");
+            TaskManager.instance.DropTask(currentTask);
             currentTask = null;
             endNode = null;
             return;
@@ -169,7 +171,7 @@ public class Worker : MonoBehaviour
 
         switch(currentTask.task.taskClass)
         {
-            case TasksTypes.TaskClass.Building:
+            case TasksTypes.TaskClass.Build:
             {
                 StopCoroutine(StartBuildTask());
                 StartCoroutine(StartBuildTask());
@@ -248,25 +250,34 @@ public class Worker : MonoBehaviour
     IEnumerator StartBuildTask()
     {
 
-        if(currentTask.task.taskType != TasksTypes.TaskType.Build)
+        if(currentTask.task.taskType == TasksTypes.TaskType.None)
         yield break;
         
-        yield return new WaitForSeconds(stats.workSpeed * currentTask.building.buildingTime);
+        if(currentTask.task.taskType == TasksTypes.TaskType.Build)
+        {
+            yield return new WaitForSeconds(stats.workSpeed * currentTask.building.buildingTime);
 
-        currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
+            IndicatorsPool.instance.ReturnIndicator(currentTask.indicator);
+            currentTask.tileWithTask.RemoveBuilding(false);
+            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
+            GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
+            currentTask.tileWithTask.building = newBuilding;
+            
 
-        IndicatorsPool.instance.ReturnIndicator(currentTask.indicator);
+            CheckIfBuildingIsRack(newBuilding);
 
-        GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
-        currentTask.tileWithTask.building = newBuilding;
+            CheckIfBuildingIsOrdersStation(newBuilding);
 
-        CheckIfBuildingIsRack(newBuilding);
+            CheckIfBuildingIsPackStation(newBuilding);
 
-        CheckIfBuildingIsOrdersStation(newBuilding);
-
-        CheckIfBuildingIsPackStation(newBuilding);
-
-        CheckIfBuildingIsPickStash(newBuilding);
+            CheckIfBuildingIsPickStash(newBuilding);
+        }
+        else
+        {
+            yield return new WaitForSeconds(stats.workSpeed * currentTask.task.taskTime);
+            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);   
+        }
+        
         
         currentTask = null;
         ReturnWorker();

@@ -17,22 +17,41 @@ public class PathFinder : MonoBehaviour
         instance = this;
     }
     
-    bool CheckIfEndTileIsCLosed(Tile[] endTileNeighbours)
+    public bool IsTileSurrounded(Tile tileToCheck, Tile startTile)
     {
-        for(int i = 0; i < endTileNeighbours.Length; i ++)
+        HashSet<Tile> visited = new HashSet<Tile>();
+        Queue<Tile> queue = new Queue<Tile>();
+
+        visited.Add(tileToCheck);
+        queue.Enqueue(tileToCheck);
+
+        while (queue.Count > 0)
         {
-            if(endTileNeighbours[i].walkable)
+            Tile current = queue.Dequeue();
+
+            foreach (Tile neighbor in current.neighborTiles)
             {
-                return false;
+                if(neighbor == startTile)
+                    return false;
+
+                if(visited.Contains(neighbor))
+                    continue;
+
+                if(!neighbor.walkable)
+                {               
+                    continue;
+                }
+
+                visited.Add(neighbor);
+                queue.Enqueue(neighbor);
             }
         }
-
         return true;
     }
 
     public Tile[] FindPath(Tile startTile, Tile endTile)
     {
-        if(CheckIfEndTileIsCLosed(endTile.neighborTiles.ToArray()))
+        if(IsTileSurrounded(endTile, startTile))
         {
             return null;
         }

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TileType", menuName = "Tile Types", order = 1)]
 public class TileTypes : ScriptableObject
 {
-    public enum TileType {Ground, Water, Rocks, Floor, Other};
+    public enum TileType {Ground, Water, Rocks, Floor, Wall, Door, Other};
 
     public List<TileTypesRanges> tileTypesRanges = new List<TileTypesRanges>();
 

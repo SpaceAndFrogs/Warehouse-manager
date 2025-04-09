@@ -111,6 +111,28 @@ public class Tile : MonoBehaviour
         tileType = tileTypes.tileTypesRanges[tileTypeRangesIndex].tileType;
     }
 
+    public void RemoveBuilding(bool removeAll)
+    {
+        if(building == null)
+            return;
+
+        if(removeAll)
+        {
+            Destroy(building);
+            return;
+        }
+
+        switch(tileType)
+        {
+            case TileTypes.TileType.Wall:
+            {
+                Destroy(building);
+                return;
+            }
+        }
+        
+    }
+
     void CheckForNeighbours()
     {
         RaycastHit hit;

@@ -26,7 +26,7 @@ MonoBehaviour:
     nameOfButton: Floor
     buildingTime: 1
     cost: 5
-  - buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
+  - buildingObject: {fileID: 5886566032702211011, guid: c382232a510ad5a0dbb8c5074423f327,
       type: 3}
     buildingSprite: {fileID: 0}
     buildingType: 2
@@ -61,3 +61,10 @@ MonoBehaviour:
     nameOfButton: OrderStation
     buildingTime: 2
     cost: 5
+  - buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
+      type: 3}
+    buildingSprite: {fileID: 0}
+    buildingType: 7
+    nameOfButton: Door
+    buildingTime: 3
+    cost: 10

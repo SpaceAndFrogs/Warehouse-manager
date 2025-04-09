@@ -55,7 +55,21 @@ public class IndicatorsPool : MonoBehaviour
                     }
                 }
 
-                if(buildingType != Buildings.BuildingType.Floor)
+                if(buildingType == Buildings.BuildingType.Door)
+                {
+                    if(tileType == TileTypes.TileType.Wall)
+                    {
+                        if(instance.indicators[i].isAffirmative)
+                            return instance.indicators[i].GetIndicator();
+                    }
+                    else
+                    {
+                        if(!instance.indicators[i].isAffirmative)
+                            return instance.indicators[i].GetIndicator();
+                    }
+                }
+
+                if(buildingType != Buildings.BuildingType.Floor && buildingType != Buildings.BuildingType.Door)
                 {
                     if(tileType == TileTypes.TileType.Floor)
                     {
@@ -68,6 +82,8 @@ public class IndicatorsPool : MonoBehaviour
                             return instance.indicators[i].GetIndicator();
                     }
                 }
+
+                
             }
         }
 

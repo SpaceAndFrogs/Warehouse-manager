@@ -8,15 +8,15 @@ public class TasksTypes : ScriptableObject
 {
     public enum TaskType {None, Go, Chop, Dry, Mine, Build, Destroy}
 
-    public enum TaskClass {Building, Pick, Pack}
+    public enum TaskClass {Build, Pick, Pack}
     public List<Task> tasks = new List<Task>();
 
     [Serializable]
     public class Task
     {
         public float taskTime;
+        public float cost;
         public TaskType taskType;
-
         public TaskClass taskClass;
         public Sprite buttonSprite;
         public string nameOfButton;

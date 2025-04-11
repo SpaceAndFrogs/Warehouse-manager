@@ -10,7 +10,8 @@ public class PackStation : MonoBehaviour
     public Tile tileWithStation;
 
     void Start()
-    {       
+    {   
+        Debug.Log("Is station in room: " + PathFinder.instance.IsBuildingSurrounded(tileWithStation));
         OnPackStationSpawned?.Invoke(this);
     }
 }

@@ -19,46 +19,44 @@ public class PathFinder : MonoBehaviour
     }
     
     public bool IsBuildingSurrounded(Tile tileToCheck)
-{
-    HashSet<Tile> visited = new HashSet<Tile>();
-    Queue<Tile> queue = new Queue<Tile>();
-
-    visited.Add(tileToCheck);
-    queue.Enqueue(tileToCheck);
-
-    while (queue.Count > 0)
     {
-        Tile current = queue.Dequeue();
+        HashSet<Tile> visited = new HashSet<Tile>();
+        Queue<Tile> queue = new Queue<Tile>();
 
-        foreach (Tile neighbor in current.neighborTiles)
+        visited.Add(tileToCheck);
+        queue.Enqueue(tileToCheck);
+
+        while (queue.Count > 0)
         {
-            if (!visited.Contains(neighbor))
+            Tile current = queue.Dequeue();
+
+            foreach (Tile neighbor in current.neighborTiles)
             {
-                if (neighbor.tileType == TileTypes.TileType.Floor || neighbor.tileType == TileTypes.TileType.Other)
+                if (!visited.Contains(neighbor))
                 {
-                    visited.Add(neighbor);
-                    queue.Enqueue(neighbor);
+                    if (neighbor.tileType == TileTypes.TileType.Floor || neighbor.tileType == TileTypes.TileType.Other)
+                    {
+                        visited.Add(neighbor);
+                        queue.Enqueue(neighbor);
+                    }
                 }
             }
         }
-    }
 
-    // Sprawdzamy, czy obszar jest domknięty
-    foreach (Tile tile in visited)
-    {
-        foreach (Tile neighbor in tile.neighborTiles)
+        // Sprawdzamy, czy obszar jest domknięty
+        foreach (Tile tile in visited)
         {
-            if (!visited.Contains(neighbor) &&
-                neighbor.tileType != TileTypes.TileType.Wall &&
-                neighbor.tileType != TileTypes.TileType.Door)
+            foreach (Tile neighbor in tile.neighborTiles)
             {
-                return false;
+                if (!visited.Contains(neighbor) && neighbor.tileType != TileTypes.TileType.Wall && neighbor.tileType != TileTypes.TileType.Door)
+                {
+                    return false;
+                }
             }
         }
-    }
 
-    return true;
-}
+        return true;
+    }
 
 
     bool IsTileSurrounded(Tile tileToCheck, Tile startTile)

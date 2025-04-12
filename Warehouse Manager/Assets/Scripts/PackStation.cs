@@ -6,12 +6,28 @@ public class PackStation : MonoBehaviour
 {
     public static event Action<PackStation>? OnPackStationSpawned;
     public bool havePackWorker = false;
+    public bool isInRoom = false;
 
     public Tile tileWithStation;
 
     void Start()
     {   
-        Debug.Log("Is station in room: " + PathFinder.instance.IsBuildingSurrounded(tileWithStation));
+        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStation);
         OnPackStationSpawned?.Invoke(this);
+    }
+
+    void OnEnable()
+    {
+        Worker.OnBuildingEnded += CheckIfIsInRoom;
+    }
+
+    void OnDisable()
+    {
+        Worker.OnBuildingEnded -= CheckIfIsInRoom;
+    }
+
+    void CheckIfIsInRoom()
+    {
+        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStation);
     }
 }

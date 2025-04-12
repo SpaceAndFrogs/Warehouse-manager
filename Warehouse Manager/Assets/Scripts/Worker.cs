@@ -20,6 +20,7 @@ public class Worker : MonoBehaviour
 
     public static event Action<Worker>? OnWorkerSpawned;
     public static event Action<Tile, OrdersManager.Order>? OnOrderAddedToStash;
+    public static event Action? OnBuildingEnded;
 
     private void Start()
     {
@@ -196,10 +197,17 @@ public class Worker : MonoBehaviour
             {
                 if(currentTask.order.racksWithItems.Count > 0)
                 {
+                    if(currentTask.order.racksWithItems[0].isInRoom)
+                    {
+                        yield return new WaitForSeconds(stats.workSpeed);
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(stats.workSpeed + stats.workSpeed * 0.8f);
+                    }
+                    
                     TakeItemsFromRack();
 
-                    yield return new WaitForSeconds(stats.workSpeed);
-                    
                     currentTask.order.racksWithItems.RemoveAt(0);
                     currentTask.order.amountOfItemsFromRacks.RemoveAt(0);
 
@@ -213,6 +221,17 @@ public class Worker : MonoBehaviour
                     
                 }else if(endNode == pickStashTile)
                 {
+                    PickStash pickStash = pickStashTile.building.GetComponent<PickStash>();
+
+                    if(pickStash.isInRoom)
+                    {
+                        yield return new WaitForSeconds(stats.workSpeed);
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(stats.workSpeed + stats.workSpeed * 0.8f);
+                    }
+
                     OnOrderAddedToStash?.Invoke(pickStashTile,currentTask.order);
                     currentTask.task.taskClass = TasksTypes.TaskClass.Pack;
                     currentTask.tileOfPickStashWithOrder = pickStashTile;
@@ -239,7 +258,15 @@ public class Worker : MonoBehaviour
 
     IEnumerator StartPackOrder()
     {
-        yield return new WaitForSeconds(stats.workSpeed);
+        PackStation packStation = packStationTile.building.GetComponent<PackStation>();
+        if(packStation.isInRoom)
+        {
+            yield return new WaitForSeconds(stats.workSpeed);
+        }
+        else
+        {
+            yield return new WaitForSeconds(stats.workSpeed + stats.workSpeed * 0.8f);
+        }
 
         CashManager.instance.GetCash(currentTask.order.orderPrice);
         currentTask = null;
@@ -262,7 +289,6 @@ public class Worker : MonoBehaviour
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
             GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
             currentTask.tileWithTask.building = newBuilding;
-            
 
             CheckIfBuildingIsRack(newBuilding);
 
@@ -271,6 +297,8 @@ public class Worker : MonoBehaviour
             CheckIfBuildingIsPackStation(newBuilding);
 
             CheckIfBuildingIsPickStash(newBuilding);
+
+            OnBuildingEnded?.Invoke();
         }
         else
         {

@@ -8,10 +8,12 @@ public class PickStash : MonoBehaviour
 
     public Tile tileWithStash;
     public static event Action<PickStash>? OnPickStashSpawned;
+    public bool isInRoom = false;
 
     public List<OrdersManager.Order> orders = new List<OrdersManager.Order>();
     void Start()
     {
+        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStash);
         OnPickStashSpawned?.Invoke(this);
     }
 
@@ -23,6 +25,20 @@ public class PickStash : MonoBehaviour
         }
 
         orders.Add(order);
-        
+    }
+
+    void OnEnable()
+    {
+        Worker.OnBuildingEnded += CheckIfIsInRoom;
+    }
+
+    void OnDisable()
+    {
+        Worker.OnBuildingEnded -= CheckIfIsInRoom;
+    }
+
+    void CheckIfIsInRoom()
+    {
+        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStash);
     }
 }

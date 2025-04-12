@@ -15,6 +15,7 @@ public class Rack : MonoBehaviour
     public int desiredAmountOfItems = 0;
     public int maxAmountOfItems = 0;
     public static event Action<Rack>? OnRackSpawned;
+    public bool isInRoom = false;
 
     void Update()
     {
@@ -23,6 +24,7 @@ public class Rack : MonoBehaviour
 
     void Start()
     {
+        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithRack);
         OnRackSpawned?.Invoke(this);
     }
 
@@ -56,5 +58,20 @@ public class Rack : MonoBehaviour
     {
         amountOfItems -= amountOfItemsToGive;
         reservedAmountOfItems -= amountOfItemsToGive;
+    }
+
+    void OnEnable()
+    {
+        Worker.OnBuildingEnded += CheckIfIsInRoom;
+    }
+
+    void OnDisable()
+    {
+        Worker.OnBuildingEnded -= CheckIfIsInRoom;
+    }
+
+    void CheckIfIsInRoom()
+    {
+        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithRack);
     }
 }

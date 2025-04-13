@@ -235,7 +235,7 @@ public class Worker : MonoBehaviour
                     OnOrderAddedToStash?.Invoke(pickStashTile,currentTask.order);
                     currentTask.task.taskClass = TasksTypes.TaskClass.Pack;
                     currentTask.tileOfPickStashWithOrder = pickStashTile;
-                    TaskManager.instance.packTasks.Add(currentTask);
+                    TaskManager.instance.packTasks.Enqueue(currentTask);
                     ReturnWorker();
                     StopCoroutine(FollowPath());
                     break;

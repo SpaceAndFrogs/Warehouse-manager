@@ -33,7 +33,7 @@ public class TaskManager : MonoBehaviour
 
     #region Indicators Variables
     Tile lastIndicatorEndTile = null;
-    List<IndicatorsPool.Indicator> indicators = new List<IndicatorsPool.Indicator>();
+    Queue<IndicatorsPool.Indicator> indicators = new Queue<IndicatorsPool.Indicator>();
     #endregion
     
     #region Workers Variables
@@ -211,10 +211,9 @@ public class TaskManager : MonoBehaviour
 
     void ReturnIndicators()
     {
-        for(int i = indicators.Count - 1; i >= 0; i--)
+        while(indicators.Count > 0)
         {
-            IndicatorsPool.instance.ReturnIndicator(indicators[i]);
-            indicators.RemoveAt(i);
+            IndicatorsPool.instance.ReturnIndicator(indicators.Dequeue());
         }
     }
 
@@ -224,7 +223,7 @@ public class TaskManager : MonoBehaviour
 
         for(int i = 0; i < tiles.Count; i++)
         {
-            indicators.Add(MakeIndicator(tiles[i]));
+            indicators.Enqueue(MakeIndicator(tiles[i]));
         }
     }
 
@@ -234,7 +233,7 @@ public class TaskManager : MonoBehaviour
 
         for(int i = 0; i < tiles.Count; i++)
         {
-            indicators.Add(MakeIndicator(tiles[i]));
+            indicators.Enqueue(MakeIndicator(tiles[i]));
         }
     }
 

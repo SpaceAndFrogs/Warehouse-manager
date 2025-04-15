@@ -100,6 +100,11 @@ public class TaskManager : MonoBehaviour
         GiveTasksToPack();
     }
 
+    void FixedUpdate() 
+    {
+        CheckForIndicator();
+    }
+
     void OnEnable()
     {
         Worker.OnBuildingEnded += FreeDropedTasks;
@@ -176,7 +181,31 @@ public class TaskManager : MonoBehaviour
     }
     #endregion
     
-    #region Indicators Methods
+    #region Indicators Methods 
+    void CheckForIndicator()
+    {
+        if(IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None || currentTile != null)
+            return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        {
+                
+            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+            if (tile == null || lastIndicatorEndTile == tile)
+                return;
+
+            lastIndicatorEndTile = tile;
+
+            ReturnIndicators();
+
+            indicators.Enqueue(MakeIndicator(tile)); 
+                                
+        }
+    }
     void SetIndicators()
     {
         if(currentTile == null || IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None)
@@ -185,7 +214,7 @@ public class TaskManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
         {
                 
             Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
@@ -390,6 +419,19 @@ public class TaskManager : MonoBehaviour
 
         if(currentTask.cost > CashManager.instance.AmountOfCash())
         return;
+
+        if(currentTask.taskType == TasksTypes.TaskType.Destroy)
+        {
+            if(tile.tileType == TileTypes.TileType.Floor)
+            {
+                currentTask.tileTypeAfterTask = TileTypes.TileType.Ground;
+            }
+            else
+            {
+                currentTask.tileTypeAfterTask = TileTypes.TileType.Floor;
+            }
+            
+        }
         
         CashManager.instance.SpendCash(currentTask.cost);
 
@@ -505,7 +547,7 @@ public class TaskManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
         {
                 
             Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
@@ -521,7 +563,7 @@ public class TaskManager : MonoBehaviour
             {
                 if(currentBuilding.buildingType == Buildings.BuildingType.Wall)
                 {
-                   CheckForAmountAndTilesForBuildings(tile, false);
+                    CheckForAmountAndTilesForBuildings(tile, false);
                 } 
                 else
                 {
@@ -549,7 +591,7 @@ public class TaskManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
         {
             Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
 
@@ -574,6 +616,15 @@ public class TaskManager : MonoBehaviour
 
     bool IsTileCompatibleWithTask(Tile tile)
     {
+        if(tile == null)
+            return false;
+        
+        if(currentTask.taskType == TasksTypes.TaskType.None)
+            return false;
+        
+        if(tile.building != null && currentTask.taskType == TasksTypes.TaskType.Destroy)
+            return true;
+            
         switch(tile.tileType)
         {
             case TileTypes.TileType.Ground:
@@ -581,35 +632,35 @@ public class TaskManager : MonoBehaviour
                 if(currentTask.taskType == TasksTypes.TaskType.Build && currentBuilding.buildingType == Buildings.BuildingType.Floor)
                     return true;
 
-                return false;    
+                break;  
             }
             case TileTypes.TileType.Wall:
             {
                 if(currentTask.taskType == TasksTypes.TaskType.Build && currentBuilding.buildingType == Buildings.BuildingType.Door)
                     return true;
 
-                return false;
+                break; 
             }
             case TileTypes.TileType.Floor:
             {
                 if(currentTask.taskType == TasksTypes.TaskType.Build && currentBuilding.buildingType != Buildings.BuildingType.Floor)
                     return true;
 
-                return false;
+                break; 
             }
             case TileTypes.TileType.Water:
             {
                 if(currentTask.taskType == TasksTypes.TaskType.Dry)
-                    return true;
+                    return true; 
 
-                return false;    
+                break;  
             }
             case TileTypes.TileType.Rocks:
             {
                 if(currentTask.taskType == TasksTypes.TaskType.Mine)
-                    return true;
+                    return true;  
 
-                return false;    
+                break; 
             }
         }
 

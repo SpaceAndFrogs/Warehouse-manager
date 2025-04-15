@@ -59,25 +59,25 @@ public class Tile : MonoBehaviour
     {
         outlineObject.SetActive(true);
 
-        if(TaskManager.instance.currentBuilding.buildingType == Buildings.BuildingType.None || TaskManager.instance.currentBuilding == null)
+        /*if(TaskManager.instance.currentBuilding.buildingType == Buildings.BuildingType.None || TaskManager.instance.currentBuilding == null)
         {
             return;
         }
 
         currentIndicator = IndicatorsPool.instance.GetIndicator(tileType, TaskManager.instance.currentBuilding.buildingType);
-        currentIndicator.indicatorObject.transform.position = transform.position;
+        currentIndicator.indicatorObject.transform.position = transform.position;*/
     }
     private void OnMouseExit() 
     {
         outlineObject.SetActive(false);
 
-        if(currentIndicator == null)
+        /*if(currentIndicator == null)
         {
             return;
         }
 
         IndicatorsPool.instance.ReturnIndicator(currentIndicator);
-        currentIndicator = null;
+        currentIndicator = null;*/
     }
 
     public void SetTileType(float noiseSample)
@@ -105,10 +105,38 @@ public class Tile : MonoBehaviour
             }
         }
 
+        if(tileTypeToChange == TileTypes.TileType.Ground && tileType == TileTypes.TileType.Floor)
+        {
+            RemoveBuilding(true);
+        }
+        else if(tileTypeToChange == TileTypes.TileType.Floor && (tileType == TileTypes.TileType.Wall || tileType == TileTypes.TileType.Other || tileType == TileTypes.TileType.Door))
+        {
+            RemoveBuilding(true);
+            CheckForBuilding();
+        }
+
+        
+
         mapFragmentScript.ChangeTileOnMap(tileCords,tileTypes.tileTypesRanges[tileTypeRangesIndex].color);
 
         walkable = tileTypes.tileTypesRanges[tileTypeRangesIndex].walkable;
         tileType = tileTypes.tileTypesRanges[tileTypeRangesIndex].tileType;
+    }
+
+    void CheckForBuilding()
+    {
+
+        Ray ray = new Ray(transform.position+Vector3.up, Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, 10f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide);
+        for(int i = 1; i < hits.Length; i++)
+        {
+            if(hits[i].collider.gameObject != gameObject)
+            {
+                Debug.Log("Found: " + hits[i].collider.gameObject.name);
+                building = hits[i].collider.gameObject;
+                break;
+            }
+        }
     }
 
     public void RemoveBuilding(bool removeAll)

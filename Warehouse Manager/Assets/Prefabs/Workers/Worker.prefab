@@ -162,6 +162,7 @@ MonoBehaviour:
   currentTask:
     task:
       taskTime: 0
+      cost: 0
       taskType: 0
       taskClass: 0
       buttonSprite: {fileID: 0}
@@ -180,6 +181,11 @@ MonoBehaviour:
       amountOfItemsFromRacks: 
       orderPrice: 0
     tileOfPickStashWithOrder: {fileID: 0}
+    indicator:
+      buildingType: 0
+      indicatorObject: {fileID: 0}
+      isAffirmative: 0
+      indicatorsInPool: []
   packStationTile: {fileID: 0}
   pickStashTile: {fileID: 0}
   goingToPickStash: 0

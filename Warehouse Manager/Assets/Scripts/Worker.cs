@@ -287,7 +287,7 @@ public class Worker : MonoBehaviour
             IndicatorsPool.instance.ReturnIndicator(currentTask.indicator);
             currentTask.tileWithTask.RemoveBuilding(false);
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
-            GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.tileWithTask.transform.rotation);
+            GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.rotationTransform.rotation);
             currentTask.tileWithTask.building = newBuilding;
 
             CheckIfBuildingIsRack(newBuilding);

@@ -29,6 +29,8 @@ public class TaskManager : MonoBehaviour
     Tile currentTile = null;
     Tile currentTileBuild = null;
     public Buildings.Building currentBuilding = null;
+    [SerializeField]
+    Transform rotationTransform;
     #endregion
 
     #region Indicators Variables
@@ -58,10 +60,11 @@ public class TaskManager : MonoBehaviour
         public TasksTypes.Task task;
         public Tile tileWithTask;
         public Buildings.Building building;
+        public Transform rotationTransform;
         public OrdersManager.Order order;
         public Tile tileOfPickStashWithOrder;
         public IndicatorsPool.Indicator indicator;
-        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building,IndicatorsPool.Indicator indicator, OrdersManager.Order order,Tile tileOfPickStashWithOrder)
+        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building, Transform rotationTrasform,IndicatorsPool.Indicator indicator, OrdersManager.Order order,Tile tileOfPickStashWithOrder)
         {
             this.task = task;
             this.tileWithTask = tileWithTask;
@@ -69,6 +72,7 @@ public class TaskManager : MonoBehaviour
             this.order = order;
             this.tileOfPickStashWithOrder = tileOfPickStashWithOrder;
             this.indicator = indicator;
+            this.rotationTransform = rotationTrasform;
         }
     }
     #endregion
@@ -238,6 +242,15 @@ public class TaskManager : MonoBehaviour
         }           
     }
 
+    void RotateIndicators()
+    {
+        for(int i = 0; i < indicators.Count; i++)
+        {
+            IndicatorsPool.Indicator indicator = indicators.Dequeue();
+            indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
+            indicators.Enqueue(indicator);
+        }
+    }
     void ReturnIndicators()
     {
         while(indicators.Count > 0)
@@ -270,12 +283,27 @@ public class TaskManager : MonoBehaviour
     {
         IndicatorsPool.Indicator indicator = IndicatorsPool.instance.GetIndicator(tile.tileType, currentBuilding.buildingType);
         indicator.indicatorObject.transform.position = tile.transform.position;
+        indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
     
         return indicator;
     }
     #endregion
     
     #region Building Methods
+
+    void RotateBuilding(bool left)
+    {
+        if(left)
+        {
+            rotationTransform.Rotate(0, 90f, 0);
+        }
+        else
+        {
+            rotationTransform.Rotate(0, 90f, 0);
+        }
+
+        RotateIndicators();
+    }
     void Contour(Tile endTile)
     {
         List<Tile> tiles = Figuers.instance.MakeFiguer(currentTile, endTile, Figuers.FiguersType.Contour);
@@ -389,7 +417,7 @@ public class TaskManager : MonoBehaviour
     {
         for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
         {
-            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null,null, ordersManager.ordersOnPick[i],null);
+            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null,null,null, ordersManager.ordersOnPick[i],null);
             pickTasks.Enqueue(newPickTask);
         }
 
@@ -409,7 +437,7 @@ public class TaskManager : MonoBehaviour
         CashManager.instance.SpendCash(currentBuilding.cost);
         currentTask.tileTypeAfterTask = TileTypeAfterTask();        
 
-        buildingTasks.Enqueue(new Task(currentTask, tile, currentBuilding, indicator, null, null));
+        buildingTasks.Enqueue(new Task(currentTask, tile, currentBuilding, rotationTransform, indicator, null, null));
     }
 
     void MakeBuildTask(Tile tile)
@@ -435,7 +463,7 @@ public class TaskManager : MonoBehaviour
         
         CashManager.instance.SpendCash(currentTask.cost);
 
-        buildingTasks.Enqueue(new Task(currentTask, tile, null, null, null, null));
+        buildingTasks.Enqueue(new Task(currentTask, tile, null, null, null, null, null));
     }
 
     void GiveTasksToBuilders()
@@ -608,8 +636,25 @@ public class TaskManager : MonoBehaviour
             }
         }
     }
+
+    void CheckForRotationInput()
+    {
+        if(currentBuilding.buildingType == Buildings.BuildingType.None)
+            return;
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            RotateBuilding(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            RotateBuilding(true);
+        }
+    }
     void CheckForInput()
     {
+        CheckForRotationInput();
         CheckBuildingsInput();
         CheckBuildInput();
     }

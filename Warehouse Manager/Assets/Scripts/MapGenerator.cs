@@ -101,6 +101,10 @@ public class MapGenerator : MonoBehaviour
                     float xCoord = (float)x / size * scale + offSetX;
                     float yCoord = (float)y / size * scale + offSetY;
                     float sample = Mathf.PerlinNoise(xCoord, yCoord);
+                    sample = Mathf.Clamp01(sample);
+
+                    if (sample > 1f || sample < 0)
+                        Debug.Log("Sample: " + sample);
 
                     xRow.Add(sample);
                 }

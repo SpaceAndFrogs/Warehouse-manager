@@ -58,33 +58,17 @@ public class Tile : MonoBehaviour
     private void OnMouseEnter() 
     {
         outlineObject.SetActive(true);
-
-        /*if(TaskManager.instance.currentBuilding.buildingType == Buildings.BuildingType.None || TaskManager.instance.currentBuilding == null)
-        {
-            return;
-        }
-
-        currentIndicator = IndicatorsPool.instance.GetIndicator(tileType, TaskManager.instance.currentBuilding.buildingType);
-        currentIndicator.indicatorObject.transform.position = transform.position;*/
     }
     private void OnMouseExit() 
     {
         outlineObject.SetActive(false);
-
-        /*if(currentIndicator == null)
-        {
-            return;
-        }
-
-        IndicatorsPool.instance.ReturnIndicator(currentIndicator);
-        currentIndicator = null;*/
     }
 
     public void SetTileType(float noiseSample)
     {
         for (int r = 0; r < tileTypes.tileTypesRanges.Count; r++)
         {
-            if (noiseSample >= tileTypes.tileTypesRanges[r].tileRange.x && noiseSample < tileTypes.tileTypesRanges[r].tileRange.y)
+            if (noiseSample >= tileTypes.tileTypesRanges[r].tileRange.x && noiseSample <= tileTypes.tileTypesRanges[r].tileRange.y)
             {
                 walkable = tileTypes.tileTypesRanges[r].walkable;
                 tileType = tileTypes.tileTypesRanges[r].tileType;

@@ -27,7 +27,7 @@ public class MapFragmentScript : MonoBehaviour
                 noiseSample = noiseSamples[i][j];
                 for (int r = 0; r < tileTypes.tileTypesRanges.Count; r++)
                 {
-                    if (noiseSample >= tileTypes.tileTypesRanges[r].tileRange.x && noiseSample < tileTypes.tileTypesRanges[r].tileRange.y)
+                    if (noiseSample >= tileTypes.tileTypesRanges[r].tileRange.x && noiseSample <= tileTypes.tileTypesRanges[r].tileRange.y)
                     {
                         texture.SetPixel(i, j, tileTypes.tileTypesRanges[r].color);
                     }

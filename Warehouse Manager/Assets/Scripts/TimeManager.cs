@@ -10,8 +10,8 @@ public class TimeManager : MonoBehaviour
     public static TimeManager instance;
     [SerializeField]
     float oneHourInSeconds;
-    [SerializeField]
-    TimeUi timeUi;
+    [SerializeField]TextMeshProUGUI currentSpeedTMP;
+    float currentTimeScale;
 
     void Awake()
     {
@@ -20,8 +20,7 @@ public class TimeManager : MonoBehaviour
 
     void Start()
     {
-        AddListeners();
-        timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
+        currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
     }
 
     void MakeInstance()
@@ -56,39 +55,31 @@ public class TimeManager : MonoBehaviour
         return oneHourInSeconds*720;
     }
 
-    void AddListeners()
-    {
-        timeUi.stopTimeButton.onClick.AddListener(() => ChangeTimeScale(0));
-        timeUi.slowDownTimeButton.onClick.AddListener(() => ChangeTimeScale(-0.25f));
-        timeUi.speedUpTimeButton.onClick.AddListener(() => ChangeTimeScale(0.25f));
-    }
-
     public void ChangeTimeScale(float timeScale)
     {
         if(timeScale != 0)
         {
+            if (Time.timeScale == 0)
+            {
+                return;
+            }
             Time.timeScale += timeScale;
-            timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
-        }
-        else
-        {
-            Time.timeScale = timeScale;
-            timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
-        }
-        
-        if(Time.timeScale < 0)
-        {
-            Time.timeScale = 0;
-            timeUi.currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
+            currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }
     }
 
-    [System.Serializable]
-    public class TimeUi
+    public void TogglePause()
     {
-        public Button stopTimeButton;
-        public Button speedUpTimeButton;
-        public Button slowDownTimeButton;
-        public TextMeshProUGUI currentSpeedTMP;
+        if (Time.timeScale > 0f)
+        {
+            currentTimeScale = Time.timeScale;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = currentTimeScale;
+        }
+
+        currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
     }
 }

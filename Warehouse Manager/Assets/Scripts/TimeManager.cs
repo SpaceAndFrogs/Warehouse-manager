@@ -12,6 +12,7 @@ public class TimeManager : MonoBehaviour
     float oneHourInSeconds;
     [SerializeField]TextMeshProUGUI currentSpeedTMP;
     float currentTimeScale;
+    bool isPaused = false;
 
     void Awake()
     {
@@ -21,6 +22,17 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
+    }
+
+    void Update()
+    {
+        CheckForPauseInput();
+    }
+
+    void CheckForPauseInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            TogglePause();
     }
 
     void MakeInstance()
@@ -61,8 +73,17 @@ public class TimeManager : MonoBehaviour
         {
             if (Time.timeScale == 0)
             {
-                return;
+                if(isPaused)
+                {
+                    isPaused = false;
+                    Time.timeScale = currentTimeScale;
+                }
+                else
+                {
+                    return;
+                }               
             }
+            
             Time.timeScale += timeScale;
             currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }
@@ -74,10 +95,12 @@ public class TimeManager : MonoBehaviour
         {
             currentTimeScale = Time.timeScale;
             Time.timeScale = 0f;
+            isPaused = true;
         }
         else
         {
             Time.timeScale = currentTimeScale;
+            isPaused = false;
         }
 
         currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";

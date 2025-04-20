@@ -31,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
         CheckAxisMovement();
 
         CheckScroll();
+
+        CheckRotation();
     }
 
     Vector3 CalculateNormalizedDirection(Vector3 startPoint, Vector3 endPoint)
@@ -78,18 +80,23 @@ public class PlayerMovement : MonoBehaviour
             cameraTransform.position += direction * scrollSpeed * Time.unscaledDeltaTime;
         }
 
-        if(Input.GetKeyDown(KeyCode.Mouse2))
+        
+    }
+
+    void CheckRotation()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse2))
         {
             lastMousePosition = Input.mousePosition;
         }
 
-        if(Input.GetKey(KeyCode.Mouse2))
+        if (Input.GetKey(KeyCode.Mouse2))
         {
             Vector2 currentMousePosition = Input.mousePosition;
 
-            if(currentMousePosition.x != lastMousePosition.x)
+            if (currentMousePosition.x != lastMousePosition.x)
             {
-                transform.eulerAngles += new Vector3(0,currentMousePosition.x - lastMousePosition.x,0) * rotationSpeed * Time.unscaledDeltaTime;
+                transform.eulerAngles += new Vector3(0, currentMousePosition.x - lastMousePosition.x, 0) * rotationSpeed * Time.unscaledDeltaTime;
             }
 
             lastMousePosition = currentMousePosition;

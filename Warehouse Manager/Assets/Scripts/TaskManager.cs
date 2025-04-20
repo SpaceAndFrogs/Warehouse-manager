@@ -561,7 +561,7 @@ public class TaskManager : MonoBehaviour
 
     void CheckBuildingsInput()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse1) || currentBuilding.buildingType == Buildings.BuildingType.None)
+        if(Input.GetKeyDown(KeyCode.Mouse1) || IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None)
         {
             currentTile = null;
             lastIndicatorEndTile = null;
@@ -569,30 +569,40 @@ public class TaskManager : MonoBehaviour
             return;
         }
 
-        if(!Input.GetKeyDown(KeyCode.Mouse0) || IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None)
-            return;
-        
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        if(Input.GetMouseButtonDown(0))
         {
-                
-            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
 
-            if (tile == null)
-                return;
-
-            if(currentTile == null)
+            if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
+
+                Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+                if (tile == null)
+                    return;
+
                 currentTile = tile;
             }
-            else
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
-                if(currentBuilding.buildingType == Buildings.BuildingType.Wall)
+
+                Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+                if (tile == null || currentTile == null)
+                    return;
+
+                if (currentBuilding.buildingType == Buildings.BuildingType.Wall)
                 {
                     CheckForAmountAndTilesForBuildings(tile, false);
-                } 
+                }
                 else
                 {
                     CheckForAmountAndTilesForBuildings(tile, true);
@@ -601,40 +611,50 @@ public class TaskManager : MonoBehaviour
                 lastIndicatorEndTile = null;
                 ReturnIndicators();
             }
-                                
         }
     }
 
     void CheckBuildInput()
     {     
-        if(Input.GetKeyDown(KeyCode.Mouse1) || currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build)
+        if(Input.GetKeyDown(KeyCode.Mouse1) || IsMouseOverUi() || currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build)
         {
             currentTileBuild = null;
             return;
         }
 
-        if(!Input.GetKeyDown(KeyCode.Mouse0) || IsMouseOverUi() || currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build)
-            return;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        if(Input.GetMouseButtonDown(0))
         {
-            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
 
-            if (tile == null)
-                return;
-            
-            if(currentTileBuild == null)
+            if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
+                Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+                if (tile == null)
+                    return;
+
                 currentTileBuild = tile;
             }
-            else
+        }
+
+        if(Input.GetMouseButtonUp(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
-                CheckForAmountAndTilesForBuild(tile);
+                Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+                if (tile == null || currentTileBuild == null)
+                    return;
+
+                CheckForAmountAndTilesForBuild(tile);               
             }
         }
+
+        
     }
 
     void CheckForRotationInput()

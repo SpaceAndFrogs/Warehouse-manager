@@ -435,7 +435,8 @@ public class TaskManager : MonoBehaviour
         IndicatorsPool.Indicator indicator = MakeIndicator(tile);
         
         CashManager.instance.SpendCash(currentBuilding.cost);
-        currentTask.tileTypeAfterTask = TileTypeAfterTask();        
+        currentTask.tileTypeAfterTask = TileTypeAfterTask();   
+        tile.haveTask = true;     
 
         buildingTasks.Enqueue(new Task(currentTask, tile, currentBuilding, rotationTransform, indicator, null, null));
     }
@@ -462,6 +463,8 @@ public class TaskManager : MonoBehaviour
         }
         
         CashManager.instance.SpendCash(currentTask.cost);
+
+        tile.haveTask = true;  
 
         buildingTasks.Enqueue(new Task(currentTask, tile, null, null, null, null, null));
     }
@@ -685,6 +688,9 @@ public class TaskManager : MonoBehaviour
             return false;
         
         if(currentTask.taskType == TasksTypes.TaskType.None)
+            return false;
+
+        if(tile.haveTask)
             return false;
         
         if(tile.building != null && currentTask.taskType == TasksTypes.TaskType.Destroy)

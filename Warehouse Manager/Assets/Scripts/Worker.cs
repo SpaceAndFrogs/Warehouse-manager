@@ -289,6 +289,7 @@ public class Worker : MonoBehaviour
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
             GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.rotationTransform.rotation);
             currentTask.tileWithTask.building = newBuilding;
+            currentTask.tileWithTask.haveTask = false;
 
             CheckIfBuildingIsRack(newBuilding);
 
@@ -303,6 +304,7 @@ public class Worker : MonoBehaviour
         else
         {
             yield return new WaitForSeconds(stats.workSpeed * currentTask.task.taskTime);
+            currentTask.tileWithTask.haveTask = false;
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);   
         }
         

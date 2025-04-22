@@ -20,6 +20,7 @@ public class Tile : MonoBehaviour
     public float hCost;
 
     public GameObject building = null;
+    public bool haveTask = false;
 
     IndicatorsPool.Indicator currentIndicator = null;
 

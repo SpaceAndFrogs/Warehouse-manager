@@ -14,6 +14,12 @@ public class MapGenerator : MonoBehaviour
     [SerializeField]
     Noise noise;
 
+    [SerializeField]
+    float cashForMapFragment = 1000f;
+    [SerializeField]
+    float mapFragmentCashMultiplier = 1.5f;
+    bool firstFragment = true;
+
     public static MapGenerator instance { get; private set; }
 
     [Serializable]
@@ -230,6 +236,18 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMapFragment(Vector3 positionToSpawn, MapFragment mapFragmentPrefab, Transform transform)
     {
+        if(CashManager.instance.AmountOfCash() < cashForMapFragment)
+        {
+            return;
+        }
+
+        if (!firstFragment)
+        {
+            CashManager.instance.SpendCash(cashForMapFragment);
+            cashForMapFragment *= mapFragmentCashMultiplier;
+        }
+        
+        firstFragment = false;
         MapFragment mapFragment = new MapFragment(mapFragmentPrefab.mapFragmentSize, mapFragmentPrefab.mapFragmentObject, mapFragmentPrefab.amountOfTilesOnFragment, mapFragmentPrefab.tile, new List<List<MapFragment.TileClass>>(), mapFragmentPrefab.canvasForButtons);
 
         GameObject mapFragmentObject = Instantiate(mapFragment.mapFragmentObject, positionToSpawn, transform.rotation);
@@ -249,6 +267,21 @@ public class MapGenerator : MonoBehaviour
 
         GenerateNewFragmentsButtons(mapFragmentPrefab);
 
+        SetCashIndicatorsForButtons();
+
+    }
+
+    void SetCashIndicatorsForButtons()
+    {
+        for (int i = 0; i < mapFragments.Count; i++)
+        {
+            for (int j = 0; j < mapFragments[i].newMapFragmentButtons.Count; j++)
+            {
+                MapFragment.NewMapFragmentButton button = mapFragments[i].newMapFragmentButtons[j];
+                TextMeshProUGUI textMesh = button.button.gameObject.GetComponentInChildren<TextMeshProUGUI>();
+                textMesh.text = cashForMapFragment.ToString() + "$";
+            }
+        }
     }
 
     public void GenerateTilesOnMapFragment()

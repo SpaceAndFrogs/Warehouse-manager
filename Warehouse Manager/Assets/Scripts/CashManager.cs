@@ -23,10 +23,7 @@ public class CashManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    void Start()
-    {
         currentCash = startCash;
         UpdateCounter();
     }

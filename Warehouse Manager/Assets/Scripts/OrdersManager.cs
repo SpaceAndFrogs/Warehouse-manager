@@ -137,10 +137,10 @@ public class OrdersManager : MonoBehaviour
     {
         for(int i = 0; i < racks.Count; i ++)
         {
-            int currentRackPathLength = PathFinder.instance.FindPath(PickPackStationsManager.instance.ordersStation.tileWithStation,racks[i].tileWithRack).Length;
+            int currentRackPathLength = PathFinder.instance.FindPath(PickPackStationsManager.instance.ordersStation.tileWithStation,racks[i].tileWithRack).Count;
             for(int j = i+1; j < racks.Count; j++)
             {
-                int lastPathLength = PathFinder.instance.FindPath(PickPackStationsManager.instance.ordersStation.tileWithStation,racks[i].tileWithRack).Length;
+                int lastPathLength = PathFinder.instance.FindPath(PickPackStationsManager.instance.ordersStation.tileWithStation,racks[i].tileWithRack).Count;
                 if(currentRackPathLength>lastPathLength)
                 {
                     Rack currentRack = racks[i];

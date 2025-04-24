@@ -91,7 +91,7 @@ public class PathFinder : MonoBehaviour
         return true;
     }
 
-    public Tile[] FindPath(Tile startTile, Tile endTile)
+    public Queue<Tile> FindPath(Tile startTile, Tile endTile)
     {
         if(IsTileSurrounded(endTile, startTile))
         {
@@ -100,8 +100,8 @@ public class PathFinder : MonoBehaviour
 
         if(endTile == startTile)
         {
-            Tile[] path = new Tile[1];
-            path[0] = endTile;
+            Queue<Tile> path = new Queue<Tile>();
+            path.Enqueue(endTile);
             return path;
         }
         List<Tile> openList = new List<Tile>();
@@ -126,7 +126,7 @@ public class PathFinder : MonoBehaviour
 
             if(currentTile == endTile)
             {               
-                return RetracePath(startTile, endTile).ToArray();
+                return RetracePath(startTile, endTile);
             }
 
             foreach(Tile tile in currentTile.neighborTiles)
@@ -157,19 +157,19 @@ public class PathFinder : MonoBehaviour
         return null;
     }
 
-    List<Tile> RetracePath(Tile startTile, Tile endTile)
+    Queue<Tile> RetracePath(Tile startTile, Tile endTile)
     {
-        List<Tile> path = new List<Tile>();
+        Queue<Tile> path = new Queue<Tile>();
 
         Tile currentTile = endTile;
 
         while(currentTile != startTile) 
         {
-            path.Add(currentTile);
+            path.Enqueue(currentTile);
             currentTile = currentTile.parentTile;
         }
 
-        path.Reverse();
+        path = new Queue<Tile>(path.Reverse());
 
         return path;
     }

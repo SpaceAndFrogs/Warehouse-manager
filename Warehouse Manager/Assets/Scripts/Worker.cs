@@ -7,7 +7,7 @@ public class Worker : MonoBehaviour
 {
     public Tile endNode; 
     public Tile startNode;
-    public Tile[] path = new Tile[0];
+    public Queue<Tile> path = new Queue<Tile>();
     
     [SerializeField]
     public Stats stats;
@@ -138,29 +138,38 @@ public class Worker : MonoBehaviour
 
     IEnumerator FollowPath()
     {
-        if(path.Length == 0)
+        if(path.Count == 0)
         {
             Debug.Log("null path");
         }
-        int i = 0;
-        Vector3 fixedPositionOfTile = new Vector3(path[i].transform.position.x,transform.position.y,path[i].transform.position.z);
+        Tile nextTile = path.Dequeue();
+        Vector3 fixedPositionOfTile = new Vector3(nextTile.transform.position.x,transform.position.y,nextTile.transform.position.z);
         Vector3 direction = fixedPositionOfTile - transform.position;
         direction.Normalize();
-        while (i < path.Length)
+        while (path.Count > 0)
         {
-            fixedPositionOfTile = new Vector3(path[i].transform.position.x,transform.position.y,path[i].transform.position.z);
+            fixedPositionOfTile = new Vector3(nextTile.transform.position.x,transform.position.y,nextTile.transform.position.z);
             direction = fixedPositionOfTile - transform.position;
             direction.Normalize();
             transform.position += direction * stats.moveSpeed * Time.deltaTime;
 
-            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMargin && i < path.Length-1)
+            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMargin && 1 < path.Count)
             { 
-                i++;
+                nextTile = path.Dequeue();
             }
 
-            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMarginOfFinalTile && i == path.Length - 1)
+            if(Vector3.Distance(transform.position, fixedPositionOfTile)<= stats.proxyMarginOfFinalTile && 1 == path.Count)
             { 
-                i++;
+                nextTile = path.Dequeue();
+            }
+
+            if(!nextTile.walkable && nextTile != endNode)
+            {
+                Debug.Log("Drop task");
+                TaskManager.instance.DropTask(currentTask);
+                currentTask = null;
+                endNode = null;
+                yield break;
             }
             yield return new WaitForEndOfFrame();
         }

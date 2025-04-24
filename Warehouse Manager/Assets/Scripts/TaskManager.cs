@@ -772,15 +772,15 @@ public class TaskManager : MonoBehaviour
 
         foreach(Worker worker in freeBuilders)
         {
-            Tile[] path = PathFinder.instance.FindPath(worker.startNode, endTile);
+            Queue<Tile> path = PathFinder.instance.FindPath(worker.startNode, endTile);
 
             if(path == null)
                 continue;
 
-            if(path.Length < currentClosestPath)
+            if(path.Count < currentClosestPath)
             {
                 currentClosestWorker = worker;
-                currentClosestPath = path.Length;
+                currentClosestPath = path.Count;
             }
         }
 

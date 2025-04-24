@@ -111,7 +111,7 @@ public class Worker : MonoBehaviour
 
     void StartPickTask()
     {
-        endNode = currentTask.order.racksWithItems[0].tileWithRack;
+        endNode = currentTask.order.racksWithItems.Peek().tileWithRack;
         GetPathToTarget();
     }
     void StartBuildingTask()
@@ -207,7 +207,7 @@ public class Worker : MonoBehaviour
             {
                 if(currentTask.order.racksWithItems.Count > 0)
                 {
-                    if(currentTask.order.racksWithItems[0].isInRoom)
+                    if(currentTask.order.racksWithItems.Peek().isInRoom)
                     {
                         yield return new WaitForSeconds(stats.workSpeed);
                     }
@@ -218,8 +218,8 @@ public class Worker : MonoBehaviour
                     
                     TakeItemsFromRack();
 
-                    currentTask.order.racksWithItems.RemoveAt(0);
-                    currentTask.order.amountOfItemsFromRacks.RemoveAt(0);
+                    currentTask.order.racksWithItems.Dequeue();
+                    currentTask.order.amountOfItemsFromRacks.Dequeue();
 
                     
                 }
@@ -227,7 +227,7 @@ public class Worker : MonoBehaviour
                 if(currentTask.order.racksWithItems.Count > 0)
                 {        
                                
-                    endNode = currentTask.order.racksWithItems[0].tileWithRack;
+                    endNode = currentTask.order.racksWithItems.Peek().tileWithRack;
                     
                 }else if(endNode == pickStashTile)
                 {
@@ -263,7 +263,7 @@ public class Worker : MonoBehaviour
 
     void TakeItemsFromRack()
     {
-        currentTask.order.racksWithItems[0].GiveItems(currentTask.order.amountOfItemsFromRacks[0]);
+        currentTask.order.racksWithItems.Peek().GiveItems(currentTask.order.amountOfItemsFromRacks.Peek());
     }
 
     IEnumerator StartPackOrder()

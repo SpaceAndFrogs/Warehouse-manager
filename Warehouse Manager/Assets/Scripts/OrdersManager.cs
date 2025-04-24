@@ -22,11 +22,11 @@ public class OrdersManager : MonoBehaviour
     [System.Serializable]
     public class Order
     {
-        public List<Rack> racksWithItems = new List<Rack>();
-        public List<int> amountOfItemsFromRacks = new List<int>();
+        public Queue<Rack> racksWithItems = new Queue<Rack>();
+        public Queue<int> amountOfItemsFromRacks = new Queue<int>();
         public float orderPrice;
 
-        public Order(List<Rack> racksWithItems, float orderPrice, List<int> amountOfItemsFromRacks)
+        public Order(Queue<Rack> racksWithItems, float orderPrice, Queue<int> amountOfItemsFromRacks)
         {
             this.racksWithItems = racksWithItems;
             this.orderPrice = orderPrice;
@@ -100,21 +100,21 @@ public class OrdersManager : MonoBehaviour
 
     Order MakeOrder()
     {
-        (List<Items.Item>, List<int>) items = DrawItemsForOrder();
+        (List<Items.Item>, Queue<int>) items = DrawItemsForOrder();
         if(items.Item1 == null || items.Item2 == null)
         {
             return null;
         }
         List<Items.Item> itemsInOrder = items.Item1;
-        List<int> amountOfItemsFromRacks = items.Item2;
-        List<Rack> sortedRacks = SortRacksByItems(itemsInOrder);
+        Queue<int> amountOfItemsFromRacks = items.Item2;
+        Queue<Rack> sortedRacks = SortRacksByItems(itemsInOrder);
         float priceOfOrder = CheckPriceOfOrder(itemsInOrder);
         return new Order(sortedRacks, priceOfOrder, amountOfItemsFromRacks);
     }
 
-    List<Rack> SortRacksByItems(List<Items.Item> itemsInOrder)
+    Queue<Rack> SortRacksByItems(List<Items.Item> itemsInOrder)
     {
-        List<Rack> racksWithItems = new List<Rack>();
+        Queue<Rack> racksWithItems = new Queue<Rack>();
 
         SortRacks();
 
@@ -124,7 +124,7 @@ public class OrdersManager : MonoBehaviour
             {
                 if(racks[i].itemOnRack.itemType == itemsInOrder[j].itemType && racks[i].amountOfItems -  racks[i].reservedAmountOfItems > 0)
                 {
-                    racksWithItems.Add(racks[i]);
+                    racksWithItems.Enqueue(racks[i]);
                     racks[i].reservedAmountOfItems ++;
                 }
             }
@@ -180,11 +180,11 @@ public class OrdersManager : MonoBehaviour
         return price;
     }
 
-    (List<Items.Item>, List<int>) DrawItemsForOrder()
+    (List<Items.Item>, Queue<int>) DrawItemsForOrder()
     {
 
         List<Items.Item> drawnItems = new List<Items.Item>();
-        List<int> amountOfItemsFromRacks = new List<int>();
+        Queue<int> amountOfItemsFromRacks = new Queue<int>();
 
         int maxAmountOfItems = 1;
         for(int i = 0; i < racks.Count; i ++)
@@ -269,7 +269,7 @@ public class OrdersManager : MonoBehaviour
 
             for(int j = 0 ; j < amountOfItemsFromRack; j++)
             {
-                amountOfItemsFromRacks.Add(1);
+                amountOfItemsFromRacks.Enqueue(1);
             }
             
 

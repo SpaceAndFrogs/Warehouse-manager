@@ -100,19 +100,19 @@ public class OrdersManager : MonoBehaviour
 
     Order MakeOrder()
     {
-        (List<Items.Item>, Queue<int>) items = DrawItemsForOrder();
+        (Queue<Items.Item>, Queue<int>) items = DrawItemsForOrder();
         if(items.Item1 == null || items.Item2 == null)
         {
             return null;
         }
-        List<Items.Item> itemsInOrder = items.Item1;
+        Queue<Items.Item> itemsInOrder = items.Item1;
         Queue<int> amountOfItemsFromRacks = items.Item2;
-        Queue<Rack> sortedRacks = SortRacksByItems(itemsInOrder);
+        Queue<Rack> sortedRacks = SortRacksByItems(itemsInOrder.ToArray());
         float priceOfOrder = CheckPriceOfOrder(itemsInOrder);
         return new Order(sortedRacks, priceOfOrder, amountOfItemsFromRacks);
     }
 
-    Queue<Rack> SortRacksByItems(List<Items.Item> itemsInOrder)
+    Queue<Rack> SortRacksByItems(Items.Item[] itemsInOrder)
     {
         Queue<Rack> racksWithItems = new Queue<Rack>();
 
@@ -120,7 +120,7 @@ public class OrdersManager : MonoBehaviour
 
         for(int i = 0; i < racks.Count; i++)
         {
-            for(int j = 0; j < itemsInOrder.Count; j++)
+            for(int j = 0; j < itemsInOrder.Length; j++)
             {
                 if(racks[i].itemOnRack.itemType == itemsInOrder[j].itemType && racks[i].amountOfItems -  racks[i].reservedAmountOfItems > 0)
                 {
@@ -151,12 +151,12 @@ public class OrdersManager : MonoBehaviour
         }
     }
 
-    float CheckPriceOfOrder(List<Items.Item> itemsInOrder)
+    float CheckPriceOfOrder(Queue<Items.Item> itemsInOrder)
     {
         float price = 0;
-        for(int i = 0; i < itemsInOrder.Count; i++)
+        while(itemsInOrder.Count > 0)
         {
-            price += FindPriceOfItem(itemsInOrder[i].itemType);
+            price += FindPriceOfItem(itemsInOrder.Dequeue().itemType);
         }
         return price;
     }
@@ -180,10 +180,10 @@ public class OrdersManager : MonoBehaviour
         return price;
     }
 
-    (List<Items.Item>, Queue<int>) DrawItemsForOrder()
+    (Queue<Items.Item>, Queue<int>) DrawItemsForOrder()
     {
 
-        List<Items.Item> drawnItems = new List<Items.Item>();
+        Queue<Items.Item> drawnItems = new Queue<Items.Item>();
         Queue<int> amountOfItemsFromRacks = new Queue<int>();
 
         int maxAmountOfItems = 1;
@@ -275,7 +275,7 @@ public class OrdersManager : MonoBehaviour
 
             for(int j = 0; j < amountOfItemsFromRack; j++)
             {
-                drawnItems.Add(racks[rackIndex].itemOnRack);
+                drawnItems.Enqueue(racks[rackIndex].itemOnRack);
             }
             
         }

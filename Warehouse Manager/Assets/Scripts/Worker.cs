@@ -171,6 +171,7 @@ public class Worker : MonoBehaviour
                 endNode = null;
                 yield break;
             }
+            
             yield return new WaitForEndOfFrame();
         }
 

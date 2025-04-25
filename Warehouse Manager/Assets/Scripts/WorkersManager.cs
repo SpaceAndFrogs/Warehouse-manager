@@ -7,7 +7,11 @@ using Newtonsoft.Json.Linq;
 
 public class WorkersManager : MonoBehaviour
 {
+    Tile tileToSpawnWorker;
     Vector3 posToSpawnWorkers;
+    [SerializeField]
+    GameObject workersSpawnerPrefab;
+    GameObject workersSpawner;
     [SerializeField]
     WorkersPanel workersPanel;
     bool isSettingWorkersSpawn = false;
@@ -89,6 +93,15 @@ public class WorkersManager : MonoBehaviour
 
     void SetTileForWorkersSpawn(Vector3 tilePosition)
     {
+        if(workersSpawner == null)
+        {
+            workersSpawner = Instantiate(workersSpawnerPrefab, tilePosition, Quaternion.identity);
+        }
+        else
+        {
+            workersSpawner.transform.position = tilePosition;
+        }
+        
         posToSpawnWorkers = tilePosition + new Vector3(0,0.1f,0);
         isSettingWorkersSpawn = false;
         workersPanel.workersPanel.SetActive(true);
@@ -206,8 +219,14 @@ public class WorkersManager : MonoBehaviour
                 if (tile == null)
                     return;
 
-                if(tile.tileType == TileTypes.TileType.Ground && !tile.building)
+                if((tile.tileType == TileTypes.TileType.Ground && !tile.building) || tile.tileType == TileTypes.TileType.Floor)
                 {
+                    tile.haveTask = true;
+
+                    if(tileToSpawnWorker != null)
+                        tileToSpawnWorker.haveTask = false;
+
+                    tileToSpawnWorker = tile;
                     SetTileForWorkersSpawn(tile.transform.position);
                 }
             }

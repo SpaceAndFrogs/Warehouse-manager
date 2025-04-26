@@ -22,7 +22,7 @@ public class Tile : MonoBehaviour
     public GameObject building = null;
     public bool haveTask = false;
 
-    IndicatorsPool.Indicator currentIndicator = null;
+    IndicatorsPool.BuildingIndicator currentBuildingIndicator = null;
 
     public MapFragmentScript mapFragmentScript
     {

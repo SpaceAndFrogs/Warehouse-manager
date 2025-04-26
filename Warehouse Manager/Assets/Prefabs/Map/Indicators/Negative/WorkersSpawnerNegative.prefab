@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1457556805432540728}
   - component: {fileID: -5314704762063203727}
   m_Layer: 0
-  m_Name: WorkersSpawner
+  m_Name: WorkersSpawnerNegative
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f3cb4b4dc8af622a59c77fff2b56c78c, type: 2}
+  - {fileID: 2100000, guid: 04c35dacb7617bea58812688f829d71c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

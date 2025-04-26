@@ -35,7 +35,7 @@ public class TaskManager : MonoBehaviour
 
     #region Indicators Variables
     Tile lastIndicatorEndTile = null;
-    Queue<IndicatorsPool.Indicator> indicators = new Queue<IndicatorsPool.Indicator>();
+    Queue<IndicatorsPool.BuildingIndicator> indicators = new Queue<IndicatorsPool.BuildingIndicator>();
     #endregion
     
     #region Workers Variables
@@ -63,8 +63,8 @@ public class TaskManager : MonoBehaviour
         public Transform rotationTransform;
         public OrdersManager.Order order;
         public Tile tileOfPickStashWithOrder;
-        public IndicatorsPool.Indicator indicator;
-        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building, Transform rotationTrasform,IndicatorsPool.Indicator indicator, OrdersManager.Order order,Tile tileOfPickStashWithOrder)
+        public IndicatorsPool.BuildingIndicator indicator;
+        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building, Transform rotationTrasform,IndicatorsPool.BuildingIndicator indicator, OrdersManager.Order order,Tile tileOfPickStashWithOrder)
         {
             this.task = task;
             this.tileWithTask = tileWithTask;
@@ -246,7 +246,7 @@ public class TaskManager : MonoBehaviour
     {
         for(int i = 0; i < indicators.Count; i++)
         {
-            IndicatorsPool.Indicator indicator = indicators.Dequeue();
+            IndicatorsPool.BuildingIndicator indicator = indicators.Dequeue();
             indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
             indicators.Enqueue(indicator);
         }
@@ -255,7 +255,7 @@ public class TaskManager : MonoBehaviour
     {
         while(indicators.Count > 0)
         {
-            IndicatorsPool.instance.ReturnIndicator(indicators.Dequeue());
+            IndicatorsPool.instance.ReturnBuildingIndicator(indicators.Dequeue());
         }
     }
 
@@ -279,9 +279,9 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    IndicatorsPool.Indicator MakeIndicator(Tile tile)
+    IndicatorsPool.BuildingIndicator MakeIndicator(Tile tile)
     {
-        IndicatorsPool.Indicator indicator = IndicatorsPool.instance.GetIndicator(tile.tileType, currentBuilding.buildingType);
+        IndicatorsPool.BuildingIndicator indicator = IndicatorsPool.instance.GetBuildingIndicator(tile.tileType, currentBuilding.buildingType);
         indicator.indicatorObject.transform.position = tile.transform.position;
         indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
     
@@ -432,7 +432,7 @@ public class TaskManager : MonoBehaviour
         if(currentBuilding.cost > CashManager.instance.AmountOfCash())
         return;
 
-        IndicatorsPool.Indicator indicator = MakeIndicator(tile);
+        IndicatorsPool.BuildingIndicator indicator = MakeIndicator(tile);
         
         CashManager.instance.SpendCash(currentBuilding.cost);
         currentTask.tileTypeAfterTask = TileTypeAfterTask();   

@@ -5030,77 +5030,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee3097a244ffb0839929b36d3000506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  indicators:
-  - buildingType: 1
-    indicatorObject: {fileID: 6777885033127159899, guid: 9cd119c6f63e13526bb942c5abd8b08b,
-      type: 3}
-    isAffirmative: 1
-    indicatorsInPool: []
-  - buildingType: 2
-    indicatorObject: {fileID: 6777885033127159899, guid: 23663d50f30a798d88a612ae90cbfea4,
-      type: 3}
-    isAffirmative: 1
-    indicatorsInPool: []
-  - buildingType: 3
-    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
-      type: 3}
-    isAffirmative: 1
-    indicatorsInPool: []
-  - buildingType: 4
-    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
-      type: 3}
-    isAffirmative: 1
-    indicatorsInPool: []
-  - buildingType: 5
-    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
-      type: 3}
-    isAffirmative: 1
-    indicatorsInPool: []
-  - buildingType: 6
-    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
-      type: 3}
-    isAffirmative: 1
-    indicatorsInPool: []
-  - buildingType: 1
-    indicatorObject: {fileID: 6777885033127159899, guid: d5ce726a6a573a9d886a0320ef5badf6,
-      type: 3}
+  buildingIndicators: []
+  workerSpawnerIndicators:
     isAffirmative: 0
-    indicatorsInPool: []
-  - buildingType: 2
-    indicatorObject: {fileID: 6777885033127159899, guid: e1ffda6f16db6478f831eaf17e9ebeed,
+    affirmativeIndicatorObject: {fileID: 5886566032702211011, guid: 01ec8bf1c43a5500ab16fe380f01b740,
       type: 3}
-    isAffirmative: 0
-    indicatorsInPool: []
-  - buildingType: 3
-    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+    negativeIndicatorObject: {fileID: 5886566032702211011, guid: 75c164b4cb8e593ca9759591fa841322,
       type: 3}
-    isAffirmative: 0
-    indicatorsInPool: []
-  - buildingType: 4
-    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
-      type: 3}
-    isAffirmative: 0
-    indicatorsInPool: []
-  - buildingType: 5
-    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
-      type: 3}
-    isAffirmative: 0
-    indicatorsInPool: []
-  - buildingType: 6
-    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
-      type: 3}
-    isAffirmative: 0
-    indicatorsInPool: []
-  - buildingType: 7
-    indicatorObject: {fileID: 6777885033127159899, guid: 81fa3ad19d6464089add2b482cf9fb6b,
-      type: 3}
-    isAffirmative: 1
-    indicatorsInPool: []
-  - buildingType: 7
-    indicatorObject: {fileID: 6777885033127159899, guid: 999140753e1dc993ea2aa957db1f91cf,
-      type: 3}
-    isAffirmative: 0
-    indicatorsInPool: []
 --- !u!4 &695194790
 Transform:
   m_ObjectHideFlags: 0
@@ -5232,8 +5168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f13a2a57006de4caafd289129b55587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  workersSpawnerPrefab: {fileID: 5886566032702211011, guid: 01ec8bf1c43a5500ab16fe380f01b740,
-    type: 3}
   workersPanel:
     workersPanel: {fileID: 1303678125}
     employed:

@@ -7,11 +7,12 @@ using Newtonsoft.Json.Linq;
 
 public class WorkersManager : MonoBehaviour
 {
-    Tile tileToSpawnWorker;
+    public Tile tileToSpawnWorker = null;
     Vector3 posToSpawnWorkers;
-    [SerializeField]
-    GameObject workersSpawnerPrefab;
-    GameObject workersSpawner;
+    IndicatorsPool.WorkerSpawnerIndicator setWorkersSpawnerIndicator = null;
+    IndicatorsPool.WorkerSpawnerIndicator currentWorkersSpawnerIndicator = null;
+
+    Tile lastTile = null;
     [SerializeField]
     WorkersPanel workersPanel;
     bool isSettingWorkersSpawn = false;
@@ -93,14 +94,15 @@ public class WorkersManager : MonoBehaviour
 
     void SetTileForWorkersSpawn(Vector3 tilePosition)
     {
-        if(workersSpawner == null)
+        if(setWorkersSpawnerIndicator != null)
         {
-            workersSpawner = Instantiate(workersSpawnerPrefab, tilePosition, Quaternion.identity);
+            IndicatorsPool.instance.workerSpawnerIndicators.ReturnIndicator(setWorkersSpawnerIndicator);
         }
-        else
-        {
-            workersSpawner.transform.position = tilePosition;
-        }
+
+        IndicatorsPool.instance.workerSpawnerIndicators.ReturnIndicator(currentWorkersSpawnerIndicator);       
+
+        setWorkersSpawnerIndicator = IndicatorsPool.instance.workerSpawnerIndicators.GetIndicator(tileToSpawnWorker.tileType);
+        setWorkersSpawnerIndicator.affirmativeIndicatorObject.transform.position = tilePosition;
         
         posToSpawnWorkers = tilePosition + new Vector3(0,0.1f,0);
         isSettingWorkersSpawn = false;
@@ -246,6 +248,46 @@ public class WorkersManager : MonoBehaviour
     void Update()
     {
         CheckForClick();
+        CheckForIndicator();
+    }
+
+    void CheckForIndicator()
+    {
+        if(!isSettingWorkersSpawn || IsMouseOverUi())
+            return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
+            {
+                
+                Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+                if (tile == null)
+                    return;
+
+                if(tile != lastTile)
+                {
+                    lastTile = tile;
+
+                    if(currentWorkersSpawnerIndicator != null)
+                    {
+                        IndicatorsPool.instance.workerSpawnerIndicators.ReturnIndicator(currentWorkersSpawnerIndicator);
+                    }
+
+                    currentWorkersSpawnerIndicator = IndicatorsPool.instance.workerSpawnerIndicators.GetIndicator(tile.tileType);
+
+                    if(currentWorkersSpawnerIndicator.isAffirmative)
+                    {
+                        currentWorkersSpawnerIndicator.affirmativeIndicatorObject.transform.position = tile.transform.position;
+                    }
+                    else
+                    {
+                        currentWorkersSpawnerIndicator.negativeIndicatorObject.transform.position = tile.transform.position;
+                    }
+                }
+            }
     }
 
     bool IsMouseOverUi()

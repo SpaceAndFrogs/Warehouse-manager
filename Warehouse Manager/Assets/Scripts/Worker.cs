@@ -294,7 +294,7 @@ public class Worker : MonoBehaviour
         {
             yield return new WaitForSeconds(stats.workSpeed * currentTask.building.buildingTime);
 
-            IndicatorsPool.instance.ReturnBuildingIndicator(currentTask.indicator);
+            IndicatorsPool.instance.ReturnBuildingIndicator(currentTask.buildingIndicator);
             currentTask.tileWithTask.RemoveBuilding(false);
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
             GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.rotationTransform.rotation);
@@ -315,7 +315,8 @@ public class Worker : MonoBehaviour
         {
             yield return new WaitForSeconds(stats.workSpeed * currentTask.task.taskTime);
             currentTask.tileWithTask.haveTask = false;
-            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);   
+            currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask); 
+            IndicatorsPool.instance.ReturnTaskIndicator(currentTask.taskIndicator);  
         }
         
         

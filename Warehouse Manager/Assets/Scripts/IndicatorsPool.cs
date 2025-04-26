@@ -19,6 +19,144 @@ public class IndicatorsPool : MonoBehaviour
         }
         
     }
+    #region TasksIndicators
+    public List<TaskIndicator> taskIndicators = new List<TaskIndicator>();
+    public void ReturnTaskIndicator(TaskIndicator indicator)
+    {
+        for(int i = 0; i < instance.taskIndicators.Count; i++)
+        {
+            if(instance.taskIndicators[i].taskType == indicator.taskType)
+            {
+                if(instance.taskIndicators[i].isAffirmative == indicator.isAffirmative)
+                {
+                    instance.taskIndicators[i].ReturnIndicator(indicator);
+                    return;
+                }                
+            }            
+        }
+    }
+
+    public TaskIndicator GetTaskIndicator(TileTypes.TileType tileType, TasksTypes.TaskType taskType)
+    {
+
+        for(int i = 0; i < instance.taskIndicators.Count; i++)
+        {
+            if(instance.taskIndicators[i].taskType == taskType)
+            {
+                if(taskType == TasksTypes.TaskType.Chop)
+                {
+                    if(tileType == TileTypes.TileType.Tree)
+                    {
+                        if(instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                    else
+                    {
+                        if(!instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                }
+
+                if(taskType == TasksTypes.TaskType.Mine)
+                {
+                    if(tileType == TileTypes.TileType.Rocks)
+                    {
+                        if(instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                    else
+                    {
+                        if(!instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                }
+
+                if(taskType == TasksTypes.TaskType.Dry)
+                {
+                    if(tileType == TileTypes.TileType.Water)
+                    {
+                        if(instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                    else
+                    {
+                        if(!instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                }
+
+                if(taskType == TasksTypes.TaskType.Destroy)
+                {
+                    if(tileType == TileTypes.TileType.Floor || tileType == TileTypes.TileType.Wall || tileType == TileTypes.TileType.Door || tileType == TileTypes.TileType.Other)
+                    {
+                        if(instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                    else
+                    {
+                        if(!instance.taskIndicators[i].isAffirmative)
+                            return instance.taskIndicators[i].GetIndicator();
+                    }
+                }
+
+                
+            }
+        }
+
+        return null;
+    }
+
+    [System.Serializable]
+    public class TaskIndicator
+
+    {
+        public TasksTypes.TaskType taskType;
+        public GameObject indicatorObject;
+        public bool isAffirmative;
+        public Queue<TaskIndicator> indicatorsInPool = new Queue<TaskIndicator>();
+
+        public TaskIndicator(TasksTypes.TaskType taskType, GameObject indicatorObject, bool isAffirmative)
+        {
+            this.taskType = taskType;
+            this.indicatorObject = indicatorObject;
+            this.indicatorsInPool = new Queue<TaskIndicator>();
+            this.isAffirmative = isAffirmative;
+        }
+
+
+        public TaskIndicator GetIndicator()
+        {
+            TaskIndicator indicator = null;
+
+            if(indicatorsInPool == null)
+            {
+                indicatorsInPool = new Queue<TaskIndicator>();
+            }
+
+            if(indicatorsInPool.Count == 0)
+            {
+                SpawnIndicator();
+            }
+
+            indicator = indicatorsInPool.Dequeue();           
+            
+            return indicator;
+        }
+
+        void SpawnIndicator()
+        {
+            GameObject spawnedIndicatorObject = Instantiate(indicatorObject,instance.transform.position, instance.transform.rotation);
+            TaskIndicator indicator = new TaskIndicator(this.taskType, spawnedIndicatorObject, this.isAffirmative);
+            indicatorsInPool.Enqueue(indicator);
+        }
+
+        public void ReturnIndicator(TaskIndicator indicator)
+        {
+            indicator.indicatorObject.transform.position = instance.transform.position;
+            indicatorsInPool.Enqueue(indicator);
+        }
+    }
+    #endregion
 
     #region Building Indicators
     public List<BuildingIndicator> buildingIndicators = new List<BuildingIndicator>();
@@ -114,6 +252,11 @@ public class IndicatorsPool : MonoBehaviour
         public BuildingIndicator GetIndicator()
         {
             BuildingIndicator indicator = null;
+
+            if(indicatorsInPool == null)
+            {
+                indicatorsInPool = new Queue<BuildingIndicator>();
+            }
 
             if(indicatorsInPool.Count == 0)
             {

@@ -20,9 +20,9 @@ MonoBehaviour:
     buttonSprite: {fileID: 0}
     nameOfButton: None
     tileTypeAfterTask: 0
-  - taskTime: 1.5
+  - taskTime: 3
     cost: 0
-    taskType: 2
+    taskType: 1
     taskClass: 0
     buttonSprite: {fileID: 0}
     nameOfButton: Chop
@@ -32,26 +32,26 @@ MonoBehaviour:
     taskType: 3
     taskClass: 0
     buttonSprite: {fileID: 0}
-    nameOfButton: Dry
+    nameOfButton: Mine
     tileTypeAfterTask: 0
   - taskTime: 2
     cost: 0
     taskType: 4
     taskClass: 0
     buttonSprite: {fileID: 0}
-    nameOfButton: Mine
+    nameOfButton: Build
+    tileTypeAfterTask: 4
+  - taskTime: 3
+    cost: 0
+    taskType: 2
+    taskClass: 0
+    buttonSprite: {fileID: 0}
+    nameOfButton: Dry
     tileTypeAfterTask: 0
   - taskTime: 3
     cost: 0
     taskType: 5
     taskClass: 0
     buttonSprite: {fileID: 0}
-    nameOfButton: Build
-    tileTypeAfterTask: 0
-  - taskTime: 3
-    cost: 0
-    taskType: 6
-    taskClass: 0
-    buttonSprite: {fileID: 0}
     nameOfButton: Destroy
-    tileTypeAfterTask: 3
+    tileTypeAfterTask: 0

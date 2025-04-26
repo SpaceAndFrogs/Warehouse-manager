@@ -13,21 +13,21 @@ MonoBehaviour:
   m_Name: TileType
   m_EditorClassIdentifier: 
   tileTypesRanges:
-  - tileType: 1
+  - tileType: 2
     tileRange: {x: 0, y: 0.2}
     color: {r: 0.0047169924, g: 0.46757832, b: 1, a: 1}
     walkable: 0
+  - tileType: 1
+    tileRange: {x: 0.2, y: 0.4}
+    color: {r: 0.17354612, g: 0.7325422, b: 0.14244027, a: 1}
+    walkable: 0
   - tileType: 0
-    tileRange: {x: 0.2, y: 0.8}
+    tileRange: {x: 0.4, y: 0.9}
     color: {r: 0.7264151, g: 0.49120682, b: 0.28439835, a: 1}
     walkable: 1
-  - tileType: 2
-    tileRange: {x: 0.8, y: 1}
-    color: {r: 0.6132076, g: 0.54668033, b: 0.54668033, a: 1}
-    walkable: 0
   - tileType: 3
-    tileRange: {x: 2, y: 2}
-    color: {r: 1, g: 1, b: 1, a: 1}
+    tileRange: {x: 0.9, y: 1}
+    color: {r: 0.6061891, g: 0.6061891, b: 0.6061891, a: 1}
     walkable: 1
   - tileType: 4
     tileRange: {x: 2, y: 2}
@@ -38,6 +38,10 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
     walkable: 1
   - tileType: 6
+    tileRange: {x: 2, y: 2}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    walkable: 0
+  - tileType: 7
     tileRange: {x: 2, y: 2}
     color: {r: 1, g: 1, b: 1, a: 1}
     walkable: 0

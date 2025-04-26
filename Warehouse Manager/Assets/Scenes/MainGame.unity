@@ -5030,7 +5030,96 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee3097a244ffb0839929b36d3000506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingIndicators: []
+  taskIndicators:
+  - taskType: 1
+    indicatorObject: {fileID: 6618725628355234377, guid: 42ac2a24f3ee58448916f745ce79c5ee,
+      type: 3}
+    isAffirmative: 1
+  - taskType: 2
+    indicatorObject: {fileID: 7322173429083555654, guid: 9ab17a5463ca4ea45bcb6c7371b46ad9,
+      type: 3}
+    isAffirmative: 1
+  - taskType: 3
+    indicatorObject: {fileID: 3480242447457170110, guid: 50b22ccaac98e6c479eac2e36f6968d8,
+      type: 3}
+    isAffirmative: 1
+  - taskType: 5
+    indicatorObject: {fileID: 7522467440924630778, guid: d20b62eaeeead634bb26c5c883d70c36,
+      type: 3}
+    isAffirmative: 1
+  - taskType: 1
+    indicatorObject: {fileID: 6618725628355234377, guid: 7a41f195815b15b84b22fa768f5ac885,
+      type: 3}
+    isAffirmative: 0
+  - taskType: 2
+    indicatorObject: {fileID: 7322173429083555654, guid: 3cbb1d05550928a229c321cc9ce23622,
+      type: 3}
+    isAffirmative: 0
+  - taskType: 3
+    indicatorObject: {fileID: 3480242447457170110, guid: e942831d9790e29628a5c7fafbbc16eb,
+      type: 3}
+    isAffirmative: 0
+  - taskType: 5
+    indicatorObject: {fileID: 7522467440924630778, guid: 11ed3f1da6e0338a087fd867b5390104,
+      type: 3}
+    isAffirmative: 0
+  buildingIndicators:
+  - buildingType: 1
+    indicatorObject: {fileID: 6777885033127159899, guid: 9cd119c6f63e13526bb942c5abd8b08b,
+      type: 3}
+    isAffirmative: 1
+  - buildingType: 2
+    indicatorObject: {fileID: 6777885033127159899, guid: 23663d50f30a798d88a612ae90cbfea4,
+      type: 3}
+    isAffirmative: 1
+  - buildingType: 3
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    isAffirmative: 1
+  - buildingType: 4
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    isAffirmative: 1
+  - buildingType: 5
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    isAffirmative: 1
+  - buildingType: 6
+    indicatorObject: {fileID: 8851040814126902023, guid: 3fb44dfbe521942a68f64797e8bbebc9,
+      type: 3}
+    isAffirmative: 1
+  - buildingType: 7
+    indicatorObject: {fileID: 6777885033127159899, guid: 81fa3ad19d6464089add2b482cf9fb6b,
+      type: 3}
+    isAffirmative: 1
+  - buildingType: 1
+    indicatorObject: {fileID: 6777885033127159899, guid: d5ce726a6a573a9d886a0320ef5badf6,
+      type: 3}
+    isAffirmative: 0
+  - buildingType: 2
+    indicatorObject: {fileID: 6777885033127159899, guid: e1ffda6f16db6478f831eaf17e9ebeed,
+      type: 3}
+    isAffirmative: 0
+  - buildingType: 3
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+  - buildingType: 4
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+  - buildingType: 5
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+  - buildingType: 6
+    indicatorObject: {fileID: 8851040814126902023, guid: e80b3ec6fc12b1b468c0a3dca2a37bc0,
+      type: 3}
+    isAffirmative: 0
+  - buildingType: 7
+    indicatorObject: {fileID: 6777885033127159899, guid: 999140753e1dc993ea2aa957db1f91cf,
+      type: 3}
+    isAffirmative: 0
   workerSpawnerIndicators:
     isAffirmative: 0
     affirmativeIndicatorObject: {fileID: 5886566032702211011, guid: 01ec8bf1c43a5500ab16fe380f01b740,
@@ -5168,6 +5257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f13a2a57006de4caafd289129b55587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileToSpawnWorker: {fileID: 0}
   workersPanel:
     workersPanel: {fileID: 1303678125}
     employed:

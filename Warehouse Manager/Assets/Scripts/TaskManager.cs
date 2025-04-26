@@ -35,7 +35,8 @@ public class TaskManager : MonoBehaviour
 
     #region Indicators Variables
     Tile lastIndicatorEndTile = null;
-    Queue<IndicatorsPool.BuildingIndicator> indicators = new Queue<IndicatorsPool.BuildingIndicator>();
+    Queue<IndicatorsPool.BuildingIndicator> buildingIndicators = new Queue<IndicatorsPool.BuildingIndicator>();
+    Queue<IndicatorsPool.TaskIndicator> taskIndicators = new Queue<IndicatorsPool.TaskIndicator>();
     #endregion
     
     #region Workers Variables
@@ -63,15 +64,17 @@ public class TaskManager : MonoBehaviour
         public Transform rotationTransform;
         public OrdersManager.Order order;
         public Tile tileOfPickStashWithOrder;
-        public IndicatorsPool.BuildingIndicator indicator;
-        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building, Transform rotationTrasform,IndicatorsPool.BuildingIndicator indicator, OrdersManager.Order order,Tile tileOfPickStashWithOrder)
+        public IndicatorsPool.BuildingIndicator buildingIndicator;
+        public IndicatorsPool.TaskIndicator taskIndicator;
+        public Task(TasksTypes.Task task, Tile tileWithTask, Buildings.Building building, Transform rotationTrasform,IndicatorsPool.BuildingIndicator buildingIndicator, IndicatorsPool.TaskIndicator taskIndicator, OrdersManager.Order order,Tile tileOfPickStashWithOrder)
         {
-            this.task = task;
+            this.task = task; 
             this.tileWithTask = tileWithTask;
             this.building = building;
             this.order = order;
             this.tileOfPickStashWithOrder = tileOfPickStashWithOrder;
-            this.indicator = indicator;
+            this.buildingIndicator = buildingIndicator;
+            this.taskIndicator = taskIndicator;
             this.rotationTransform = rotationTrasform;
         }
     }
@@ -97,7 +100,8 @@ public class TaskManager : MonoBehaviour
     private void Update()
     {        
         CheckForInput();
-        SetIndicators();
+        SetBuildingIndicators();
+        SetTaskIndicators();
         GiveTasksToBuilders();
         ConvertOrdersToTasks();
         GiveTasksToPick();
@@ -188,7 +192,16 @@ public class TaskManager : MonoBehaviour
     #region Indicators Methods 
     void CheckForIndicator()
     {
-        if(IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None || currentTile != null)
+        if(IsMouseOverUi())
+            return;
+
+        CheckForBuildingIndicator();
+        CheckForTaskIndicator();
+    }
+
+    void CheckForTaskIndicator()
+    {
+        if(currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build || currentTileBuild != null)
             return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -204,13 +217,39 @@ public class TaskManager : MonoBehaviour
 
             lastIndicatorEndTile = tile;
 
-            ReturnIndicators();
+            ReturnTaskIndicators();
 
-            indicators.Enqueue(MakeIndicator(tile)); 
+            taskIndicators.Enqueue(MakeTaskIndicator(tile)); 
                                 
         }
     }
-    void SetIndicators()
+    void CheckForBuildingIndicator()
+    {
+        if(currentBuilding.buildingType == Buildings.BuildingType.None || currentTile != null)
+            return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        {
+                
+            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+            if (tile == null || lastIndicatorEndTile == tile)
+                return;
+
+            lastIndicatorEndTile = tile;
+
+            ReturnBuildingIndicators();
+
+            buildingIndicators.Enqueue(MakeBuildingIndicator(tile)); 
+                                
+        }
+    }
+
+    
+    void SetBuildingIndicators()
     {
         if(currentTile == null || IsMouseOverUi() || currentBuilding.buildingType == Buildings.BuildingType.None)
             return;
@@ -228,60 +267,117 @@ public class TaskManager : MonoBehaviour
 
             lastIndicatorEndTile = tile;
 
-            ReturnIndicators();
+            ReturnBuildingIndicators();
 
             if(currentBuilding.buildingType == Buildings.BuildingType.Wall)
             {
-                MakeContourIndicators(tile); 
+                MakeContourBuildingIndicators(tile); 
             }
             else
             {
-                MakeFillIndicators(tile);         
+                MakeFillBuildingIndicators(tile);         
             }  
                                 
         }           
     }
 
+    void SetTaskIndicators()
+    {
+        if(currentTileBuild == null || IsMouseOverUi() || currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build)
+            return;
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        {
+                
+            Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
+
+            if (tile == null || lastIndicatorEndTile == tile)
+                return;
+
+            lastIndicatorEndTile = tile;
+
+            ReturnTaskIndicators();
+
+            MakeFillTaskIndicators(tile);                     
+        }           
+    }
+
     void RotateIndicators()
     {
-        for(int i = 0; i < indicators.Count; i++)
+        for(int i = 0; i < buildingIndicators.Count; i++)
         {
-            IndicatorsPool.BuildingIndicator indicator = indicators.Dequeue();
+            IndicatorsPool.BuildingIndicator indicator = buildingIndicators.Dequeue();
             indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
-            indicators.Enqueue(indicator);
+            buildingIndicators.Enqueue(indicator);
+        }
+
+        for(int i = 0; i < taskIndicators.Count; i++)
+        {
+            IndicatorsPool.TaskIndicator indicator = taskIndicators.Dequeue();
+            indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
+            taskIndicators.Enqueue(indicator);
         }
     }
-    void ReturnIndicators()
+    void ReturnBuildingIndicators()
     {
-        while(indicators.Count > 0)
+        while(buildingIndicators.Count > 0)
         {
-            IndicatorsPool.instance.ReturnBuildingIndicator(indicators.Dequeue());
+            IndicatorsPool.instance.ReturnBuildingIndicator(buildingIndicators.Dequeue());
         }
     }
 
-    void MakeContourIndicators(Tile endTile)
+    void ReturnTaskIndicators()
+    {
+        while(taskIndicators.Count > 0)
+        {
+            IndicatorsPool.instance.ReturnTaskIndicator(taskIndicators.Dequeue());
+        }
+    }
+
+    void MakeContourBuildingIndicators(Tile endTile)
     {
         List<Tile> tiles = Figuers.instance.MakeFiguer(currentTile, endTile, Figuers.FiguersType.Contour);
 
         for(int i = 0; i < tiles.Count; i++)
         {
-            indicators.Enqueue(MakeIndicator(tiles[i]));
+            buildingIndicators.Enqueue(MakeBuildingIndicator(tiles[i]));
         }
     }
 
-    void MakeFillIndicators(Tile endTile)
+    void MakeFillBuildingIndicators(Tile endTile)
     {
         List<Tile> tiles = Figuers.instance.MakeFiguer(currentTile, endTile, Figuers.FiguersType.Fill);
 
         for(int i = 0; i < tiles.Count; i++)
         {
-            indicators.Enqueue(MakeIndicator(tiles[i]));
+            buildingIndicators.Enqueue(MakeBuildingIndicator(tiles[i]));
+        }
+    }
+    void MakeFillTaskIndicators(Tile endTile)
+    {
+        List<Tile> tiles = Figuers.instance.MakeFiguer(currentTileBuild, endTile, Figuers.FiguersType.Fill);
+
+        for(int i = 0; i < tiles.Count; i++)
+        {
+            taskIndicators.Enqueue(MakeTaskIndicator(tiles[i]));
         }
     }
 
-    IndicatorsPool.BuildingIndicator MakeIndicator(Tile tile)
+    IndicatorsPool.BuildingIndicator MakeBuildingIndicator(Tile tile)
     {
         IndicatorsPool.BuildingIndicator indicator = IndicatorsPool.instance.GetBuildingIndicator(tile.tileType, currentBuilding.buildingType);
+        indicator.indicatorObject.transform.position = tile.transform.position;
+        indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
+    
+        return indicator;
+    }
+
+    IndicatorsPool.TaskIndicator MakeTaskIndicator(Tile tile)
+    {
+        IndicatorsPool.TaskIndicator indicator = IndicatorsPool.instance.GetTaskIndicator(tile.tileType, currentTask.taskType);
         indicator.indicatorObject.transform.position = tile.transform.position;
         indicator.indicatorObject.transform.rotation = rotationTransform.rotation;
     
@@ -417,7 +513,7 @@ public class TaskManager : MonoBehaviour
     {
         for(int i = 0; i < ordersManager.ordersOnPick.Count; i++)
         {
-            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null,null,null, ordersManager.ordersOnPick[i],null);
+            Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null,null,null,null, ordersManager.ordersOnPick[i],null);
             pickTasks.Enqueue(newPickTask);
         }
 
@@ -432,13 +528,13 @@ public class TaskManager : MonoBehaviour
         if(currentBuilding.cost > CashManager.instance.AmountOfCash())
         return;
 
-        IndicatorsPool.BuildingIndicator indicator = MakeIndicator(tile);
+        IndicatorsPool.BuildingIndicator indicator = MakeBuildingIndicator(tile);
         
         CashManager.instance.SpendCash(currentBuilding.cost);
         currentTask.tileTypeAfterTask = TileTypeAfterTask();   
         tile.haveTask = true;     
 
-        buildingTasks.Enqueue(new Task(currentTask, tile, currentBuilding, rotationTransform, indicator, null, null));
+        buildingTasks.Enqueue(new Task(currentTask, tile, currentBuilding, rotationTransform, indicator,null, null, null));
     }
 
     void MakeBuildTask(Tile tile)
@@ -461,12 +557,14 @@ public class TaskManager : MonoBehaviour
             }
             
         }
+
+        IndicatorsPool.TaskIndicator indicator = MakeTaskIndicator(tile);
         
         CashManager.instance.SpendCash(currentTask.cost);
 
         tile.haveTask = true;  
 
-        buildingTasks.Enqueue(new Task(currentTask, tile, null, null, null, null, null));
+        buildingTasks.Enqueue(new Task(currentTask, tile, null, null, null, indicator, null, null));
     }
 
     void GiveTasksToBuilders()
@@ -568,7 +666,7 @@ public class TaskManager : MonoBehaviour
         {
             currentTile = null;
             lastIndicatorEndTile = null;
-            ReturnIndicators();
+            ReturnBuildingIndicators();
             return;
         }
 
@@ -612,7 +710,7 @@ public class TaskManager : MonoBehaviour
                 }
 
                 lastIndicatorEndTile = null;
-                ReturnIndicators();
+                ReturnBuildingIndicators();
             }
         }
     }
@@ -622,6 +720,8 @@ public class TaskManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Mouse1) || IsMouseOverUi() || currentTask.taskType == TasksTypes.TaskType.None || currentTask.taskType == TasksTypes.TaskType.Build)
         {
             currentTileBuild = null;
+            lastIndicatorEndTile = null;
+            ReturnTaskIndicators();
             return;
         }
 
@@ -653,7 +753,10 @@ public class TaskManager : MonoBehaviour
                 if (tile == null || currentTileBuild == null)
                     return;
 
-                CheckForAmountAndTilesForBuild(tile);               
+                CheckForAmountAndTilesForBuild(tile);
+
+                lastIndicatorEndTile = null;
+                ReturnTaskIndicators();               
             }
         }
 
@@ -729,6 +832,13 @@ public class TaskManager : MonoBehaviour
             case TileTypes.TileType.Rocks:
             {
                 if(currentTask.taskType == TasksTypes.TaskType.Mine)
+                    return true;  
+
+                break; 
+            }
+            case TileTypes.TileType.Tree:
+            {
+                if(currentTask.taskType == TasksTypes.TaskType.Chop)
                     return true;  
 
                 break; 

@@ -6,7 +6,7 @@ using System;
 [CreateAssetMenu(fileName = "TaskData", menuName = "Tasks", order = 1)]
 public class TasksTypes : ScriptableObject
 {
-    public enum TaskType {None, Go, Chop, Dry, Mine, Build, Destroy}
+    public enum TaskType {None, Chop, Dry, Mine, Build, Destroy}
 
     public enum TaskClass {Build, Pick, Pack}
     public List<Task> tasks = new List<Task>();

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2259.809, g: 2399.3008, b: 3491.0356, a: 1}
+  m_IndirectSpecularColor: {r: 2259.8167, g: 2399.2932, b: 3490.9966, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5784,6 +5784,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761310257}
   m_CullTransparentMesh: 1
+--- !u!1 &765220754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765220756}
+  - component: {fileID: 765220755}
+  m_Layer: 0
+  m_Name: BuildingPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &765220755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765220754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615c2a60bb6f18d33a296f20c207a20a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildings:
+  - buildingType: 1
+    buildingObject: {fileID: 6777885033127159899, guid: 7a852ed501291d94dabeab7f6d348e95,
+      type: 3}
+  - buildingType: 2
+    buildingObject: {fileID: 5886566032702211011, guid: c382232a510ad5a0dbb8c5074423f327,
+      type: 3}
+  - buildingType: 3
+    buildingObject: {fileID: 8851040814126902023, guid: bc79e1c80a568930fa534ae24c06e261,
+      type: 3}
+  - buildingType: 4
+    buildingObject: {fileID: 8851040814126902023, guid: d73822cd51e84e8d39f39ebce2cb7e96,
+      type: 3}
+  - buildingType: 5
+    buildingObject: {fileID: 8851040814126902023, guid: 022421ad66fb3053cac56c25d6ff12c0,
+      type: 3}
+  - buildingType: 6
+    buildingObject: {fileID: 8851040814126902023, guid: e8842d96db0d44eadab574137eb1a53c,
+      type: 3}
+  - buildingType: 7
+    buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
+      type: 3}
+--- !u!4 &765220756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765220754}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &780387466
 GameObject:
   m_ObjectHideFlags: 0
@@ -14076,3 +14142,4 @@ SceneRoots:
   - {fileID: 695194790}
   - {fileID: 2049666327}
   - {fileID: 1160208792}
+  - {fileID: 765220756}

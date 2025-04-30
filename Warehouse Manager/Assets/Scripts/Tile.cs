@@ -19,7 +19,7 @@ public class Tile : MonoBehaviour
     public float gCost;
     public float hCost;
 
-    public GameObject building = null;
+    public BuildingsPool.Building building = null;
     public bool haveTask = false;
 
     IndicatorsPool.BuildingIndicator currentBuildingIndicator = null;

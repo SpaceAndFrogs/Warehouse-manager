@@ -297,7 +297,8 @@ public class Worker : MonoBehaviour
             IndicatorsPool.instance.ReturnBuildingIndicator(currentTask.buildingIndicator);
             currentTask.tileWithTask.RemoveBuilding(false);
             currentTask.tileWithTask.ChangeTileType(currentTask.task.tileTypeAfterTask);
-            GameObject newBuilding = Instantiate(currentTask.building.buildingObject, currentTask.tileWithTask.transform.position, currentTask.rotationTransform.rotation);
+            BuildingsPool.Building newBuilding = BuildingsPool.instance.GetBuilding(currentTask.building.buildingType);
+            newBuilding.buildingObject.transform.position = currentTask.tileWithTask.transform.position;
             currentTask.tileWithTask.building = newBuilding;
             currentTask.tileWithTask.haveTask = false;
 

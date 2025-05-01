@@ -19,6 +19,7 @@ public class Tile : MonoBehaviour
     public float gCost;
     public float hCost;
 
+    [NonSerialized]
     public BuildingsPool.Building building = null;
     public bool haveTask = false;
 

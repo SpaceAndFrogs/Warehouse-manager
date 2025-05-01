@@ -115,10 +115,10 @@ public class Tile : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(ray, 10f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide);
         for(int i = 1; i < hits.Length; i++)
         {
-            if(hits[i].collider.gameObject != gameObject)
+            if (hits[i].collider.gameObject.TryGetComponent<BuildingScript>(out BuildingScript buildingScript))
             {
                 Debug.Log("Found: " + hits[i].collider.gameObject.name);
-                building = hits[i].collider.gameObject;
+                building = buildingScript.building;
                 break;
             }
         }
@@ -131,7 +131,8 @@ public class Tile : MonoBehaviour
 
         if(removeAll)
         {
-            Destroy(building);
+            BuildingsPool.instance.ReturnBuilding(building);
+            building = null;
             return;
         }
 
@@ -139,8 +140,9 @@ public class Tile : MonoBehaviour
         {
             case TileTypes.TileType.Wall:
             {
-                Destroy(building);
-                return;
+                    BuildingsPool.instance.ReturnBuilding(building);
+                    building = null;
+                    return;
             }
         }
         

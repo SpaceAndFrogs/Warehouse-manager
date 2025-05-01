@@ -231,7 +231,7 @@ public class Worker : MonoBehaviour
                     
                 }else if(endNode == pickStashTile)
                 {
-                    PickStash pickStash = pickStashTile.building.GetComponent<PickStash>();
+                    PickStash pickStash = pickStashTile.building.buildingObject.GetComponent<PickStash>();
 
                     if(pickStash.isInRoom)
                     {
@@ -268,7 +268,7 @@ public class Worker : MonoBehaviour
 
     IEnumerator StartPackOrder()
     {
-        PackStation packStation = packStationTile.building.GetComponent<PackStation>();
+        PackStation packStation = packStationTile.building.buildingObject.GetComponent<PackStation>();
         if(packStation.isInRoom)
         {
             yield return new WaitForSeconds(stats.workSpeed);
@@ -302,13 +302,13 @@ public class Worker : MonoBehaviour
             currentTask.tileWithTask.building = newBuilding;
             currentTask.tileWithTask.haveTask = false;
 
-            CheckIfBuildingIsRack(newBuilding);
+            CheckIfBuildingIsRack(newBuilding.buildingObject);
 
-            CheckIfBuildingIsOrdersStation(newBuilding);
+            CheckIfBuildingIsOrdersStation(newBuilding.buildingObject);
 
-            CheckIfBuildingIsPackStation(newBuilding);
+            CheckIfBuildingIsPackStation(newBuilding.buildingObject);
 
-            CheckIfBuildingIsPickStash(newBuilding);
+            CheckIfBuildingIsPickStash(newBuilding.buildingObject);
 
             OnBuildingEnded?.Invoke();
         }

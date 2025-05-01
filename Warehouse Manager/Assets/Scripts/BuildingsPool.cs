@@ -77,8 +77,13 @@ public class BuildingsPool : MonoBehaviour
         void MakeBuilding()
         {
             GameObject buildingObject = Instantiate(this.buildingObject, instance.transform.position, Quaternion.identity);
+            Building building = new Building(this.buildingType, buildingObject);
+            if (this.buildingType == Buildings.BuildingType.Floor)
+            {
+                buildingObject.GetComponent<BuildingScript>().building = building;
+            }
             
-            buildingsInPool.Enqueue(new Building(this.buildingType, buildingObject));
+            buildingsInPool.Enqueue(building);
         }
 
         public void ReturnBuilding(Building building)

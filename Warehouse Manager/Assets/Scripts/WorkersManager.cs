@@ -210,19 +210,21 @@ public class WorkersManager : MonoBehaviour
     }
     void CheckForTile()
     {
+        Debug.Log("Check for tile");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
             if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Default"), QueryTriggerInteraction.Collide))
             {
-                
+                Debug.Log("Object found");
                 Tile tile = hitInfo.collider.gameObject.GetComponent<Tile>();
 
                 if (tile == null)
                     return;
-
-                if((tile.tileType == TileTypes.TileType.Ground && !tile.building) || tile.tileType == TileTypes.TileType.Floor)
+                Debug.Log("It's tile");
+                if(tile.tileType == TileTypes.TileType.Ground || tile.tileType == TileTypes.TileType.Floor)
                 {
+                    Debug.Log("Seting spawner");
                     tile.haveTask = true;
 
                     if(tileToSpawnWorker != null)

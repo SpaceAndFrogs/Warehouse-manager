@@ -113,6 +113,13 @@ public class WorkersManager : MonoBehaviour
     {
         while(true)
         {
+            for(int i = workersPanel.candidates.records.Count-1; i >= 0; i--)
+            {
+                WorkerRecordScript record = workersPanel.candidates.records[i];
+                workersPanel.candidates.records.RemoveAt(i);
+                Destroy(record.gameObject);
+
+            }
             MakeCandidateRecord(workersPanel.candidates.records.Count,WorkerData.WorkerType.Builder);
             MakeCandidateRecord(workersPanel.candidates.records.Count,WorkerData.WorkerType.Pick);
             MakeCandidateRecord(workersPanel.candidates.records.Count,WorkerData.WorkerType.Pack);

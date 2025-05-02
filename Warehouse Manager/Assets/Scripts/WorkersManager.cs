@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Newtonsoft.Json.Linq;
+
 
 public class WorkersManager : MonoBehaviour
 {
@@ -16,40 +16,12 @@ public class WorkersManager : MonoBehaviour
     [SerializeField]
     WorkersPanel workersPanel;
     bool isSettingWorkersSpawn = false;
-
-    [SerializeField]
-    WorkerData builderData;
-    [SerializeField]
-    WorkerData packData;
-    [SerializeField]
-    WorkerData pickData;
     [SerializeField]
     Worker workerPrefab;
     [SerializeField]
-    List<string> lastNames = new List<string>();
-    [SerializeField]
-    List<string> firstNames = new List<string>();
-    [SerializeField]
-    TextAsset firstNamesFile;
-    [SerializeField]
-    TextAsset lastNamesFile;
-    [SerializeField]
     List<Worker> workers = new List<Worker>();
-    void Awake()
-    {
-        LoadNames();
-    }
 
-    void LoadNames()
-    {
-        JObject jsonObj = JObject.Parse(firstNamesFile.text);
-        JArray namesArray = (JArray)jsonObj["male_names"];
-        firstNames = namesArray.ToObject<List<string>>();
-
-        jsonObj = JObject.Parse(lastNamesFile.text);
-        namesArray = (JArray)jsonObj["male_surnames"];
-        lastNames = namesArray.ToObject<List<string>>();
-    }
+    
     void Start()
     {
         AddListeners();
@@ -76,9 +48,8 @@ public class WorkersManager : MonoBehaviour
         worker.stats = stats;
         workers.Add(worker);
 
+        WorkerRecordsPool.instance.ReturnRecord(workerRecordScript, true);
         workersPanel.candidates.records.Remove(workerRecordScript);
-
-        Destroy(workerRecordScript.gameObject);
 
         MakeEmployedRecord(stats, worker);
     }
@@ -86,10 +57,8 @@ public class WorkersManager : MonoBehaviour
     public void FireWorker(WorkerRecordScript workerRecordScript)
     {
         workersPanel.employed.records.Remove(workerRecordScript);
-        
-        Destroy(workerRecordScript.worker.gameObject);
 
-        Destroy(workerRecordScript.gameObject);
+        WorkerRecordsPool.instance.ReturnRecord(workerRecordScript, false);
     }
 
     void SetTileForWorkersSpawn(Vector3 tilePosition)
@@ -130,9 +99,9 @@ public class WorkersManager : MonoBehaviour
     void MakeEmployedRecord(Worker.Stats stats, Worker worker)
     {
 
-        WorkerRecordScript workerRecordScript = Instantiate(workersPanel.employed.recordObjectPrefab, workersPanel.employed.content.transform).GetComponent<WorkerRecordScript>();
+        WorkerRecordScript workerRecordScript = WorkerRecordsPool.instance.GetRecord(worker.stats.workerType,false).Item1;
         workerRecordScript.worker = worker;
-
+        workerRecordScript.transform.parent = workersPanel.employed.content.transform;
 
         SetValuesToRecord(workerRecordScript, stats);
 
@@ -143,64 +112,21 @@ public class WorkersManager : MonoBehaviour
 
     void MakeCandidateRecord(int index, WorkerData.WorkerType workerType)
     {
-        float moveSpeed = 0;
-        float workSpeed = 0;
-        float proxyMargin = 0;
-        float proxyMarginOfFinalTile = 0;
-        string name = "";
 
-        int indexOfFirstName = Random.Range(0, firstNames.Count);
-        int indexOfLastName = Random.Range(0, lastNames.Count);
-        name = firstNames[indexOfFirstName] + " " + lastNames[indexOfLastName];
+        (WorkerRecordScript, Worker.Stats) workerRecordScript = WorkerRecordsPool.instance.GetRecord(workerType,true);
+ 
+        workersPanel.candidates.records.Add(workerRecordScript.Item1);
+        workerRecordScript.Item1.transform.parent = workersPanel.candidates.content.transform;
 
-
-        switch(workerType)
-        {
-            case WorkerData.WorkerType.Builder:
-            {
-                moveSpeed = Random.Range(builderData.minMaxMoveSpeed.x, builderData.minMaxMoveSpeed.y);
-                workSpeed = Random.Range(builderData.minMaxWorkSpeed.x, builderData.minMaxWorkSpeed.y);
-                proxyMargin = builderData.proxyMargin;
-                proxyMarginOfFinalTile = builderData.proxyMarginOfFinalTile;
-                break;
-            }
-            case WorkerData.WorkerType.Pick:
-            {
-                moveSpeed = Random.Range(pickData.minMaxMoveSpeed.x, pickData.minMaxMoveSpeed.y);
-                workSpeed = Random.Range(pickData.minMaxWorkSpeed.x, pickData.minMaxWorkSpeed.y);
-                proxyMargin = pickData.proxyMargin;
-                proxyMarginOfFinalTile = pickData.proxyMarginOfFinalTile;
-                break;
-            }
-            case WorkerData.WorkerType.Pack:
-            {
-                moveSpeed = Random.Range(packData.minMaxMoveSpeed.x, packData.minMaxMoveSpeed.y);
-                workSpeed = Random.Range(packData.minMaxWorkSpeed.x, packData.minMaxWorkSpeed.y);
-                proxyMargin = packData.proxyMargin;
-                proxyMarginOfFinalTile = packData.proxyMarginOfFinalTile;
-                break;
-            }
-        }
-
-        float salary = moveSpeed + workSpeed;
-
-        Worker.Stats stats = new Worker.Stats(moveSpeed, workSpeed, salary, workerType, proxyMargin, proxyMarginOfFinalTile, name); 
-    
-        WorkerRecordScript workerRecordScript = Instantiate(workersPanel.candidates.recordObjectPrefab, workersPanel.candidates.content.transform).GetComponent<WorkerRecordScript>();
-
-        SetValuesToRecord(workerRecordScript, stats);
-
-        workersPanel.candidates.records.Add(workerRecordScript);
-
-        AddListenerToRecord(false, stats, workerRecordScript, index);
+        AddListenerToRecord(false, workerRecordScript.Item2, workerRecordScript.Item1, index);
     }
 
     void SetValuesToRecord(WorkerRecordScript workerRecordScript, Worker.Stats stats)
     {
         workerRecordScript.nameTMP.text = stats.name;
-        workerRecordScript.moveSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0,3);
-        workerRecordScript.workSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0,3);
-        workerRecordScript.salaryTMP.text = (stats.salary.ToString()).Substring(0,3);
+        workerRecordScript.moveSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);
+        workerRecordScript.workSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);
+        workerRecordScript.salaryTMP.text = (stats.salary.ToString()).Substring(0, 3);
         workerRecordScript.workerTypeTMP.text = stats.workerType.ToString();
     }
 

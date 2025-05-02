@@ -13,7 +13,6 @@ public class Buildings : ScriptableObject
     [Serializable]
     public class Building
     {
-        public GameObject buildingObject;
         public Sprite buildingSprite;
         public BuildingType buildingType;
         public string nameOfButton;

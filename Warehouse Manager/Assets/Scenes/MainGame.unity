@@ -14186,18 +14186,39 @@ MonoBehaviour:
   lastNamesFile: {fileID: 4900000, guid: 72a5613b00f633f68a56f8108e715050, type: 3}
   recordsInPool:
   - workerType: 0
+    candidate: 1
     workerData: {fileID: 11400000, guid: 0925bf783e6e86c41abcfacf7cf7a026, type: 2}
     recordObject: {fileID: 1577101312653755397, guid: 91f75f7e40364e1e6b2eac8116f104e7,
       type: 3}
     recordsPanel: {fileID: 628058629}
+  - workerType: 0
+    candidate: 0
+    workerData: {fileID: 11400000, guid: 0925bf783e6e86c41abcfacf7cf7a026, type: 2}
+    recordObject: {fileID: 8460841928400485278, guid: 1198a4d9aa72e5b6f8e1ea447e967023,
+      type: 3}
+    recordsPanel: {fileID: 628058629}
   - workerType: 1
+    candidate: 1
+    workerData: {fileID: 11400000, guid: 32d816b88207ebe96ae1e97c85cca6ab, type: 2}
+    recordObject: {fileID: 1577101312653755397, guid: 91f75f7e40364e1e6b2eac8116f104e7,
+      type: 3}
+    recordsPanel: {fileID: 628058629}
+  - workerType: 1
+    candidate: 0
+    workerData: {fileID: 11400000, guid: 32d816b88207ebe96ae1e97c85cca6ab, type: 2}
+    recordObject: {fileID: 8460841928400485278, guid: 1198a4d9aa72e5b6f8e1ea447e967023,
+      type: 3}
+    recordsPanel: {fileID: 628058629}
+  - workerType: 2
+    candidate: 1
     workerData: {fileID: 11400000, guid: 3d4808f97db91640fb7025c0a4d9ce18, type: 2}
     recordObject: {fileID: 1577101312653755397, guid: 91f75f7e40364e1e6b2eac8116f104e7,
       type: 3}
     recordsPanel: {fileID: 628058629}
   - workerType: 2
-    workerData: {fileID: 11400000, guid: 32d816b88207ebe96ae1e97c85cca6ab, type: 2}
-    recordObject: {fileID: 1577101312653755397, guid: 91f75f7e40364e1e6b2eac8116f104e7,
+    candidate: 0
+    workerData: {fileID: 11400000, guid: 3d4808f97db91640fb7025c0a4d9ce18, type: 2}
+    recordObject: {fileID: 8460841928400485278, guid: 1198a4d9aa72e5b6f8e1ea447e967023,
       type: 3}
     recordsPanel: {fileID: 628058629}
 --- !u!4 &2141332761

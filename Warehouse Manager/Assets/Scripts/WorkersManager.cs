@@ -85,8 +85,8 @@ public class WorkersManager : MonoBehaviour
             for(int i = workersPanel.candidates.records.Count-1; i >= 0; i--)
             {
                 WorkerRecordScript record = workersPanel.candidates.records[i];
-                workersPanel.candidates.records.RemoveAt(i);
-                Destroy(record.gameObject);
+                workersPanel.candidates.records.Remove(record);
+                WorkerRecordsPool.instance.ReturnRecord(record, true);
 
             }
             MakeCandidateRecord(workersPanel.candidates.records.Count,WorkerData.WorkerType.Builder);
@@ -134,10 +134,12 @@ public class WorkersManager : MonoBehaviour
     {
         if(isEmployed)
         {
+            workersPanel.employed.records[index].actionButton.onClick.RemoveAllListeners();
             workersPanel.employed.records[index].actionButton.onClick.AddListener(() => FireWorker(workerRecordScript));
         }
         else
         {
+            workersPanel.candidates.records[index].actionButton.onClick.RemoveAllListeners();
             workersPanel.candidates.records[index].actionButton.onClick.AddListener(() => SpawnWorker(stats, workerRecordScript));
         }
     }

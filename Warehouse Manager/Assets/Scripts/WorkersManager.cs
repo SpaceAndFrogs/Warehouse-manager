@@ -17,8 +17,6 @@ public class WorkersManager : MonoBehaviour
     WorkersPanel workersPanel;
     bool isSettingWorkersSpawn = false;
     [SerializeField]
-    Worker workerPrefab;
-    [SerializeField]
     List<Worker> workers = new List<Worker>();
 
     
@@ -44,8 +42,9 @@ public class WorkersManager : MonoBehaviour
 
     public void SpawnWorker(Worker.Stats stats, WorkerRecordScript workerRecordScript)
     {
-        Worker worker = Instantiate(workerPrefab,posToSpawnWorkers, transform.rotation);
-        worker.stats = stats;
+        Worker worker = WorkersPool.instance.GetWorker(stats.workerType,stats);
+        worker.transform.position = posToSpawnWorkers;
+        worker.HireWorker();
         workers.Add(worker);
 
         WorkerRecordsPool.instance.ReturnRecord(workerRecordScript, true);
@@ -56,6 +55,8 @@ public class WorkersManager : MonoBehaviour
 
     public void FireWorker(WorkerRecordScript workerRecordScript)
     {
+        workerRecordScript.worker.FireWorker();
+        workers.Remove(workerRecordScript.worker);
         workersPanel.employed.records.Remove(workerRecordScript);
 
         WorkerRecordsPool.instance.ReturnRecord(workerRecordScript, false);

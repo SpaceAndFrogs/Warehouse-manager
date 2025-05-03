@@ -873,7 +873,47 @@ public class TaskManager : MonoBehaviour
         
     }
 
-    
+    public void FireWorker(Worker worker)
+    {
+        switch(worker.stats.workerType)
+        {
+            case WorkerData.WorkerType.Builder:
+                {
+                    freeBuilders.Remove(worker);
+                    return;
+                }
+            case WorkerData.WorkerType.Pick:
+                {
+                    Queue<Worker> checkedWorkers = new Queue<Worker>();
+                    while(freePickWorkers.Count > 0)
+                    {
+                        Worker workerInCheck = freePickWorkers.Dequeue();
+                        if(workerInCheck != worker)
+                        {
+                            checkedWorkers.Enqueue(workerInCheck);
+                        }
+                    }
+
+                    freePickWorkers = checkedWorkers;
+                    return;
+                }
+            case WorkerData.WorkerType.Pack:
+                {
+                    Queue<Worker> checkedWorkers = new Queue<Worker>();
+                    while (freePackWorkers.Count > 0)
+                    {
+                        Worker workerInCheck = freePackWorkers.Dequeue();
+                        if (workerInCheck != worker)
+                        {
+                            checkedWorkers.Enqueue(workerInCheck);
+                        }
+                    }
+
+                    freePackWorkers = checkedWorkers;
+                    return;
+                }
+        }
+    }
 
     Worker FindClosestWorker(Tile endTile)
     {

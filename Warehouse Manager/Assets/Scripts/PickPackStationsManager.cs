@@ -29,6 +29,7 @@ public class PickPackStationsManager : MonoBehaviour
     {
         PackStation.OnPackStationSpawned += AddNewPackStation;
         Worker.OnWorkerSpawned += AddNewWorker;
+        Worker.OnWorkerFired += RemoveWorker;
         PickStash.OnPickStashSpawned += AddNewPickStash;
         OrdersStation.OnStationSpawned += AddOrderStation;
     }
@@ -37,6 +38,7 @@ public class PickPackStationsManager : MonoBehaviour
     {
         PackStation.OnPackStationSpawned -= AddNewPackStation;
         Worker.OnWorkerSpawned -= AddNewWorker;
+        Worker.OnWorkerFired -= RemoveWorker;
         PickStash.OnPickStashSpawned -= AddNewPickStash;
         OrdersStation.OnStationSpawned -= AddOrderStation;
     }
@@ -59,6 +61,36 @@ public class PickPackStationsManager : MonoBehaviour
             }
         }
         packStations.Add(packStation);
+    }
+
+    void RemoveWorker(Worker worker)
+    {
+        if (worker.stats.workerType == WorkerData.WorkerType.Pack)
+        {
+            
+
+            for (int i = 0; i < packStations.Count; i++)
+            {
+                if (packStations[i].havePackWorker && worker.packStationTile == packStations[i].tileWithStation)
+                {
+                    packStations[i].havePackWorker = false;
+                    worker.packStationTile = null;
+                    packWorkers.Remove(worker);
+                    break;
+                }
+            }
+
+            return;
+        }
+        else if (worker.stats.workerType == WorkerData.WorkerType.Pick)
+        {
+            pickWorkers.Remove(worker);
+            return;
+        }
+        else
+        {
+            return;
+        }
     }
 
     void AddNewWorker(Worker worker)

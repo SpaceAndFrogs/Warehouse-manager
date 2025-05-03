@@ -19,14 +19,9 @@ public class Worker : MonoBehaviour
     public bool goingToPickStash =true;
 
     public static event Action<Worker>? OnWorkerSpawned;
+    public static event Action<Worker>? OnWorkerFired;
     public static event Action<Tile, OrdersManager.Order>? OnOrderAddedToStash;
     public static event Action? OnBuildingEnded;
-
-    private void Start()
-    {
-        ReturnWorker();
-        OnWorkerSpawned?.Invoke(this);
-    }
 
     public void GoToStation()
     {
@@ -364,6 +359,23 @@ public class Worker : MonoBehaviour
     void ReturnWorker()
     {
         TaskManager.instance.ReturnWorker(this);
+    }
+
+    public void HireWorker()
+    {
+        ReturnWorker();
+        OnWorkerSpawned?.Invoke(this);
+    }
+
+    public void FireWorker()
+    {
+        if(currentTask != null)
+            TaskManager.instance.DropTask(currentTask);
+
+        OnWorkerFired?.Invoke(this);
+        TaskManager.instance.FireWorker(this);
+
+        WorkersPool.instance.ReturnWorker(this);
     }
 
     private void OnCollisionEnter(Collision collision)

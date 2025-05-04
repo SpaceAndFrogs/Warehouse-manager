@@ -244,6 +244,20 @@ public class OrdersManager : MonoBehaviour
                     continue;
                 }
 
+                float sellPrice = float.Parse(PricesManager.instance.itemPricesScripts[itemIndex].sellPriceInput.text.Remove(PricesManager.instance.itemPricesScripts[itemIndex].sellPriceInput.text.Length - 1));
+                float demandPrice = float.Parse(PricesManager.instance.itemPricesScripts[itemIndex].demandPrice.text.Remove(PricesManager.instance.itemPricesScripts[itemIndex].demandPrice.text.Length - 1));
+                float probabilityModifier = Mathf.Clamp01(1.0f - ((sellPrice - demandPrice) / demandPrice)); 
+
+                if (Random.value > probabilityModifier)
+                {
+                    Debug.Log("Item skipped due to overpricing");
+                    if (racksChecked.Count == racks.Count)
+                    {
+                        return (null, null);
+                    }
+                    continue;
+                }
+
                 if(racks[rackIndex].amountOfItems-racks[rackIndex].reservedAmountOfItems > 0)
                 {
                     usedRacksIndexs.Add(rackIndex);

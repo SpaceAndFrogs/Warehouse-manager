@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 302389580051435622}
   - component: {fileID: 1457556805432540728}
   - component: {fileID: -5314704762063203727}
+  - component: {fileID: 491072880766004997}
   m_Layer: 0
   m_Name: WorkersSpawnerAffirmative
   m_TagString: Untagged
@@ -97,3 +98,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scaleWhenHidden: 0.1
+--- !u!114 &491072880766004997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5886566032702211011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73e241d7e236626f59506205e0c11581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer:
+  - {fileID: 1457556805432540728}

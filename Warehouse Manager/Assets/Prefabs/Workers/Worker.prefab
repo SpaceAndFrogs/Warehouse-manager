@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6262584920522932717}
   - component: {fileID: 720062394785637295}
   - component: {fileID: 7320657417775280965}
+  - component: {fileID: 6300641258072856168}
   m_Layer: 3
   m_Name: Worker
   m_TagString: Untagged
@@ -150,7 +151,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   endNode: {fileID: 0}
   startNode: {fileID: 0}
-  path: []
   stats:
     workerType: 0
     moveSpeed: 0
@@ -170,22 +170,37 @@ MonoBehaviour:
       tileTypeAfterTask: 0
     tileWithTask: {fileID: 0}
     building:
-      buildingObject: {fileID: 0}
       buildingSprite: {fileID: 0}
       buildingType: 0
       nameOfButton: 
       buildingTime: 0
       cost: 0
+    rotationTransform: {fileID: 0}
     order:
-      racksWithItems: []
-      amountOfItemsFromRacks: 
       orderPrice: 0
     tileOfPickStashWithOrder: {fileID: 0}
-    indicator:
+    buildingIndicator:
       buildingType: 0
       indicatorObject: {fileID: 0}
       isAffirmative: 0
-      indicatorsInPool: []
+    taskIndicator:
+      taskType: 0
+      indicatorObject: {fileID: 0}
+      isAffirmative: 0
   packStationTile: {fileID: 0}
   pickStashTile: {fileID: 0}
   goingToPickStash: 0
+--- !u!114 &6300641258072856168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7432142665284801768}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73e241d7e236626f59506205e0c11581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer:
+  - {fileID: 562298566339427984}

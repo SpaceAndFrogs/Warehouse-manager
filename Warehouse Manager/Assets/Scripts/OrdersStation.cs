@@ -7,7 +7,9 @@ public class OrdersStation : MonoBehaviour
 {
     public Tile tileWithStation;
 
+    #nullable enable
     public static event Action<OrdersStation>? OnStationSpawned;
+    #nullable disable
 
     void Start()
     {

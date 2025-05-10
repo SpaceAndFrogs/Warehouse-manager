@@ -23,8 +23,6 @@ public class Tile : MonoBehaviour
     public BuildingsPool.Building building = null;
     public bool haveTask = false;
 
-    IndicatorsPool.BuildingIndicator currentBuildingIndicator = null;
-
     public MapFragmentScript mapFragmentScript
     {
         private get; set;

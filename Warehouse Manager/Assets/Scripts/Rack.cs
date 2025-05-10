@@ -14,7 +14,9 @@ public class Rack : MonoBehaviour
     public Tile tileWithRack;
     public int desiredAmountOfItems = 0;
     public int maxAmountOfItems = 0;
+    #nullable enable
     public static event Action<Rack>? OnRackSpawned;
+    #nullable disable
     public bool isInRoom = false;
 
     void Update()

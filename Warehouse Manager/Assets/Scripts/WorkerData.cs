@@ -10,7 +10,6 @@ public class WorkerData : ScriptableObject
     public WorkerType workerType;
     public Vector2 minMaxMoveSpeed;
     public Vector2 minMaxWorkSpeed;
-    public string name;
     public float proxyMargin;
     public float proxyMarginOfFinalTile;
 }

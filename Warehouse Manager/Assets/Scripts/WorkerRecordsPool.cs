@@ -134,7 +134,7 @@ public class WorkerRecordsPool : MonoBehaviour
 
         public void ReturnRecord(WorkerRecordScript workerRecordScript)
         {
-            workerRecordScript.transform.parent = recordsPanel.transform;
+            workerRecordScript.transform.SetParent(recordsPanel.transform);
             records.Enqueue(workerRecordScript);
         }
     }

@@ -7,7 +7,9 @@ public class PickStash : MonoBehaviour
 {
 
     public Tile tileWithStash;
+    #nullable enable
     public static event Action<PickStash>? OnPickStashSpawned;
+    #nullable disable
     public bool isInRoom = false;
 
     public List<OrdersManager.Order> orders = new List<OrdersManager.Order>();

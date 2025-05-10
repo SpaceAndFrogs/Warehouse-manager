@@ -102,7 +102,7 @@ public class WorkersManager : MonoBehaviour
 
         WorkerRecordScript workerRecordScript = WorkerRecordsPool.instance.GetRecord(worker.stats.workerType,false).Item1;
         workerRecordScript.worker = worker;
-        workerRecordScript.transform.parent = workersPanel.employed.content.transform;
+        workerRecordScript.transform.SetParent(workersPanel.employed.content.transform);
 
         SetValuesToRecord(workerRecordScript, stats);
 
@@ -117,7 +117,7 @@ public class WorkersManager : MonoBehaviour
         (WorkerRecordScript, Worker.Stats) workerRecordScript = WorkerRecordsPool.instance.GetRecord(workerType,true);
  
         workersPanel.candidates.records.Add(workerRecordScript.Item1);
-        workerRecordScript.Item1.transform.parent = workersPanel.candidates.content.transform;
+        workerRecordScript.Item1.transform.SetParent(workersPanel.candidates.content.transform);
 
         AddListenerToRecord(false, workerRecordScript.Item2, workerRecordScript.Item1, index);
     }

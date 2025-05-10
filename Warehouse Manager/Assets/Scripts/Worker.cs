@@ -18,10 +18,12 @@ public class Worker : MonoBehaviour
     public Tile pickStashTile;
     public bool goingToPickStash =true;
 
+    #nullable enable
     public static event Action<Worker>? OnWorkerSpawned;
     public static event Action<Worker>? OnWorkerFired;
     public static event Action<Tile, OrdersManager.Order>? OnOrderAddedToStash;
     public static event Action? OnBuildingEnded;
+    #nullable disable
 
     public void GoToStation()
     {

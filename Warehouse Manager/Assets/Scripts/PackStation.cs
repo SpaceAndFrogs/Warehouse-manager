@@ -4,7 +4,9 @@ using UnityEngine;
 using System;
 public class PackStation : MonoBehaviour
 {
+    #nullable enable
     public static event Action<PackStation>? OnPackStationSpawned;
+    #nullable disable
     public bool havePackWorker = false;
     public bool isInRoom = false;
 

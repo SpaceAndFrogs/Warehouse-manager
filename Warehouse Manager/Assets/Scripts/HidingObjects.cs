@@ -44,7 +44,7 @@ public class HidingObjects : MonoBehaviour
 
         foreach (MeshRenderer mesh in meshRenderer)
         {
-            Bounds bounds = GetComponent<Renderer>().bounds;
+            Bounds bounds = mesh.bounds;
 
             if (GeometryUtility.TestPlanesAABB(planes, bounds))
             {

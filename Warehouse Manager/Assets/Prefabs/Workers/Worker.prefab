@@ -197,10 +197,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7432142665284801768}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73e241d7e236626f59506205e0c11581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 562298566339427984}
+  canMove: 1
+  posTolerance: 0.75

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7110129189368186470}
   - component: {fileID: -5314704762063203727}
   - component: {fileID: -5246946005644848463}
+  - component: {fileID: -2838152006868457581}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -134,3 +135,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 1457556805432540728}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &-2838152006868457581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5886566032702211011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47935333348d7fb49b59d653dea523ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  building:
+    buildingType: 2
+    buildingObject: {fileID: 5886566032702211011}

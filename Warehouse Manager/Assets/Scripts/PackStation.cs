@@ -21,15 +21,22 @@ public class PackStation : MonoBehaviour
     void OnEnable()
     {
         Worker.OnBuildingEnded += CheckIfIsInRoom;
+        SavingManager.OnSave += SavePackStationData;
     }
 
     void OnDisable()
     {
         Worker.OnBuildingEnded -= CheckIfIsInRoom;
+        SavingManager.OnSave -= SavePackStationData;
     }
 
     void CheckIfIsInRoom()
     {
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStation);
+    }
+
+    void SavePackStationData()
+    {
+        SavingManager.instance.saveData.packStations.Add(new SaveData.PackStationData(havePackWorker, isInRoom, transform.position, transform.rotation));
     }
 }

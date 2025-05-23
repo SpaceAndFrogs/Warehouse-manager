@@ -15,13 +15,13 @@ public class MapFragmentScript : MonoBehaviour
 
         Material material = m_Renderer.materials[0];
 
-        Texture2D texture = new Texture2D(noiseSamples.Count,noiseSamples.Count);
+        Texture2D texture = new Texture2D(noiseSamples.Count, noiseSamples.Count);
 
         float noiseSample;
 
-        for(int i = 0; i < noiseSamples.Count; i ++)
+        for (int i = 0; i < noiseSamples.Count; i++)
         {
-            for(int j = 0; j < noiseSamples.Count; j ++)
+            for (int j = 0; j < noiseSamples.Count; j++)
             {
 
                 noiseSample = noiseSamples[i][j];
@@ -70,5 +70,41 @@ public class MapFragmentScript : MonoBehaviour
         {
             other.gameObject.SetActive(false);
         }
+    }
+
+    List<List<Color>> GetColorSamples()
+    {
+        List<List<Color>> colorSamples = new List<List<Color>>();
+
+        Material material = m_Renderer.materials[0];
+        Texture2D texture = (Texture2D)material.mainTexture;
+
+        for (int i = 0; i < texture.width; i++)
+        {
+            List<Color> row = new List<Color>();
+            for (int j = 0; j < texture.height; j++)
+            {
+                row.Add(texture.GetPixel(i, j));
+            }
+            colorSamples.Add(row);
+        }
+
+        return colorSamples;
+    }
+
+    void OnSave()
+    {
+        List<List<Color>> colorSamples = GetColorSamples();
+        SavingManager.instance.saveData.mapFragments.Add(new SaveData.MapFragmentData(transform.position, transform.rotation, colorSamples));
+    }
+
+    void OnEnable()
+    {
+        SavingManager.OnSave += OnSave;
+    }
+
+    void OnDisable()
+    {
+        SavingManager.OnSave -= OnSave;
     }
 }

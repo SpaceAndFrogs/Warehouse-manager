@@ -65,15 +65,22 @@ public class Rack : MonoBehaviour
     void OnEnable()
     {
         Worker.OnBuildingEnded += CheckIfIsInRoom;
+        SavingManager.OnSave += SaveRack;
     }
 
     void OnDisable()
     {
         Worker.OnBuildingEnded -= CheckIfIsInRoom;
+        SavingManager.OnSave -= SaveRack;
     }
 
     void CheckIfIsInRoom()
     {
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithRack);
+    }
+
+    void SaveRack()
+    {
+        SavingManager.instance.saveData.racks.Add(new SaveData.RackData(itemOnRack.itemType.ToString(), amountOfItems, reservedAmountOfItems, desiredAmountOfItems, maxAmountOfItems, transform.position, transform.rotation));       
     }
 }

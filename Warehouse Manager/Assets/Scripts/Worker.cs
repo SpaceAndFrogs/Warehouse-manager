@@ -389,6 +389,63 @@ public class Worker : MonoBehaviour
 
         startNode = tile; 
     }
+    
+    private void OnEnable() 
+    {
+        SavingManager.OnSave += OnSave;
+    }
+
+    private void OnDisable() 
+    {
+        SavingManager.OnSave -= OnSave;
+    }
+
+    void OnSave()
+    {
+        SaveWorkerData();
+        SaveTask();
+    }
+
+    void SaveTask()
+    {
+        if(currentTask == null)
+            return;
+
+        if (currentTask.task.taskClass == TasksTypes.TaskClass.Build)
+        {
+            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), currentTask.tileWithTask.transform.position, new Vector3(), currentTask.task.tileTypeAfterTask.ToString(), new List<Vector3>(), 0, new List<int>());
+            SavingManager.instance.saveData.tasks.Add(taskData);
+        }
+        else if (currentTask.task.taskClass == TasksTypes.TaskClass.Pick)
+        {
+            List<Vector3> racksWithItems = ConvertRacksToVector3(new List<Rack>(currentTask.order.racksWithItems));
+            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), new Vector3(), null, racksWithItems, currentTask.order.orderPrice, new List<int>(currentTask.order.amountOfItemsFromRacks));
+            SavingManager.instance.saveData.tasks.Add(taskData);
+        }
+        else
+        {
+            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), currentTask.tileOfPickStashWithOrder.transform.position, null, null, currentTask.order.orderPrice, null);
+            SavingManager.instance.saveData.tasks.Add(taskData);
+        }
+    }
+
+    List<Vector3> ConvertRacksToVector3(List<Rack> racks)
+    {
+        List<Vector3> positions = new List<Vector3>();
+
+        for(int i = 0; i < racks.Count; i++)
+        {
+            positions.Add(racks[i].transform.position);
+        }
+
+        return positions;
+    }
+
+    void SaveWorkerData()
+    {
+        SaveData.WorkerData workerData = new SaveData.WorkerData(stats.name,stats.workerType.ToString(),stats.moveSpeed,stats.workSpeed,stats.salary,transform.position,transform.rotation);
+        SavingManager.instance.saveData.workers.Add(workerData);
+    }
 
     [System.Serializable]
     public class Stats

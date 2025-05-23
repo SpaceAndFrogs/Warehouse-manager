@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4335612072643927431}
   - component: {fileID: -5468386110980084062}
   - component: {fileID: 8121646129335257174}
+  - component: {fileID: -4403754937133956981}
   m_Layer: 0
   m_Name: MineNegative
   m_TagString: Untagged
@@ -112,3 +113,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 4335612072643927431}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &-4403754937133956981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3480242447457170110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905414c4125385e56be63bf87435ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 3
+  buildingType: 0
+  isAffirmative: 0
+  isWorkerSpawner: 0

@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 8035769114314476576}
   - component: {fileID: 7497868145046024203}
   - component: {fileID: 4006420096820543860}
+  - component: {fileID: 77136645848919589}
   m_Layer: 0
   m_Name: IndicatorDoorNegative
   m_TagString: Untagged
@@ -314,3 +315,21 @@ MonoBehaviour:
   - {fileID: 1340454045029611795}
   - {fileID: 2104969210197790299}
   - {fileID: 5655269382175321190}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &77136645848919589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6777885033127159899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905414c4125385e56be63bf87435ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 0
+  buildingType: 7
+  isAffirmative: 0
+  isWorkerSpawner: 0

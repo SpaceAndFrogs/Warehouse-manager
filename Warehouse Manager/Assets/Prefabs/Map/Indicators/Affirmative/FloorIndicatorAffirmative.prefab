@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 216103564492179704}
   - component: {fileID: 5604438014675212090}
   - component: {fileID: -8515211630561574961}
+  - component: {fileID: -3728051593041209106}
   m_Layer: 0
   m_Name: FloorIndicatorAffirmative
   m_TagString: Untagged
@@ -98,3 +99,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 5604438014675212090}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &-3728051593041209106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6777885033127159899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905414c4125385e56be63bf87435ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 0
+  buildingType: 1
+  isAffirmative: 1
+  isWorkerSpawner: 0

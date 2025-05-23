@@ -10,8 +10,8 @@ public class TimeManager : MonoBehaviour
     public static TimeManager instance;
     [SerializeField]
     float oneHourInSeconds;
-    [SerializeField]TextMeshProUGUI currentSpeedTMP;
-    float currentTimeScale;
+    [SerializeField] TextMeshProUGUI currentSpeedTMP;
+    public float currentTimeScale { get;  private set; }
     bool isPaused = false;
 
     void Awake()
@@ -22,6 +22,7 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
+        currentTimeScale = Time.timeScale;
     }
 
     void Update()
@@ -37,7 +38,7 @@ public class TimeManager : MonoBehaviour
 
     void MakeInstance()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -54,26 +55,26 @@ public class TimeManager : MonoBehaviour
 
     public float GetOneDay()
     {
-        return oneHourInSeconds*24;
+        return oneHourInSeconds * 24;
     }
 
     public float GetOneWeek()
     {
-        return oneHourInSeconds*168;
+        return oneHourInSeconds * 168;
     }
 
     public float GetOneMounth()
     {
-        return oneHourInSeconds*720;
+        return oneHourInSeconds * 720;
     }
 
     public void ChangeTimeScale(float timeScale)
     {
-        if(timeScale != 0)
+        if (timeScale != 0)
         {
             if (Time.timeScale == 0)
             {
-                if(isPaused)
+                if (isPaused)
                 {
                     isPaused = false;
                     Time.timeScale = currentTimeScale;
@@ -81,10 +82,11 @@ public class TimeManager : MonoBehaviour
                 else
                 {
                     return;
-                }               
+                }
             }
-            
+
             Time.timeScale += timeScale;
+            currentTimeScale = Time.timeScale;
             currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }
     }
@@ -105,4 +107,6 @@ public class TimeManager : MonoBehaviour
 
         currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
     }
+    
+
 }

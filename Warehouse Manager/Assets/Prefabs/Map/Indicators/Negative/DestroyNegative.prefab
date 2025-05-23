@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7470265553878782893}
   - component: {fileID: -4895943739655110026}
   - component: {fileID: 1766495682320059679}
+  - component: {fileID: -7128405086699005275}
   m_Layer: 0
   m_Name: DestroyNegative
   m_TagString: Untagged
@@ -112,3 +113,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 7470265553878782893}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &-7128405086699005275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7522467440924630778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905414c4125385e56be63bf87435ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 5
+  buildingType: 0
+  isAffirmative: 0
+  isWorkerSpawner: 0

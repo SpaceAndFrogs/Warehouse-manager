@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1457556805432540728}
   - component: {fileID: -5314704762063203727}
   - component: {fileID: 1317710626095334444}
+  - component: {fileID: -7284930793581081089}
   m_Layer: 0
   m_Name: WorkersSpawnerNegative
   m_TagString: Untagged
@@ -112,3 +113,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 1457556805432540728}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &-7284930793581081089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5886566032702211011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905414c4125385e56be63bf87435ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 0
+  buildingType: 0
+  isAffirmative: 0
+  isWorkerSpawner: 1

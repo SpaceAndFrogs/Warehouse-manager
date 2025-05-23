@@ -116,11 +116,13 @@ public class TaskManager : MonoBehaviour
     void OnEnable()
     {
         Worker.OnBuildingEnded += FreeDropedTasks;
+        SavingManager.OnSave += OnSave;
     }
 
     void OnDisable()
     {
         Worker.OnBuildingEnded -= FreeDropedTasks;
+        SavingManager.OnSave -= OnSave;
     }
     #endregion
 
@@ -467,8 +469,47 @@ public class TaskManager : MonoBehaviour
             
     }
     #endregion
-    
+
     #region Tasks Methods
+
+    void OnSave()
+    {
+        for (int i = 0; i < buildingTasks.Count; i++)
+        {
+            Task task = buildingTasks.Dequeue();
+
+            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), task.tileWithTask.transform.position, new Vector3(), task.task.tileTypeAfterTask.ToString(), new List<Vector3>(), 0, new List<int>()));
+        }
+
+        for (int i = 0; i < pickTasks.Count; i++)
+        {
+            Task task = pickTasks.Dequeue();
+
+            List<Vector3> racksWithItems = ConvertRacksToVector3(new List<Rack>(task.order.racksWithItems));
+
+            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), new Vector3(), new Vector3(), null, racksWithItems, task.order.orderPrice, new List<int>(task.order.amountOfItemsFromRacks)));
+        }
+
+        for (int i = 0; i < packTasks.Count; i++)
+        {
+            Task task = packTasks.Dequeue();
+
+            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), new Vector3(), task.tileOfPickStashWithOrder.transform.position, null, null, task.order.orderPrice, null));
+        }
+
+    }
+
+    List<Vector3> ConvertRacksToVector3(List<Rack> racks)
+    {
+        List<Vector3> positions = new List<Vector3>();
+
+        for(int i = 0; i < racks.Count; i++)
+        {
+            positions.Add(racks[i].transform.position);
+        }
+
+        return positions;
+    }
 
     void FreeDropedTasks()
     {

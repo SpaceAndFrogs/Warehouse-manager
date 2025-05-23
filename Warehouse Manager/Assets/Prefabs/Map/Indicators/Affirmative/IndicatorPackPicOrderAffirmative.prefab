@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6835610730845378970}
   - component: {fileID: 4360479645137692736}
   - component: {fileID: 8783830503758423480}
+  - component: {fileID: -6279465239001116420}
   m_Layer: 0
   m_Name: IndicatorPackPicOrderAffirmative
   m_TagString: Untagged
@@ -112,3 +113,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 6835610730845378970}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &-6279465239001116420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851040814126902023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905414c4125385e56be63bf87435ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 0
+  buildingType: 5
+  isAffirmative: 1
+  isWorkerSpawner: 0

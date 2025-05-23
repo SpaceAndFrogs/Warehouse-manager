@@ -32,15 +32,22 @@ public class PickStash : MonoBehaviour
     void OnEnable()
     {
         Worker.OnBuildingEnded += CheckIfIsInRoom;
+        SavingManager.OnSave += SavePickStashData;
     }
 
     void OnDisable()
     {
         Worker.OnBuildingEnded -= CheckIfIsInRoom;
+        SavingManager.OnSave -= SavePickStashData;
     }
 
     void CheckIfIsInRoom()
     {
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStash);
+    }
+
+    void SavePickStashData()
+    {
+        SavingManager.instance.saveData.pickStashes.Add(new SaveData.PickStashData(isInRoom, transform.position, transform.rotation));
     }
 }

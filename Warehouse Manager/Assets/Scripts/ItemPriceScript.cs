@@ -14,4 +14,14 @@ public class ItemPriceScript : MonoBehaviour
     public Button lockSellingButton;
     public bool sellingLocked = false;
     public Items.ItemType itemType;
+
+    private void OnEnable()
+    {
+        SavingManager.OnSave += OnSave;
+    }
+
+    void OnSave()
+    {
+        SavingManager.instance.saveData.itemPrices.Add(new SaveData.ItemPricesData(itemName.text, buyPrice.text, sellPriceInput.text, demandPrice.text, growthRate.text, sellingLocked, itemType.ToString()));
+    }
 }

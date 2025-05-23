@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6805109730277710151}
   - component: {fileID: -8566050113785910431}
   - component: {fileID: 6628469670533000208}
+  - component: {fileID: -1070199622463354816}
   m_Layer: 0
   m_Name: ChopAffirmative
   m_TagString: Untagged
@@ -112,3 +113,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 6805109730277710151}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &-1070199622463354816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6618725628355234377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905414c4125385e56be63bf87435ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 1
+  buildingType: 0
+  isAffirmative: 1
+  isWorkerSpawner: 0

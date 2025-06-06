@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2298.469, g: 2488.8208, b: 3743.852, a: 1}
+  m_IndirectSpecularColor: {r: 2260.1606, g: 2401.8948, b: 3499.7583, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5134,6 +5134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93419bd25b996f3458fc386e5bdca95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileTypes: {fileID: 11400000, guid: 45f1a747d2be33848a400f1e0656432d, type: 2}
   mapFragmentPrefab:
     mapFragmentSize: 1
     mapFragmentObject: {fileID: 1961851297720809161, guid: 9e98c3ca634b51441af36c161fecb609,
@@ -9690,67 +9691,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186844514}
   m_CullTransparentMesh: 1
---- !u!1 &1199096769
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1199096771}
-  - component: {fileID: 1199096770}
-  m_Layer: 0
-  m_Name: SavingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1199096770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199096769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b35af86b027b76216ab977b0c13fb38e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveFileName: saveData.json
-  saveDirectory: Saves
-  saveData:
-    racks: []
-    packStations: []
-    pickStashes: []
-    workers: []
-    buildings: []
-    tiles: []
-    mapFragments: []
-    buildingIndicators: []
-    taskIndicators: []
-    workerSpawnerndicators: []
-    loans: []
-    itemPrices: []
-    playerCash: 0
-    gameTime: 0
---- !u!4 &1199096771
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199096769}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.10000012, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1216563772
 GameObject:
   m_ObjectHideFlags: 0
@@ -9877,6 +9817,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216563772}
   m_CullTransparentMesh: 1
+--- !u!1 &1224421013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1224421015}
+  - component: {fileID: 1224421014}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1224421014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224421013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b35af86b027b76216ab977b0c13fb38e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveFileName: saveData.json
+  saveDirectory: Saves
+  saveData:
+    racks: []
+    packStations: []
+    pickStashes: []
+    workers: []
+    buildings: []
+    tiles: []
+    mapFragments: []
+    tasks: []
+    buildingIndicators: []
+    taskIndicators: []
+    workerSpawnerndicators: []
+    loans: []
+    itemPrices: []
+    playerCash: 0
+    gameTime: 0
+--- !u!4 &1224421015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224421013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1227591140
 GameObject:
   m_ObjectHideFlags: 0
@@ -12597,7 +12599,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1199096770}
+      - m_Target: {fileID: 1224421014}
         m_TargetAssemblyTypeName: SavingManager, Assembly-CSharp
         m_MethodName: SaveGame
         m_Mode: 1
@@ -14899,5 +14901,5 @@ SceneRoots:
   - {fileID: 765220756}
   - {fileID: 2141332761}
   - {fileID: 34657056}
-  - {fileID: 1199096771}
   - {fileID: 476891565}
+  - {fileID: 1224421015}

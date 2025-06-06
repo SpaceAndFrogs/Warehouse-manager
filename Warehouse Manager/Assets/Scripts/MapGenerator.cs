@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class MapGenerator : MonoBehaviour
 {
     [SerializeField]
+    TileTypes tileTypes;
+    [SerializeField]
     MapFragment mapFragmentPrefab;
     [SerializeField]
     List<MapFragment> mapFragments;
@@ -316,12 +318,95 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    private void LoadMap()
+    {
+        List<SaveData.MapFragmentData> fragmentsData = SavingManager.instance.saveData.mapFragments;
+        firstFragment = false;
+        for (int i = 0; i < fragmentsData.Count; i++)
+        {
+            MapFragment mapFragment = SpawnMapFragment(fragmentsData[i]);
+
+            mapFragments.Add(mapFragment);
+
+            MapFragmentScript mapFragmentScript = mapFragment.mapFragmentObject.GetComponent<MapFragmentScript>();
+
+            mapFragmentScript.SetColorSamples(fragmentsData[i].Unflatten(fragmentsData[i].colorSamples,fragmentsData[i].width, fragmentsData[i].height));
+
+            GenerateTilesOnMapFragment();
+
+            List<List<float>> noiseSamples = ConvertColorToNoiseSamples(fragmentsData[i].Unflatten(fragmentsData[i].colorSamples,fragmentsData[i].width, fragmentsData[i].height));
+
+            SetTileTypes(mapFragment.tiles, noiseSamples);
+
+            GenerateNewFragmentsButtons(mapFragmentPrefab);
+        }
+
+    }
+    List<List<float>> ConvertColorToNoiseSamples(List<List<SaveData.MapFragmentData.SerializableColor>> colorSamples)
+    {
+        List<List<float>> noiseSamples = new List<List<float>>();
+
+        for (int i = 0; i < colorSamples.Count; i++)
+        {
+            List<float> xRow = new List<float>();
+            for (int j = 0; j < colorSamples[i].Count; j++)
+            {
+                float sample = -1f;
+                foreach (TileTypes.TileTypesRanges tileType in tileTypes.tileTypesRanges)
+                {
+                    if (tileType.color == colorSamples[i][j].ToUnityColor())
+                    {
+                        sample = (tileType.tileRange.y + tileType.tileRange.x) / 2;
+                        break;
+                    }
+                }
+                xRow.Add(sample);
+            }
+            noiseSamples.Add(xRow);
+        }
+
+        return noiseSamples;
+    }
+
+    private void SetTileTypes(List<List<MapFragment.TileClass>> tiles, List<List<float>> noiseSamples)
+    {
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            for (int j = 0; j < tiles[i].Count; j++)
+            {
+                MapFragment.TileClass tile = tiles[i][j];
+                tile.tileScript.SetTileType(noiseSamples[i][j]);
+            }
+        }
+    }
+
+
+    private MapFragment SpawnMapFragment(SaveData.MapFragmentData mapFragmentData)
+    {
+        MapFragment mapFragment = new MapFragment(mapFragmentPrefab.mapFragmentSize, mapFragmentPrefab.mapFragmentObject, mapFragmentPrefab.amountOfTilesOnFragment, mapFragmentPrefab.tile, new List<List<MapFragment.TileClass>>(), mapFragmentPrefab.canvasForButtons);
+
+        GameObject mapFragmentObject = Instantiate(mapFragment.mapFragmentObject, mapFragmentData.position, mapFragmentData.rotation);
+        mapFragment.mapFragmentObject = mapFragmentObject;
+        return mapFragment;
+    }
+    
+    private void OnEnable()
+    {
+        SavingManager.OnMapLoad += LoadMap;
+    }
+
+    private void OnDisable()
+    {
+        SavingManager.OnMapLoad -= LoadMap;
+    }
+
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
-        }else
+        }
+        else
         {
             Destroy(this);
         }
@@ -329,6 +414,11 @@ public class MapGenerator : MonoBehaviour
 
     private void Start()
     {
+        if(SavingManager.instance.saveData.mapFragments.Count > 0)
+        {
+            return;
+        }
+
         GenerateMapFragment(Vector3.zero, mapFragmentPrefab, transform);        
     }
 }

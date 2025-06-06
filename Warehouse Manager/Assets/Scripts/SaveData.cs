@@ -232,12 +232,82 @@ public class SaveData
     {
         public Vector3 position;
         public Quaternion rotation;
-        List<List<Color>> colorSamples;
+        public List<SerializableColor> colorSamples;
+        public int width, height;
         public MapFragmentData(Vector3 position, Quaternion rotation, List<List<Color>> colorSamples)
         {
             this.position = position;
             this.rotation = rotation;
-            this.colorSamples = colorSamples;
+            width = colorSamples[0].Count;
+            height = colorSamples.Count;
+            this.colorSamples = Flatten(SetColorSamples(colorSamples), width);
+        }
+
+        public List<SerializableColor> Flatten(List<List<SerializableColor>> twoDList, int width)
+        {
+            List<SerializableColor> flatList = new List<SerializableColor>();
+
+            for(int i = 0; i < width; i++)
+            {                
+                flatList.AddRange(twoDList[i]);                
+            }
+
+            return flatList;
+        }
+
+        public List<List<SerializableColor>> Unflatten(List<SerializableColor> flatList, int width, int height)
+        {
+            List<List<SerializableColor>> twoDList = new List<List<SerializableColor>>();
+
+            for (int i = 0; i < height; i++)
+            {
+                List<SerializableColor> row = new List<SerializableColor>();
+                for (int j = 0; j < width; j++)
+                {
+                    row.Add(flatList[i * width + j]);
+                }
+                twoDList.Add(row);
+            }
+
+            return twoDList;
+        }
+
+        public List<List<SerializableColor>> SetColorSamples(List<List<Color>> colorSamples)
+        {
+            List<List<SerializableColor>> colors = new List<List<SerializableColor>>();
+            for (int i = 0; i < colorSamples.Count; i++)
+            {
+                List<SerializableColor> row = new List<SerializableColor>();
+                for (int j = 0; j < colorSamples[i].Count; j++)
+                {
+                    row.Add(new SerializableColor(colorSamples[i][j]));
+                }
+
+                colors.Add(row);
+            }
+
+            return colors;
+        }
+
+        [System.Serializable]
+        public class SerializableColor
+        {
+            public float r, g, b, a;
+
+            public SerializableColor() { }
+
+            public SerializableColor(Color color)
+            {
+                r = color.r;
+                g = color.g;
+                b = color.b;
+                a = color.a;
+            }
+
+            public Color ToUnityColor()
+            {
+                return new Color(r, g, b, a);
+            }
         }
     }
     

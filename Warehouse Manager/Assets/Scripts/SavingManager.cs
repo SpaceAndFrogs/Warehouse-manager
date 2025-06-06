@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class SavingManager : MonoBehaviour
 {
@@ -18,20 +19,15 @@ public class SavingManager : MonoBehaviour
             System.IO.Directory.CreateDirectory(saveDirectory);
         }
 
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        // Load the game data when the game starts
-        LoadGame();
     }
 
     public void SaveGame()
@@ -45,30 +41,44 @@ public class SavingManager : MonoBehaviour
         System.IO.File.WriteAllText(System.IO.Path.Combine(saveDirectory, saveFileName), json);
     }
 
-    public void LoadGame()
+    public void Load()
     {
         string filePath = System.IO.Path.Combine(saveDirectory, saveFileName);
         if (System.IO.File.Exists(filePath))
         {
             string json = System.IO.File.ReadAllText(filePath);
             saveData = JsonUtility.FromJson<SaveData>(json);
-            OnMapLoad?.Invoke();
-            OnTileLoad?.Invoke();
-            OnBuildingsLoad?.Invoke();
-            OnWorkersLoad?.Invoke();
-            OnIndicatorsLoad?.Invoke();
         }
         else
         {
             Debug.LogWarning("Save file not found.");
+            return;
         }
+
+        StartCoroutine(LoadGame());
+
+    }
+
+    IEnumerator LoadGame()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1);
+
+        while (!asyncLoad.isDone)
+        {
+            // np. możesz pokazać pasek ładowania
+            yield return null;
+        }
+        
+        OnMapLoad?.Invoke();
+        OnBuildingsLoad?.Invoke();
+        OnWorkersLoad?.Invoke();
+        OnIndicatorsLoad?.Invoke();
     }
 
     #nullable enable
     #region Events
         public static event Action? OnSave;       
         public static event Action? OnMapLoad;
-        public static event Action? OnTileLoad;
         public static event Action? OnBuildingsLoad;
         public static event Action? OnWorkersLoad;
         public static event Action? OnIndicatorsLoad;

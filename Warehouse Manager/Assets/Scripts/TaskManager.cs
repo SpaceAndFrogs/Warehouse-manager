@@ -474,6 +474,7 @@ public class TaskManager : MonoBehaviour
 
     void OnSave()
     {
+        FreeDropedTasks();
         for (int i = 0; i < buildingTasks.Count; i++)
         {
             Task task = buildingTasks.Dequeue();

@@ -92,6 +92,29 @@ public class MapFragmentScript : MonoBehaviour
         return colorSamples;
     }
 
+    public void SetColorSamples(List<List<SaveData.MapFragmentData.SerializableColor>> colorSamples)
+    {
+        Material material = m_Renderer.materials[0];
+
+        Texture2D texture = new Texture2D(colorSamples.Count, colorSamples.Count);
+
+        for (int i = 0; i < texture.width; i++)
+        {
+            for (int j = 0; j < texture.height; j++)
+            {
+                texture.SetPixel(i, j, colorSamples[i][j].ToUnityColor());
+            }
+        }
+
+        texture.filterMode = FilterMode.Point;
+
+        texture.Apply();
+
+        material.mainTexture = texture;
+
+        transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+
     void OnSave()
     {
         List<List<Color>> colorSamples = GetColorSamples();

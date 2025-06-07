@@ -354,7 +354,7 @@ public class MapGenerator : MonoBehaviour
                 float sample = -1f;
                 foreach (TileTypes.TileTypesRanges tileType in tileTypes.tileTypesRanges)
                 {
-                    if (tileType.color == colorSamples[i][j].ToUnityColor())
+                    if (AreColorsSimilar(tileType.color, colorSamples[i][j].ToUnityColor()))
                     {
                         sample = (tileType.tileRange.y + tileType.tileRange.x) / 2;
                         break;
@@ -366,6 +366,14 @@ public class MapGenerator : MonoBehaviour
         }
 
         return noiseSamples;
+    }
+
+    bool AreColorsSimilar(Color a, Color b, float tolerance = 0.01f)
+    {
+        return Mathf.Abs(a.r - b.r) < tolerance &&
+            Mathf.Abs(a.g - b.g) < tolerance &&
+            Mathf.Abs(a.b - b.b) < tolerance &&
+            Mathf.Abs(a.a - b.a) < tolerance;
     }
 
     private void SetTileTypes(List<List<MapFragment.TileClass>> tiles, List<List<float>> noiseSamples)

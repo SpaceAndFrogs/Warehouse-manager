@@ -894,23 +894,23 @@ public class TaskManager : MonoBehaviour
     #region Worker Methods
     public void ReturnWorker(Worker worker)
     {
-        switch(worker.stats.workerType)
+        switch (worker.stats.workerType)
         {
             case WorkerData.WorkerType.Builder:
-            {
-                freeBuilders.Add(worker);
-                break;
-            }
+                {
+                    freeBuilders.Add(worker);
+                    break;
+                }
             case WorkerData.WorkerType.Pick:
-            {
-                freePickWorkers.Enqueue(worker);
-                break;
-            }
+                {
+                    freePickWorkers.Enqueue(worker);
+                    break;
+                }
             case WorkerData.WorkerType.Pack:
-            {
-                freePackWorkers.Enqueue(worker);
-                break;
-            }
+                {
+                    freePackWorkers.Enqueue(worker);
+                    break;
+                }
         }
         
     }

@@ -53,6 +53,8 @@ public class BuildingsPool : MonoBehaviour
                 }
             }
         }
+
+        Worker.OnBuidlingEndend?.Invoke();
     }
 
     Tile GetTile(Vector3 position)

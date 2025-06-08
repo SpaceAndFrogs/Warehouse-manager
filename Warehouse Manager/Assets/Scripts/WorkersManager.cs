@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
 
 public class WorkersManager : MonoBehaviour
@@ -18,6 +19,8 @@ public class WorkersManager : MonoBehaviour
     bool isSettingWorkersSpawn = false;
     [SerializeField]
     List<Worker> workers = new List<Worker>();
+    [SerializeField]
+    WorkerData workerData;
 
     
     void Start()
@@ -286,6 +289,41 @@ public class WorkersManager : MonoBehaviour
         workersPanel.workersPanel.SetActive(false);
 
         StartCoroutine(MakeCandidates());
+    }
+
+    void LoadWorkers()
+    {
+        List<SaveData.WorkerData> workersData = SavingManager.instance.saveData.workers;
+
+        foreach (SaveData.WorkerData data in workersData)
+        {
+            Worker.Stats stats = new Worker.Stats(data.moveSpeed, data.workSpeed, data.salary, (WorkerData.WorkerType)Enum.Parse(typeof(WorkerData.WorkerType), data.type), 
+                workerData.proxyMargin, workerData.proxyMarginOfFinalTile, data.name);
+
+            Worker worker = WorkersPool.instance.GetWorker(stats.workerType, stats);
+            worker.transform.position = data.position;
+            worker.HireWorker();
+            workers.Add(worker);
+
+            WorkerRecordScript workerRecordScript = WorkerRecordsPool.instance.GetRecord(worker.stats.workerType, false).Item1;
+            workerRecordScript.worker = worker;
+            workerRecordScript.transform.SetParent(workersPanel.employed.content.transform);
+
+            SetValuesToRecord(workerRecordScript, stats);
+            workersPanel.employed.records.Add(workerRecordScript);
+
+            AddListenerToRecord(true, stats, workerRecordScript, workersPanel.employed.records.Count - 1);
+        }
+    }
+
+    void OnEnable()
+    {
+        SavingManager.OnWorkersLoad += LoadWorkers;
+    }
+
+    void OnDisable()
+    {
+        SavingManager.OnWorkersLoad -= LoadWorkers;
     }
 
     [System.Serializable]

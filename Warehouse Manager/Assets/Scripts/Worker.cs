@@ -408,7 +408,7 @@ public class Worker : MonoBehaviour
 
     void SaveTask()
     {
-        if(currentTask == null)
+        if(currentTask == null  || currentTask.task.taskType == TasksTypes.TaskType.None)
             return;
 
         if (currentTask.task.taskClass == TasksTypes.TaskClass.Build)
@@ -445,6 +445,11 @@ public class Worker : MonoBehaviour
     {
         SaveData.WorkerData workerData = new SaveData.WorkerData(stats.name,stats.workerType.ToString(),stats.moveSpeed,stats.workSpeed,stats.salary,transform.position,transform.rotation);
         SavingManager.instance.saveData.workers.Add(workerData);
+    }
+
+    public static void NotifyBuildingEnded()
+    {
+        OnBuildingEnded?.Invoke();
     }
 
     [System.Serializable]

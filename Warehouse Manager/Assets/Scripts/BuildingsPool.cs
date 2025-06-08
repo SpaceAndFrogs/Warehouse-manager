@@ -32,6 +32,55 @@ public class BuildingsPool : MonoBehaviour
         }
     }
 
+    void LoadBuildings()
+    {
+        List<SaveData.BuildingData> buildingData = SavingManager.instance.saveData.buildings;
+        foreach (var data in buildingData)
+        {
+            Building building = GetBuilding((Buildings.BuildingType)System.Enum.Parse(typeof(Buildings.BuildingType), data.type));
+            if (building != null)
+            {
+                BuildingScript buildingScript = building.buildingObject.GetComponent<BuildingScript>();
+                buildingScript.building = building;
+                building.buildingObject.transform.position = data.position;
+                building.buildingObject.transform.rotation = data.rotation;
+                building.buildingObject.SetActive(true);
+                Tile tile = GetTile(data.position);
+
+                if (tile.building == null || tile.building.buildingType == Buildings.BuildingType.Floor)
+                {
+                    tile.building = building;
+                }
+            }
+        }
+    }
+
+    Tile GetTile(Vector3 position)
+    {
+        Ray ray = new Ray(position+new Vector3(0f,100f,0f), Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            {
+                return tile;
+            }
+        }
+        return null;
+    }
+
+    void OnEnable()
+    {
+        SavingManager.OnBuildingsLoad += LoadBuildings;
+    }
+
+    void OnDisable()
+    {
+        SavingManager.OnBuildingsLoad -= LoadBuildings;
+    }
+
     void Awake()
     {
         if (instance == null)

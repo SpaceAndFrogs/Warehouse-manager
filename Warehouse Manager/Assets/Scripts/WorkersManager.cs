@@ -82,6 +82,13 @@ public class WorkersManager : MonoBehaviour
         workersPanel.workersPanel.SetActive(true);
     }
 
+    void WorkerSpawnerLoad(IndicatorsPool.WorkerSpawnerIndicator indicator, Tile tile)
+    {
+        setWorkersSpawnerIndicator = indicator;
+        tileToSpawnWorker = tile;
+        posToSpawnWorkers = tile.transform.position + new Vector3(0, 0.1f, 0);
+    }
+
     IEnumerator MakeCandidates()
     {
         while(true)
@@ -319,11 +326,23 @@ public class WorkersManager : MonoBehaviour
     void OnEnable()
     {
         SavingManager.OnWorkersLoad += LoadWorkers;
+        IndicatorsPool.OnWorkerSpawnerIndicatorsLoad += WorkerSpawnerLoad;        
     }
 
     void OnDisable()
     {
         SavingManager.OnWorkersLoad -= LoadWorkers;
+        IndicatorsPool.OnWorkerSpawnerIndicatorsLoad -= WorkerSpawnerLoad;   
+    }
+
+    void SaveIndicator()
+    {
+        if (setWorkersSpawnerIndicator != null)
+        {
+            SavingManager.instance.saveData.workerSpawnerIndicators.Add(new SaveData.WorkerSpawnerIndicatorData(
+                setWorkersSpawnerIndicator.isAffirmative, setWorkersSpawnerIndicator.affirmativeIndicatorObject.transform.position, 
+                setWorkersSpawnerIndicator.affirmativeIndicatorObject.transform.rotation));
+        }
     }
 
     [System.Serializable]

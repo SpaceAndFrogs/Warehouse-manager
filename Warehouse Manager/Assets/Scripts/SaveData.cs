@@ -15,7 +15,7 @@ public class SaveData
     public List<TaskData> tasks = new List<TaskData>();
     public List<BuildingIndicatorData> buildingIndicators = new List<BuildingIndicatorData>();
     public List<TaskIndicatorData> taskIndicators = new List<TaskIndicatorData>();
-    public List<WorkerSpawnerIndicatorData> workerSpawnerndicators = new List<WorkerSpawnerIndicatorData>();
+    public List<WorkerSpawnerIndicatorData> workerSpawnerIndicators = new List<WorkerSpawnerIndicatorData>();
     public List<LoansData> loans = new List<LoansData>();
     public List<ItemPricesData> itemPrices = new List<ItemPricesData>();
     public float playerCash;

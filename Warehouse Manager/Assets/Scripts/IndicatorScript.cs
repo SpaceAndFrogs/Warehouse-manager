@@ -20,20 +20,13 @@ public class IndicatorScript : MonoBehaviour
 
     void OnSave()
     {
-        if (isWorkerSpawner)
+        if (taskType != TasksTypes.TaskType.None)
         {
-            SavingManager.instance.saveData.workerSpawnerndicators.Add(new SaveData.WorkerSpawnerIndicatorData(isAffirmative, transform.position, transform.rotation));
+            SavingManager.instance.saveData.taskIndicators.Add(new SaveData.TaskIndicatorData(taskType.ToString(), isAffirmative, transform.position, transform.rotation));
         }
         else
         {
-            if (taskType != TasksTypes.TaskType.None)
-            {
-                SavingManager.instance.saveData.taskIndicators.Add(new SaveData.TaskIndicatorData(taskType.ToString(), isAffirmative, transform.position, transform.rotation));
-            }
-            else
-            {
-                SavingManager.instance.saveData.buildingIndicators.Add(new SaveData.BuildingIndicatorData(buildingType.ToString(), isAffirmative, transform.position, transform.rotation));
-            }
+            SavingManager.instance.saveData.buildingIndicators.Add(new SaveData.BuildingIndicatorData(buildingType.ToString(), isAffirmative, transform.position, transform.rotation));
         }
     }
 }

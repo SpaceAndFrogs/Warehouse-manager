@@ -9860,7 +9860,7 @@ MonoBehaviour:
     tasks: []
     buildingIndicators: []
     taskIndicators: []
-    workerSpawnerndicators: []
+    workerSpawnerIndicators: []
     loans: []
     itemPrices: []
     playerCash: 0

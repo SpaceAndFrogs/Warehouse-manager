@@ -74,6 +74,7 @@ public class SavingManager : MonoBehaviour
         OnWorkersLoad?.Invoke();
         OnIndicatorsLoad?.Invoke();
         OnPricesLoad?.Invoke();
+        OnLoansLoad?.Invoke();
     }
 
 #nullable enable
@@ -84,6 +85,7 @@ public class SavingManager : MonoBehaviour
     public static event Action? OnWorkersLoad;
     public static event Action? OnIndicatorsLoad;
     public static event Action? OnPricesLoad;
+    public static event Action? OnLoansLoad;
         
     #endregion
 #nullable disable

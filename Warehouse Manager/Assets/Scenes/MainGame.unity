@@ -9855,7 +9855,6 @@ MonoBehaviour:
     pickStashes: []
     workers: []
     buildings: []
-    tiles: []
     mapFragments: []
     tasks: []
     buildingIndicators: []

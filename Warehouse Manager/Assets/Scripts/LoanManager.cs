@@ -142,6 +142,46 @@ public class LoanManager : MonoBehaviour
 
     }
 
+    void OnEnable()
+    {
+        SavingManager.OnLoansLoad += LoadLoans;
+        SavingManager.OnSave += SaveLoans; 
+    }
+
+    void OnDisable()
+    {
+        SavingManager.OnLoansLoad -= LoadLoans;
+        SavingManager.OnSave -= SaveLoans;
+    }
+    
+    void SaveLoans()
+    {
+        foreach (LoanClass loan in takenLoans)
+        {
+            SaveData.LoansData newLoan = new SaveData.LoansData(loan.amountOfCashToPayOff, loan.installment, loan.timeToPayOffLoan);
+            SavingManager.instance.saveData.loans.Add(newLoan);
+        }
+    }
+
+    void LoadLoans()
+    {
+        if (SavingManager.instance.saveData.loans.Count == 0)
+        {
+            return;
+        }
+
+        foreach (SaveData.LoansData loan in SavingManager.instance.saveData.loans)
+        {
+            Loan newLoanScript = Instantiate(loanScript.gameObject, loanPanel.contentList.transform).GetComponent<Loan>();
+            newLoanScript.index = takenLoans.Count;
+            AddListenerToLoan(newLoanScript);
+            LoanClass newLoan = new LoanClass(loan.timeToPayOffLoan, loan.installment, newLoanScript, loan.cashToPayOff);
+            takenLoans.Add(newLoan);
+        }
+
+        UpdateCounters();
+    }
+
     public class LoanClass
     {
         public int timeToPayOffLoan;
@@ -158,6 +198,14 @@ public class LoanManager : MonoBehaviour
             this.percentageOfLoan = percentageOfLoan;
             amountOfCashToPayOff = amountOfCashFromLoan + amountOfCashFromLoan * (percentageOfLoan / 100);
             installment = amountOfCashToPayOff / timeToPayOffLoan;
+            this.loanScript = loanScript;
+        }
+
+        public LoanClass(int timeToPayOffLoan, float installment, Loan loanScript, float amountOfCashToPayOff)
+        {
+            this.timeToPayOffLoan = timeToPayOffLoan;
+            this.installment = installment;
+            this.amountOfCashToPayOff = amountOfCashToPayOff;
             this.loanScript = loanScript;
         }
 

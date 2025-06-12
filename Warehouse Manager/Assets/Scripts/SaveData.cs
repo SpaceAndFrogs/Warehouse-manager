@@ -48,13 +48,15 @@ public class SaveData
     [System.Serializable]
     public class LoansData
     {
-        public string cashToPayOff;
-        public string installment;
+        public float cashToPayOff;
+        public float installment;
+        public int timeToPayOffLoan;
 
-        public LoansData(string cashToPayOff, string installment)
+        public LoansData(float cashToPayOff, float installment, int timeToPayOffLoan)
         {
             this.cashToPayOff = cashToPayOff;
             this.installment = installment;
+            this.timeToPayOffLoan = timeToPayOffLoan;
         }
     }
 

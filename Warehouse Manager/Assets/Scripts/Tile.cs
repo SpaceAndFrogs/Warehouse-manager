@@ -147,21 +147,6 @@ public class Tile : MonoBehaviour
         
     }
 
-    private void OnEnable()
-    {
-        SavingManager.OnSave += SaveTileData;
-    }
-
-    private void OnDisable()
-    {
-        SavingManager.OnSave -= SaveTileData;
-    }
-
-    void SaveTileData()
-    {
-        SavingManager.instance.saveData.tiles.Add(new SaveData.TileData(transform.position, transform.rotation, tileType.ToString()));
-    }
-
     void CheckForNeighbours()
     {
         RaycastHit hit;

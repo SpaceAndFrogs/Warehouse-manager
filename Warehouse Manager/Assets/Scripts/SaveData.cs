@@ -10,7 +10,6 @@ public class SaveData
     public List<PickStashData> pickStashes = new List<PickStashData>();
     public List<WorkerData> workers = new List<WorkerData>();
     public List<BuildingData> buildings = new List<BuildingData>();
-    public List<TileData> tiles = new List<TileData>();
     public List<MapFragmentData> mapFragments = new List<MapFragmentData>();
     public List<TaskData> tasks = new List<TaskData>();
     public List<BuildingIndicatorData> buildingIndicators = new List<BuildingIndicatorData>();
@@ -212,19 +211,6 @@ public class SaveData
             this.type = type;
             this.position = position;
             this.rotation = rotation;
-        }
-    }
-    [System.Serializable]
-    public class TileData
-    {
-        public Vector3 position;
-        public Quaternion rotation;
-        public string type;
-        public TileData(Vector3 position, Quaternion rotation, string type)
-        {
-            this.position = position;
-            this.rotation = rotation;
-            this.type = type;
         }
     }
     [System.Serializable]

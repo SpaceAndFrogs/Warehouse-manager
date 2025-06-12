@@ -68,21 +68,23 @@ public class SavingManager : MonoBehaviour
             // np. możesz pokazać pasek ładowania
             yield return null;
         }
-        
+
         OnMapLoad?.Invoke();
         OnBuildingsLoad?.Invoke();
         OnWorkersLoad?.Invoke();
         OnIndicatorsLoad?.Invoke();
+        OnPricesLoad?.Invoke();
     }
 
-    #nullable enable
+#nullable enable
     #region Events
-        public static event Action? OnSave;       
-        public static event Action? OnMapLoad;
-        public static event Action? OnBuildingsLoad;
-        public static event Action? OnWorkersLoad;
-        public static event Action? OnIndicatorsLoad;
+    public static event Action? OnSave;
+    public static event Action? OnMapLoad;
+    public static event Action? OnBuildingsLoad;
+    public static event Action? OnWorkersLoad;
+    public static event Action? OnIndicatorsLoad;
+    public static event Action? OnPricesLoad;
         
     #endregion
-    #nullable disable
+#nullable disable
 }

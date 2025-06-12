@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class PricesManager : MonoBehaviour
 {
@@ -154,9 +155,9 @@ public class PricesManager : MonoBehaviour
         {
             ItemPriceScript newItemPriceScript = Instantiate(itemPricePrefab.gameObject,pricesPanel.itemPricesListContent.transform).GetComponent<ItemPriceScript>();
             newItemPriceScript.itemName.text = itemsData.items[i].name;
-            float priceOfItem = Random.Range(itemsData.items[i].minMaxBuyPrice.x, itemsData.items[i].minMaxBuyPrice.y);
+            float priceOfItem = UnityEngine.Random.Range(itemsData.items[i].minMaxBuyPrice.x, itemsData.items[i].minMaxBuyPrice.y);
             newItemPriceScript.buyPrice.text = priceOfItem.ToString("F2") + "$";
-            float percentageOfDemand = Random.Range(itemsData.items[i].minMaxPercentageOfDemandPrice.x, itemsData.items[i].minMaxPercentageOfDemandPrice.y)/100;           
+            float percentageOfDemand = UnityEngine.Random.Range(itemsData.items[i].minMaxPercentageOfDemandPrice.x, itemsData.items[i].minMaxPercentageOfDemandPrice.y)/100;           
             newItemPriceScript.demandPrice.text = (priceOfItem + (priceOfItem*percentageOfDemand)).ToString("F2") + "$";
             newItemPriceScript.sellPriceInput.text = (priceOfItem + (priceOfItem*percentageOfDemand)).ToString("F2") + "$";
             newItemPriceScript.lockSellingButton.onClick.AddListener(() => LockSelling(newItemPriceScript));
@@ -203,6 +204,37 @@ public class PricesManager : MonoBehaviour
             itemPriceScript.lockSellingButton.GetComponentInChildren<TextMeshProUGUI>().text = "Yes";
             itemPriceScript.sellingLocked = true;
             return;
+        }
+    }
+
+    void OnEnable()
+    {
+        SavingManager.OnPricesLoad += LoadPrices;   
+    }
+
+    void OnDisable()
+    {
+        SavingManager.OnPricesLoad -= LoadPrices;
+    }
+
+    void LoadPrices()
+    {
+        for(int i = 0; i < itemPricesScripts.Count; i++)
+        {
+            itemPricesScripts[i].buyPrice.text = SavingManager.instance.saveData.itemPrices[i].buyPrice;
+            itemPricesScripts[i].demandPrice.text = SavingManager.instance.saveData.itemPrices[i].demandPrice;
+            itemPricesScripts[i].sellPriceInput.text = SavingManager.instance.saveData.itemPrices[i].sellPrice;
+            itemPricesScripts[i].itemName.text = SavingManager.instance.saveData.itemPrices[i].itemName;
+            itemPricesScripts[i].itemType = (Items.ItemType)Enum.Parse(typeof(Items.ItemType), SavingManager.instance.saveData.itemPrices[i].itemType);
+            itemPricesScripts[i].sellingLocked = SavingManager.instance.saveData.itemPrices[i].sellingLocked;
+
+            if(itemPricesScripts[i].sellingLocked)
+            {
+                itemPricesScripts[i].lockSellingButton.GetComponentInChildren<TextMeshProUGUI>().text = "Yes";
+            }else
+            {
+                itemPricesScripts[i].lockSellingButton.GetComponentInChildren<TextMeshProUGUI>().text = "No";
+            }
         }
     }
 

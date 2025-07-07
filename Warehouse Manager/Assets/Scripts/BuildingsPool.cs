@@ -39,7 +39,11 @@ public class BuildingsPool : MonoBehaviour
         List<SaveData.BuildingData> buildingData = SavingManager.instance.saveData.buildings;
         foreach (var data in buildingData)
         {
-            Building building = GetBuilding((Buildings.BuildingType)System.Enum.Parse(typeof(Buildings.BuildingType), data.type));
+            Buildings.BuildingType buildingType = (Buildings.BuildingType)System.Enum.Parse(typeof(Buildings.BuildingType), data.type);
+            if (buildingType == Buildings.BuildingType.Rack || buildingType == Buildings.BuildingType.PackStation || buildingType == Buildings.BuildingType.PickStash)
+                continue;
+
+                Building building = GetBuilding(buildingType);
             if (building != null)
             {
                 BuildingScript buildingScript = building.buildingObject.GetComponent<BuildingScript>();

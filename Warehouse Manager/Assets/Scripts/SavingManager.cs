@@ -64,17 +64,28 @@ public class SavingManager : MonoBehaviour
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1);
 
         while (!asyncLoad.isDone)
-        {
-            // np. możesz pokazać pasek ładowania
-            yield return null;
-        }
+        yield return null;
 
-        OnMapLoad?.Invoke();
-        OnBuildingsLoad?.Invoke();
-        OnWorkersLoad?.Invoke();
-        OnIndicatorsLoad?.Invoke();
-        OnPricesLoad?.Invoke();
-        OnLoansLoad?.Invoke();
+    OnMapLoad?.Invoke();
+    yield return null;
+
+    OnWorkersLoad?.Invoke();
+    yield return null;
+
+    OnBuildingsLoad?.Invoke();
+    yield return null;
+
+    OnIndicatorsLoad?.Invoke();
+    yield return null;
+
+    OnPricesLoad?.Invoke();
+    yield return null;
+
+    OnLoansLoad?.Invoke();
+    yield return null;
+
+    yield return new WaitForSeconds(0.1f);
+    OnTasksLoad?.Invoke();
     }
 
 #nullable enable
@@ -86,6 +97,7 @@ public class SavingManager : MonoBehaviour
     public static event Action? OnIndicatorsLoad;
     public static event Action? OnPricesLoad;
     public static event Action? OnLoansLoad;
+    public static event Action? OnTasksLoad;
         
     #endregion
 #nullable disable

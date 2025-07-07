@@ -7,6 +7,8 @@ public class BuildingsPool : MonoBehaviour
     public static BuildingsPool instance;
     [SerializeField]
     List<Building> buildings = new List<Building>();
+    [SerializeField]
+    Items itemsData;
 
     public Building GetBuilding(Buildings.BuildingType buildingType)
     {
@@ -50,6 +52,103 @@ public class BuildingsPool : MonoBehaviour
                 if (tile.building == null || tile.building.buildingType == Buildings.BuildingType.Floor)
                 {
                     tile.building = building;
+                }
+            }
+        }
+
+        List<SaveData.PickStashData> pickStashData = SavingManager.instance.saveData.pickStashes;
+        foreach (var data in pickStashData)
+        {
+            Building building = GetBuilding(Buildings.BuildingType.PickStash);
+            if (building != null)
+            {
+                building.buildingObject.transform.position = data.position;
+                building.buildingObject.transform.rotation = data.rotation;
+                building.buildingObject.SetActive(true);
+                Tile tile = GetTile(data.position);
+
+                if (tile.building == null || tile.building.buildingType == Buildings.BuildingType.Floor)
+                {
+                    tile.building = building;
+                }
+
+                PickStash pickStash= building.buildingObject.GetComponent<PickStash>();
+                if(pickStash != null)
+                {
+                    pickStash.tileWithStash = tile;
+                } 
+            }
+        }
+
+        List<SaveData.PackStationData> packStationData = SavingManager.instance.saveData.packStations;
+        foreach (var data in packStationData)
+        {
+            Building building = GetBuilding(Buildings.BuildingType.PackStation);
+            if (building != null)
+            {
+                building.buildingObject.transform.position = data.position;
+                building.buildingObject.transform.rotation = data.rotation;
+                building.buildingObject.SetActive(true);
+                Tile tile = GetTile(data.position);
+                if(tile == null)
+                {
+                    Debug.LogError("Tile not found at position: " + data.position);
+                    continue;
+                }
+
+                if (tile.building == null || tile.building.buildingType == Buildings.BuildingType.Floor)
+                {
+                    tile.building = building;
+                }
+
+                PackStation packStation = building.buildingObject.GetComponent<PackStation>();
+                if (packStation != null)
+                {
+                    packStation.tileWithStation = tile;
+                    packStation.isInRoom = data.isInRoom;
+                }
+                else
+                {
+                    Debug.LogError("PackStation component not found on PackStation building object.");
+                }
+            }
+        }
+
+        List<SaveData.RackData> rackData = SavingManager.instance.saveData.racks;
+        foreach (var data in rackData)
+        {
+            Building building = GetBuilding(Buildings.BuildingType.Rack);
+            if (building != null)
+            {
+                building.buildingObject.transform.position = data.position;
+                building.buildingObject.transform.rotation = data.rotation;
+                building.buildingObject.SetActive(true);
+                Tile tile = GetTile(data.position);
+
+                if (tile.building == null || tile.building.buildingType == Buildings.BuildingType.Floor)
+                {
+                    tile.building = building;
+                }
+
+                Rack rack = building.buildingObject.GetComponent<Rack>();
+                if (rack != null)
+                {
+                    rack.tileWithRack = tile;
+                    rack.isInRoom = data.isInRoom;
+                    rack.amountOfItems = data.amountOfItems;
+                    rack.reservedAmountOfItems = data.reservedAmountOfItems;
+                    rack.desiredAmountOfItems = data.desiredAmountOfItems;
+                    rack.maxAmountOfItems = data.maxAmountOfItems;
+                    Items.ItemType itemType = (Items.ItemType)System.Enum.Parse(typeof(Items.ItemType), data.itemType);
+                    Items.Item itemOnRack = null;
+                    for (int i = 0; i < itemsData.items.Count; i++)
+                    {
+                        if (itemsData.items[i].itemType == itemType)
+                        {
+                            itemOnRack = itemsData.items[i];
+                            break;
+                        }
+                    }
                 }
             }
         }

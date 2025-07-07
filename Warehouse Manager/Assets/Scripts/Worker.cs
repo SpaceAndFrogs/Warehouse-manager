@@ -21,7 +21,7 @@ public class Worker : MonoBehaviour
     #nullable enable
     public static event Action<Worker>? OnWorkerSpawned;
     public static event Action<Worker>? OnWorkerFired;
-    public static event Action<Tile, OrdersManager.Order>? OnOrderAddedToStash;
+    //public static event Action<Tile, OrdersManager.Order>? OnOrderAddedToStash;
     public static event Action? OnBuildingEnded;
     #nullable disable
 
@@ -239,7 +239,7 @@ public class Worker : MonoBehaviour
                         yield return new WaitForSeconds(stats.workSpeed + stats.workSpeed * 0.8f);
                     }
 
-                    OnOrderAddedToStash?.Invoke(pickStashTile,currentTask.order);
+                    //OnOrderAddedToStash?.Invoke(pickStashTile,currentTask.order);
                     currentTask.task.taskClass = TasksTypes.TaskClass.Pack;
                     currentTask.tileOfPickStashWithOrder = pickStashTile;
                     TaskManager.instance.packTasks.Enqueue(currentTask);
@@ -408,7 +408,7 @@ public class Worker : MonoBehaviour
 
     void SaveTask()
     {
-        if(currentTask == null  || currentTask.task.taskType == TasksTypes.TaskType.None)
+        if(currentTask == null)
             return;
 
         if (currentTask.task.taskClass == TasksTypes.TaskClass.Build)
@@ -422,7 +422,7 @@ public class Worker : MonoBehaviour
             SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), new Vector3(), null, racksWithItems, currentTask.order.orderPrice, new List<int>(currentTask.order.amountOfItemsFromRacks));
             SavingManager.instance.saveData.tasks.Add(taskData);
         }
-        else
+        else if(currentTask.task.taskClass == TasksTypes.TaskClass.Pack)
         {
             SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), currentTask.tileOfPickStashWithOrder.transform.position, null, null, currentTask.order.orderPrice, null);
             SavingManager.instance.saveData.tasks.Add(taskData);

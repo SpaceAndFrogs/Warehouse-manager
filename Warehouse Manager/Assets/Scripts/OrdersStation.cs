@@ -13,7 +13,28 @@ public class OrdersStation : MonoBehaviour
 
     void Start()
     {
+        if (tileWithStation== null)
+        {
+            tileWithStation = GetTile(transform.position);
+        }
         OnStationSpawned?.Invoke(this);
+    }
+    
+
+    Tile GetTile(Vector3 position)
+    {
+        Ray ray = new Ray(position+new Vector3(0f,100f,0f), Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            {
+                return tile;
+            }
+        }
+        return null;
     }
 
     void OnEnable()

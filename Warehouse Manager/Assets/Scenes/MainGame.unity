@@ -6192,6 +6192,7 @@ MonoBehaviour:
   - buildingType: 7
     buildingObject: {fileID: 6777885033127159899, guid: 3b209dae246bd2aa0b7453efa79acef6,
       type: 3}
+  itemsData: {fileID: 11400000, guid: 516308de50cceaa67bca7932d6684da3, type: 2}
 --- !u!4 &765220756
 Transform:
   m_ObjectHideFlags: 0

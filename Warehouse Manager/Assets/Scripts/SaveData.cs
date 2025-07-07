@@ -141,7 +141,8 @@ public class SaveData
         public int maxAmountOfItems;
         public Vector3 position;
         public Quaternion rotation;
-        public RackData(string itemType, int amountOfItems, int reservedAmountOfItems, int desiredAmountOfItems, int maxAmountOfItems, Vector3 position, Quaternion rotation)
+        public bool isInRoom;
+        public RackData(string itemType, int amountOfItems, int reservedAmountOfItems, int desiredAmountOfItems, int maxAmountOfItems, Vector3 position, Quaternion rotation, bool isInRoom)
         {
             this.itemType = itemType;
             this.amountOfItems = amountOfItems;
@@ -150,6 +151,7 @@ public class SaveData
             this.maxAmountOfItems = maxAmountOfItems;
             this.position = position;
             this.rotation = rotation;
+            this.isInRoom = isInRoom;
         }
     }
 
@@ -160,9 +162,8 @@ public class SaveData
         public bool isInRoom;
         public Vector3 position;
         public Quaternion rotation;
-        public PackStationData(bool havePackWorker, bool isInRoom, Vector3 position, Quaternion rotation)
+        public PackStationData(bool isInRoom, Vector3 position, Quaternion rotation)
         {
-            this.havePackWorker = havePackWorker;
             this.isInRoom = isInRoom;
             this.position = position;
             this.rotation = rotation;

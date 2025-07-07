@@ -15,8 +15,28 @@ public class PickStash : MonoBehaviour
     public List<OrdersManager.Order> orders = new List<OrdersManager.Order>();
     void Start()
     {
+        if (tileWithStash == null)
+        {
+            tileWithStash = GetTile(transform.position);
+        }
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStash);
         OnPickStashSpawned?.Invoke(this);
+    }
+
+    Tile GetTile(Vector3 position)
+    {
+        Ray ray = new Ray(position+new Vector3(0f,100f,0f), Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            {
+                return tile;
+            }
+        }
+        return null;
     }
 
     void AddNewOrder(Tile tile, OrdersManager.Order order)
@@ -43,6 +63,10 @@ public class PickStash : MonoBehaviour
 
     void CheckIfIsInRoom()
     {
+        if (tileWithStash == null)
+        {
+            tileWithStash = GetTile(transform.position);
+        }
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStash);
     }
 

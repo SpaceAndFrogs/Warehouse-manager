@@ -13,9 +13,31 @@ public class PackStation : MonoBehaviour
     public Tile tileWithStation;
 
     void Start()
-    {   
+    {
+        if (tileWithStation == null)
+        {
+            tileWithStation = GetTile(transform.position);
+        }
+        
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStation);
         OnPackStationSpawned?.Invoke(this);
+        
+    }
+
+    Tile GetTile(Vector3 position)
+    {
+        Ray ray = new Ray(position+new Vector3(0f,100f,0f), Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            {
+                return tile;
+            }
+        }
+        return null;
     }
 
     void OnEnable()
@@ -32,11 +54,15 @@ public class PackStation : MonoBehaviour
 
     void CheckIfIsInRoom()
     {
+        if (tileWithStation == null)
+        {
+            tileWithStation = GetTile(transform.position);
+        }
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithStation);
     }
 
     void SavePackStationData()
     {
-        SavingManager.instance.saveData.packStations.Add(new SaveData.PackStationData(havePackWorker, isInRoom, transform.position, transform.rotation));
+        SavingManager.instance.saveData.packStations.Add(new SaveData.PackStationData(isInRoom, transform.position, transform.rotation));
     }
 }

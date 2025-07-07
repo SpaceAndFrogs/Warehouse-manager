@@ -117,12 +117,14 @@ public class TaskManager : MonoBehaviour
     {
         Worker.OnBuildingEnded += FreeDropedTasks;
         SavingManager.OnSave += OnSave;
+        SavingManager.OnTasksLoad += LoadTasks;
     }
 
     void OnDisable()
     {
         Worker.OnBuildingEnded -= FreeDropedTasks;
         SavingManager.OnSave -= OnSave;
+        SavingManager.OnTasksLoad -= LoadTasks;
     }
     #endregion
 
@@ -471,6 +473,113 @@ public class TaskManager : MonoBehaviour
     #endregion
 
     #region Tasks Methods
+    void LoadTasks()
+    {
+        for (int i = 0; i < SavingManager.instance.saveData.tasks.Count; i++)
+        {
+            SaveData.TaskData taskData = SavingManager.instance.saveData.tasks[i];
+            TasksTypes.TaskClass taskClass = (TasksTypes.TaskClass)Enum.Parse(typeof(TasksTypes.TaskClass), taskData.taskClass);
+
+            switch (taskClass)
+            {
+                case TasksTypes.TaskClass.Build:
+                    {
+                        LoadBuildingTask(taskData);
+                        continue;
+                    }
+
+                case TasksTypes.TaskClass.Pick:
+                    {
+                        LoadPickTask(taskData);
+                        continue;
+                    }
+
+                case TasksTypes.TaskClass.Pack:
+                    {
+                        LoadPackTask(taskData);
+                        continue;
+                    }
+                
+            }
+        }
+    }
+
+    void LoadBuildingTask(SaveData.TaskData taskData)
+    { 
+
+    }
+
+    void LoadPickTask(SaveData.TaskData taskData)
+    {
+        Queue<Rack> racksWithItems = ConvertPositionsToRacks(taskData.positionOfRacksWithItems);
+        OrdersManager.Order order = new OrdersManager.Order(racksWithItems, taskData.orderPrice, new Queue<int>(taskData.amountOfItemsFromRacks));
+        Task newPickTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pick),null,null,null,null,null, order,null);
+        pickTasks.Enqueue(newPickTask);
+    }
+
+    Queue<Rack> ConvertPositionsToRacks(List<Vector3> positions)
+    {
+        Queue<Rack> racks = new Queue<Rack>();
+
+        for (int i = 0; i < positions.Count; i++)
+        {
+            Rack rack = FindRackByPosition(positions[i]);
+            if (rack != null)
+            {
+                racks.Enqueue(rack);
+            }
+            else
+            {
+                Debug.LogWarning("Rack not found at position: " + positions[i]);
+            }
+        }
+
+        return racks;
+    }
+
+    Rack FindRackByPosition(Vector3 position)
+    {
+        Ray ray = new Ray(position + Vector3.up * 100f, Vector3.down);
+        float sphereRadius = 0.1f;
+        float distance = 200f;
+
+        RaycastHit[] hits = Physics.SphereCastAll(ray, sphereRadius, distance);
+
+        foreach (RaycastHit hit in hits)
+        {
+            Debug.Log("HIT: " + hit.collider.name);
+            Rack rack = hit.collider.gameObject.GetComponent<Rack>();
+            if (rack != null)
+            {
+                return rack;
+            }
+        }
+        return null;
+
+    }
+
+    void LoadPackTask(SaveData.TaskData taskData)
+    { 
+        OrdersManager.Order order = new OrdersManager.Order(new Queue<Rack>(), taskData.orderPrice, new Queue<int>(taskData.amountOfItemsFromRacks));
+        Task newPackTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pack),null,null,null,null,null, order,FindTileOfPickStashByPosition(taskData.positionOfTileWithPickStah));
+        packTasks.Enqueue(newPackTask);
+    }
+    
+    Tile FindTileOfPickStashByPosition(Vector3 position)
+    {
+        Ray ray = new Ray(position + new Vector3(0f, 100f, 0f), Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            {
+                return tile;
+            }
+        }
+        return null;
+    }
 
     void OnSave()
     {

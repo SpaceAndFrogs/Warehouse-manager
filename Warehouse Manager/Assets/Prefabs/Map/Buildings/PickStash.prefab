@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3791172094462707078}
   - component: {fileID: -7518286632935237057}
   - component: {fileID: 4886948364072426054}
+  - component: {fileID: 6179813242358614104}
   m_Layer: 0
   m_Name: PickStash
   m_TagString: Untagged
@@ -150,3 +151,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 6835610730845378970}
+  canMove: 0
+  posTolerance: 0.1
+--- !u!114 &6179813242358614104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851040814126902023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47935333348d7fb49b59d653dea523ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  building:
+    buildingType: 5
+    buildingObject: {fileID: 8851040814126902023}

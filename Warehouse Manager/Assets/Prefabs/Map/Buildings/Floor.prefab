@@ -120,8 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   building:
-    buildingType: 0
-    buildingObject: {fileID: 0}
+    buildingType: 1
+    buildingObject: {fileID: 6777885033127159899}
 --- !u!114 &1902026469204955085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,3 +136,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer:
   - {fileID: 5604438014675212090}
+  canMove: 0
+  posTolerance: 0.1

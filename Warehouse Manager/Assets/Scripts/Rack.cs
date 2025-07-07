@@ -26,6 +26,10 @@ public class Rack : MonoBehaviour
 
     void Start()
     {
+        if(tileWithRack == null)
+        {
+            tileWithRack = GetTile(transform.position);
+        }
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithRack);
         OnRackSpawned?.Invoke(this);
     }
@@ -74,13 +78,33 @@ public class Rack : MonoBehaviour
         SavingManager.OnSave -= SaveRack;
     }
 
+    Tile GetTile(Vector3 position)
+    {
+        Ray ray = new Ray(position + new Vector3(0f, 100f, 0f), Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
+            if (tile != null)
+            {
+                return tile;
+            }
+        }
+        return null;
+    }
+
     void CheckIfIsInRoom()
     {
+        if(tileWithRack == null)
+        {
+            tileWithRack = GetTile(transform.position);
+        }
         isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithRack);
     }
 
     void SaveRack()
     {
-        SavingManager.instance.saveData.racks.Add(new SaveData.RackData(itemOnRack.itemType.ToString(), amountOfItems, reservedAmountOfItems, desiredAmountOfItems, maxAmountOfItems, transform.position, transform.rotation));       
+        SavingManager.instance.saveData.racks.Add(new SaveData.RackData(itemOnRack.itemType.ToString(), amountOfItems, reservedAmountOfItems, desiredAmountOfItems, maxAmountOfItems, transform.position, transform.rotation, isInRoom));       
     }
 }

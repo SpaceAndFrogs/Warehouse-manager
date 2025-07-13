@@ -127,6 +127,10 @@ public class IndicatorsPool : MonoBehaviour
             this.isAffirmative = isAffirmative;
         }
 
+        public TaskIndicator()
+        {
+            
+        }
 
         public TaskIndicator GetIndicator()
         {
@@ -250,6 +254,11 @@ public class IndicatorsPool : MonoBehaviour
             this.indicatorObject = indicatorObject;
             this.indicatorsInPool = new Queue<BuildingIndicator>();
             this.isAffirmative = isAffirmative;
+        }
+
+        public BuildingIndicator()
+        {
+
         }
 
 

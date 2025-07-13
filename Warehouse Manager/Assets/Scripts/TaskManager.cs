@@ -505,8 +505,91 @@ public class TaskManager : MonoBehaviour
     }
 
     void LoadBuildingTask(SaveData.TaskData taskData)
-    { 
+    {
+        Tile tileWithTask = FindTileByPosition(taskData.positionOfTileWithTask);
+        TasksTypes.Task task = new TasksTypes.Task((TasksTypes.TaskClass)Enum.Parse(typeof(TasksTypes.TaskClass), taskData.taskClass));
+        task.taskType = (TasksTypes.TaskType)Enum.Parse(typeof(TasksTypes.TaskType), taskData.type);
+        task.tileTypeAfterTask = (TileTypes.TileType)Enum.Parse(typeof(TileTypes.TileType), taskData.tileTypeAfterTask);
+        for (int i = 0; i < tasksTypes.tasks.Count; i++)
+        {
+            if (tasksTypes.tasks[i].taskType == task.taskType && tasksTypes.tasks[i].taskClass == task.taskClass)
+            {
+                task.cost = tasksTypes.tasks[i].cost;
+                task.taskTime = tasksTypes.tasks[i].taskTime;
+                break;
+            }
+        }
 
+        Buildings.Building building = null;
+        if (task.taskType == TasksTypes.TaskType.Build)
+        {
+            for (int i = 0; i < buildings.buildings.Count; i++)
+            {
+                if (buildings.buildings[i].buildingType.ToString() == taskData.buildingType)
+                {
+                    building = buildings.buildings[i];
+                    break;
+                }
+            }
+        }
+
+        IndicatorScript indicatorScript = GetIndicatorScriptByPosition(tileWithTask.transform.position);
+        IndicatorsPool.BuildingIndicator buildingIndicator = new IndicatorsPool.BuildingIndicator();
+        IndicatorsPool.TaskIndicator taskIndicator = new IndicatorsPool.TaskIndicator();
+
+        if (indicatorScript.buildingType != Buildings.BuildingType.None)
+        {
+            for (int i = 0; i < IndicatorsPool.instance.buildingIndicators.Count; i++)
+            {
+                if (IndicatorsPool.instance.buildingIndicators[i].buildingType == indicatorScript.buildingType)
+                {
+                    buildingIndicator.buildingType = indicatorScript.buildingType;
+                    buildingIndicator.indicatorObject = indicatorScript.gameObject;
+                    buildingIndicator.isAffirmative = indicatorScript.isAffirmative;
+                    buildingIndicator.indicatorsInPool = new Queue<IndicatorsPool.BuildingIndicator>();
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < IndicatorsPool.instance.taskIndicators.Count; i++)
+            {
+                if (IndicatorsPool.instance.taskIndicators[i].taskType == task.taskType)
+                {
+                    taskIndicator.taskType = task.taskType;
+                    taskIndicator.indicatorObject = indicatorScript.gameObject;
+                    taskIndicator.isAffirmative = indicatorScript.isAffirmative;
+                    taskIndicator.indicatorsInPool = new Queue<IndicatorsPool.TaskIndicator>();
+                    break;
+                }
+            }
+        }
+
+
+
+
+        Task newBuildingTask = new Task(task, tileWithTask, building, indicatorScript.transform, buildingIndicator, taskIndicator, null, null);
+        
+        buildingTasks.Enqueue(newBuildingTask);
+    }
+
+    IndicatorScript GetIndicatorScriptByPosition(Vector3 position)
+    {
+        Ray ray = new Ray(position + Vector3.up * 100f, Vector3.down);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        foreach (RaycastHit hit in hits)
+        {
+            IndicatorScript indicatorScript = hit.collider.gameObject.GetComponent<IndicatorScript>();
+            if (indicatorScript != null)
+            {
+                return indicatorScript;
+            }
+        }
+
+        Debug.LogWarning("No indicator found at position: " + position);
+        return null;
     }
 
     void LoadPickTask(SaveData.TaskData taskData)
@@ -561,11 +644,11 @@ public class TaskManager : MonoBehaviour
     void LoadPackTask(SaveData.TaskData taskData)
     { 
         OrdersManager.Order order = new OrdersManager.Order(new Queue<Rack>(), taskData.orderPrice, new Queue<int>(taskData.amountOfItemsFromRacks));
-        Task newPackTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pack),null,null,null,null,null, order,FindTileOfPickStashByPosition(taskData.positionOfTileWithPickStah));
+        Task newPackTask = new Task(new TasksTypes.Task(TasksTypes.TaskClass.Pack),null,null,null,null,null, order,FindTileByPosition(taskData.positionOfTileWithPickStah));
         packTasks.Enqueue(newPackTask);
     }
     
-    Tile FindTileOfPickStashByPosition(Vector3 position)
+    Tile FindTileByPosition(Vector3 position)
     {
         Ray ray = new Ray(position + new Vector3(0f, 100f, 0f), Vector3.down);
         RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
@@ -588,7 +671,7 @@ public class TaskManager : MonoBehaviour
         {
             Task task = buildingTasks.Dequeue();
 
-            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), task.tileWithTask.transform.position, new Vector3(), task.task.tileTypeAfterTask.ToString(), new List<Vector3>(), 0, new List<int>()));
+            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), task.tileWithTask.transform.position, new Vector3(), task.task.tileTypeAfterTask.ToString(), new List<Vector3>(), 0, new List<int>(),task.building.buildingType.ToString(),task.rotationTransform.rotation.eulerAngles));
         }
 
         for (int i = 0; i < pickTasks.Count; i++)
@@ -597,14 +680,14 @@ public class TaskManager : MonoBehaviour
 
             List<Vector3> racksWithItems = ConvertRacksToVector3(new List<Rack>(task.order.racksWithItems));
 
-            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), new Vector3(), new Vector3(), null, racksWithItems, task.order.orderPrice, new List<int>(task.order.amountOfItemsFromRacks)));
+            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), new Vector3(), new Vector3(), null, racksWithItems, task.order.orderPrice, new List<int>(task.order.amountOfItemsFromRacks),null, Vector3.zero));
         }
 
         for (int i = 0; i < packTasks.Count; i++)
         {
             Task task = packTasks.Dequeue();
 
-            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), new Vector3(), task.tileOfPickStashWithOrder.transform.position, null, null, task.order.orderPrice, null));
+            SavingManager.instance.saveData.tasks.Add(new SaveData.TaskData(task.task.taskType.ToString(), task.task.taskClass.ToString(), new Vector3(), task.tileOfPickStashWithOrder.transform.position, null, null, task.order.orderPrice, null,null,Vector3.zero));
         }
 
     }

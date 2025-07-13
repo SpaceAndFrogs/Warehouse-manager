@@ -261,6 +261,7 @@ GameObject:
   - component: {fileID: -2186468725368625639}
   - component: {fileID: 2087148470030254884}
   - component: {fileID: 7458437561235351601}
+  - component: {fileID: 6269843211365852556}
   m_Layer: 0
   m_Name: IndicatorDoorAffirmative
   m_TagString: Untagged
@@ -333,3 +334,24 @@ MonoBehaviour:
   buildingType: 7
   isAffirmative: 1
   isWorkerSpawner: 0
+--- !u!65 &6269843211365852556
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6777885033127159899}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.9962058, y: 0.3455659, z: 1}
+  m_Center: {x: 0.011652932, y: 0.051247105, z: 0}

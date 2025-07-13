@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -4579067271085300302}
   - component: {fileID: -2655373330072894300}
   - component: {fileID: 4948572897380281951}
+  - component: {fileID: 1013723389060185318}
   m_Layer: 0
   m_Name: DryAffirmative
   m_TagString: Untagged
@@ -131,3 +132,24 @@ MonoBehaviour:
   buildingType: 0
   isAffirmative: 1
   isWorkerSpawner: 0
+--- !u!65 &1013723389060185318
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322173429083555654}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.48633516, y: 1.4860286, z: 0.15467943}
+  m_Center: {x: -0.0003233105, y: 0.33679634, z: -0.0070867985}

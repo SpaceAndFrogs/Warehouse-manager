@@ -31,8 +31,10 @@ public class SaveData
         public List<Vector3> positionOfRacksWithItems = new List<Vector3>();
         public List<int> amountOfItemsFromRacks = new List<int>();
         public float orderPrice;
+        public string buildingType;
+        public Vector3 rotation;
 
-        public TaskData(string type, string taskClass, Vector3 positionOfTileWithTask, Vector3 positionOfTileWithPickStah, string tileTypeAfterTask, List<Vector3> positionOfRacksWithItems, float orderPrice, List<int> amountOfItemsFromRacks)
+        public TaskData(string type, string taskClass, Vector3 positionOfTileWithTask, Vector3 positionOfTileWithPickStah, string tileTypeAfterTask, List<Vector3> positionOfRacksWithItems, float orderPrice, List<int> amountOfItemsFromRacks, string buildingType, Vector3 rotation)
         {
             this.type = type;
             this.taskClass = taskClass;
@@ -42,6 +44,8 @@ public class SaveData
             this.positionOfRacksWithItems = positionOfRacksWithItems;
             this.orderPrice = orderPrice;
             this.amountOfItemsFromRacks = amountOfItemsFromRacks;
+            this.buildingType = buildingType;
+            this.rotation = rotation;
         }
     }    
 

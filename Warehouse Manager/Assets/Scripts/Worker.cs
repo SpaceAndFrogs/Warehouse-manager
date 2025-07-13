@@ -413,18 +413,18 @@ public class Worker : MonoBehaviour
 
         if (currentTask.task.taskClass == TasksTypes.TaskClass.Build)
         {
-            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), currentTask.tileWithTask.transform.position, new Vector3(), currentTask.task.tileTypeAfterTask.ToString(), new List<Vector3>(), 0, new List<int>());
+            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), currentTask.tileWithTask.transform.position, new Vector3(), currentTask.task.tileTypeAfterTask.ToString(), new List<Vector3>(), 0, new List<int>(),currentTask.building.buildingType.ToString(), currentTask.rotationTransform.rotation.eulerAngles);
             SavingManager.instance.saveData.tasks.Add(taskData);
         }
         else if (currentTask.task.taskClass == TasksTypes.TaskClass.Pick)
         {
             List<Vector3> racksWithItems = ConvertRacksToVector3(new List<Rack>(currentTask.order.racksWithItems));
-            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), new Vector3(), null, racksWithItems, currentTask.order.orderPrice, new List<int>(currentTask.order.amountOfItemsFromRacks));
+            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), new Vector3(), null, racksWithItems, currentTask.order.orderPrice, new List<int>(currentTask.order.amountOfItemsFromRacks),null,Vector3.zero);
             SavingManager.instance.saveData.tasks.Add(taskData);
         }
         else if(currentTask.task.taskClass == TasksTypes.TaskClass.Pack)
         {
-            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), currentTask.tileOfPickStashWithOrder.transform.position, null, null, currentTask.order.orderPrice, null);
+            SaveData.TaskData taskData = new SaveData.TaskData(currentTask.task.taskType.ToString(), currentTask.task.taskClass.ToString(), new Vector3(), currentTask.tileOfPickStashWithOrder.transform.position, null, null, currentTask.order.orderPrice, null,null,Vector3.zero);
             SavingManager.instance.saveData.tasks.Add(taskData);
         }
     }

@@ -43,9 +43,9 @@ public class WorkersManager : MonoBehaviour
         }
     }
 
-    public void SpawnWorker(Worker.Stats stats, WorkerRecordScript workerRecordScript)
+    public void SpawnWorker(WorkerBase.Stats stats, WorkerRecordScript workerRecordScript)
     {
-        Worker worker = WorkersPool.instance.GetWorker(stats.workerType,stats);
+        WorkerBase worker = WorkersPool.instance.GetWorker(stats.workerType,stats);
         worker.transform.position = posToSpawnWorkers;
         worker.HireWorker();
         workers.Add(worker);

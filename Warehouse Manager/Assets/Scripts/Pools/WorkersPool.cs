@@ -7,7 +7,7 @@ public class WorkersPool : MonoBehaviour
     public static WorkersPool instance;
     [SerializeField]
     List<WorkerClass> workers = new List<WorkerClass>();
-    public Worker GetWorker(WorkerData.WorkerType workerType, Worker.Stats stats)
+    public WorkerBase GetWorker(WorkerData.WorkerType workerType, WorkerBase.Stats stats)
     {
         foreach(WorkerClass workerClass in workers)
         {
@@ -20,7 +20,7 @@ public class WorkersPool : MonoBehaviour
         return null;
     }
 
-    public void ReturnWorker(Worker worker)
+    public void ReturnWorker(WorkerBase worker)
     {
         foreach(WorkerClass workerClass in workers)
         {
@@ -35,14 +35,14 @@ public class WorkersPool : MonoBehaviour
     public class WorkerClass
     {
         public WorkerData.WorkerType workerType;
-        public Worker workerObject;
-        public Queue<Worker> workersInPool = new Queue<Worker>();
+        public WorkerBase workerObject;
+        public Queue<WorkerBase> workersInPool = new Queue<WorkerBase>();
 
-        public Worker GetWorker(Worker.Stats stats)
+        public WorkerBase GetWorker(WorkerBase.Stats stats)
         {
             if(workersInPool == null)
             {
-                workersInPool = new Queue<Worker>();
+                workersInPool = new Queue<WorkerBase>();
             }
 
             if(workersInPool.Count == 0)
@@ -50,18 +50,18 @@ public class WorkersPool : MonoBehaviour
                 MakeWorker();
             }
 
-            Worker worker = workersInPool.Dequeue();
+            WorkerBase worker = workersInPool.Dequeue();
             worker.stats = stats;
             return worker;
         }
 
         void MakeWorker()
         {
-            Worker worker = Instantiate(workerObject, instance.transform.position, instance.transform.rotation);
+            WorkerBase worker = Instantiate(workerObject, instance.transform.position, instance.transform.rotation);
             workersInPool.Enqueue(worker);
         }
 
-        public void ReturnWorker(Worker worker)
+        public void ReturnWorker(WorkerBase worker)
         {
             worker.transform.position = instance.transform.position;
             worker.stats = null;

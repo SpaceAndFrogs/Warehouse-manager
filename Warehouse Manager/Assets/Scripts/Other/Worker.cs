@@ -21,7 +21,6 @@ public class Worker : MonoBehaviour
     #nullable enable
     public static event Action<Worker>? OnWorkerSpawned;
     public static event Action<Worker>? OnWorkerFired;
-    //public static event Action<Tile, OrdersManager.Order>? OnOrderAddedToStash;
     public static event Action? OnBuildingEnded;
     #nullable disable
 
@@ -239,7 +238,6 @@ public class Worker : MonoBehaviour
                         yield return new WaitForSeconds(stats.workSpeed + stats.workSpeed * 0.8f);
                     }
 
-                    //OnOrderAddedToStash?.Invoke(pickStashTile,currentTask.order);
                     currentTask.task.taskClass = TasksTypes.TaskClass.Pack;
                     currentTask.tileOfPickStashWithOrder = pickStashTile;
                     TaskManager.instance.packTasks.Enqueue(currentTask);

@@ -1084,7 +1084,7 @@ public class TaskManager : MonoBehaviour
     #endregion
     
     #region Worker Methods
-    public void ReturnWorker(Worker worker)
+    public void ReturnWorker(WorkerBase worker)
     {
         switch (worker.stats.workerType)
         {
@@ -1107,7 +1107,7 @@ public class TaskManager : MonoBehaviour
         
     }
 
-    public void FireWorker(Worker worker)
+    public void FireWorker(WorkerBase worker)
     {
         switch(worker.stats.workerType)
         {

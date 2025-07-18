@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 562298566339427984}
   - component: {fileID: 6262584920522932717}
   - component: {fileID: 720062394785637295}
-  - component: {fileID: 7320657417775280965}
   - component: {fileID: 6300641258072856168}
+  - component: {fileID: -4074762257280269991}
   m_Layer: 3
-  m_Name: Worker
+  m_Name: PackWorker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,7 +137,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &7320657417775280965
+--- !u!114 &6300641258072856168
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,7 +146,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 7432142665284801768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec7e393427204234092776b6088a2d47, type: 3}
+  m_Script: {fileID: 11500000, guid: 73e241d7e236626f59506205e0c11581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer:
+  - {fileID: 562298566339427984}
+  canMove: 1
+  posTolerance: 0.75
+--- !u!114 &-4074762257280269991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7432142665284801768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ecdd7bf4a1d1200963e04b2e52fd17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   endNode: {fileID: 0}
@@ -189,20 +205,4 @@ MonoBehaviour:
       isAffirmative: 0
   packStationTile: {fileID: 0}
   pickStashTile: {fileID: 0}
-  goingToPickStash: 0
---- !u!114 &6300641258072856168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7432142665284801768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73e241d7e236626f59506205e0c11581, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshRenderer:
-  - {fileID: 562298566339427984}
-  canMove: 1
-  posTolerance: 0.75
+  goingToPickStash: 1

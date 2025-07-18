@@ -157,7 +157,7 @@ public class BuildingsPool : MonoBehaviour
             }
         }
 
-        Worker.NotifyBuildingEnded();
+        BuildingWorker.NotifyBuildingEnded();
     }
 
     Tile GetTile(Vector3 position)

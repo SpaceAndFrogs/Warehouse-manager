@@ -68,13 +68,13 @@ public class Rack : MonoBehaviour
 
     void OnEnable()
     {
-        Worker.OnBuildingEnded += CheckIfIsInRoom;
+        BuildingWorker.OnBuildingEnded += CheckIfIsInRoom;
         SavingManager.OnSave += SaveRack;
     }
 
     void OnDisable()
     {
-        Worker.OnBuildingEnded -= CheckIfIsInRoom;
+        BuildingWorker.OnBuildingEnded -= CheckIfIsInRoom;
         SavingManager.OnSave -= SaveRack;
     }
 

@@ -40,9 +40,9 @@ public class TaskManager : MonoBehaviour
     #endregion
     
     #region Workers Variables
-    public HashSet<Worker> freeBuilders = new HashSet<Worker>();
-    public Queue<Worker> freePickWorkers = new Queue<Worker>();
-    public Queue<Worker> freePackWorkers = new Queue<Worker>();
+    public HashSet<BuildingWorker> freeBuilders = new HashSet<BuildingWorker>();
+    public Queue<PickWorker> freePickWorkers = new Queue<PickWorker>();
+    public Queue<PackWorker> freePackWorkers = new Queue<PackWorker>();
     #endregion
 
     #region Ui Variables
@@ -115,14 +115,14 @@ public class TaskManager : MonoBehaviour
 
     void OnEnable()
     {
-        Worker.OnBuildingEnded += FreeDropedTasks;
+        BuildingWorker.OnBuildingEnded += FreeDropedTasks;
         SavingManager.OnSave += OnSave;
         SavingManager.OnTasksLoad += LoadTasks;
     }
 
     void OnDisable()
     {
-        Worker.OnBuildingEnded -= FreeDropedTasks;
+        BuildingWorker.OnBuildingEnded -= FreeDropedTasks;
         SavingManager.OnSave -= OnSave;
         SavingManager.OnTasksLoad -= LoadTasks;
     }
@@ -814,7 +814,7 @@ public class TaskManager : MonoBehaviour
         {
             Task givenTask = buildingTasks.Dequeue();
 
-            Worker workerForTask = FindClosestWorker(givenTask.tileWithTask);
+            BuildingWorker workerForTask = FindClosestWorker(givenTask.tileWithTask);
 
             if (workerForTask == null)
             {
@@ -847,7 +847,7 @@ public class TaskManager : MonoBehaviour
             if(freePickWorkers.Count == 0)
                 break;
 
-            Worker workerForTask = freePickWorkers.Dequeue();
+            WorkerBase workerForTask = freePickWorkers.Dequeue();
                 
             workerForTask.GetTask(pickTasks.Dequeue());
         }   
@@ -866,7 +866,7 @@ public class TaskManager : MonoBehaviour
             if(freePackWorkers.Count == 0)
                 break;
 
-            Worker workerForTask = freePackWorkers.Dequeue();
+            WorkerBase workerForTask = freePackWorkers.Dequeue();
                 
             workerForTask.GetTask(packTasks.Dequeue());
         }
@@ -1090,17 +1090,20 @@ public class TaskManager : MonoBehaviour
         {
             case WorkerData.WorkerType.Builder:
                 {
-                    freeBuilders.Add(worker);
+                    BuildingWorker buildingWorker = worker.GetComponent<BuildingWorker>();
+                    freeBuilders.Add(buildingWorker);
                     break;
                 }
             case WorkerData.WorkerType.Pick:
                 {
-                    freePickWorkers.Enqueue(worker);
+                    PickWorker pickWorker = worker.GetComponent<PickWorker>();
+                    freePickWorkers.Enqueue(pickWorker);
                     break;
                 }
             case WorkerData.WorkerType.Pack:
                 {
-                    freePackWorkers.Enqueue(worker);
+                    PackWorker packWorker = worker.GetComponent<PackWorker>();
+                    freePackWorkers.Enqueue(packWorker);
                     break;
                 }
         }
@@ -1113,15 +1116,17 @@ public class TaskManager : MonoBehaviour
         {
             case WorkerData.WorkerType.Builder:
                 {
-                    freeBuilders.Remove(worker);
+                    BuildingWorker buildingWorker = worker.GetComponent<BuildingWorker>();
+                    freeBuilders.Remove(buildingWorker);
                     return;
                 }
             case WorkerData.WorkerType.Pick:
                 {
-                    Queue<Worker> checkedWorkers = new Queue<Worker>();
+
+                    Queue<PickWorker> checkedWorkers = new Queue<PickWorker>();
                     while(freePickWorkers.Count > 0)
                     {
-                        Worker workerInCheck = freePickWorkers.Dequeue();
+                        PickWorker workerInCheck = freePickWorkers.Dequeue();
                         if(workerInCheck != worker)
                         {
                             checkedWorkers.Enqueue(workerInCheck);
@@ -1133,10 +1138,10 @@ public class TaskManager : MonoBehaviour
                 }
             case WorkerData.WorkerType.Pack:
                 {
-                    Queue<Worker> checkedWorkers = new Queue<Worker>();
+                    Queue<PackWorker> checkedWorkers = new Queue<PackWorker>();
                     while (freePackWorkers.Count > 0)
                     {
-                        Worker workerInCheck = freePackWorkers.Dequeue();
+                        PackWorker workerInCheck = freePackWorkers.Dequeue();
                         if (workerInCheck != worker)
                         {
                             checkedWorkers.Enqueue(workerInCheck);
@@ -1149,12 +1154,12 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    Worker FindClosestWorker(Tile endTile)
+    BuildingWorker FindClosestWorker(Tile endTile)
     {
         int currentClosestPath = MapGenerator.instance.GetAmountOfAllTiles();
-        Worker currentClosestWorker = null;
+        WorkerBase currentClosestWorker = null;
 
-        foreach(Worker worker in freeBuilders)
+        foreach(WorkerBase worker in freeBuilders)
         {
             Queue<Tile> path = PathFinder.instance.FindPath(worker.startNode, endTile);
 
@@ -1169,7 +1174,11 @@ public class TaskManager : MonoBehaviour
         }
 
         if (currentClosestWorker! != null)
-            return currentClosestWorker;
+        {
+            BuildingWorker worker = currentClosestWorker.GetComponent<BuildingWorker>();
+            return worker;
+        }
+            
 
         return null;
     }

@@ -12,5 +12,5 @@ public class WorkerRecordScript : MonoBehaviour
     public TextMeshProUGUI salaryTMP;
     public TextMeshProUGUI workerTypeTMP;
     public Button actionButton;
-    public Worker worker = null;
+    public WorkerBase worker = null;
 }

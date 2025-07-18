@@ -7,8 +7,8 @@ public class PickPackStationsManager : MonoBehaviour
     public List<PackStation> packStations = new List<PackStation>();
     public List<PickStash> pickStashes = new List<PickStash>();
 
-    public List<Worker> packWorkers = new List<Worker>();
-    public List<Worker> pickWorkers = new List<Worker>();
+    public List<PackWorker> packWorkers = new List<PackWorker>();
+    public List<PickWorker> pickWorkers = new List<PickWorker>();
 
     public OrdersStation ordersStation = null;
 
@@ -28,8 +28,8 @@ public class PickPackStationsManager : MonoBehaviour
     void OnEnable()
     {
         PackStation.OnPackStationSpawned += AddNewPackStation;
-        Worker.OnWorkerSpawned += AddNewWorker;
-        Worker.OnWorkerFired += RemoveWorker;
+        WorkerBase.OnWorkerSpawned += AddNewWorker;
+        WorkerBase.OnWorkerFired += RemoveWorker;
         PickStash.OnPickStashSpawned += AddNewPickStash;
         OrdersStation.OnStationSpawned += AddOrderStation;
     }
@@ -37,8 +37,8 @@ public class PickPackStationsManager : MonoBehaviour
     void OnDisable()
     {
         PackStation.OnPackStationSpawned -= AddNewPackStation;
-        Worker.OnWorkerSpawned -= AddNewWorker;
-        Worker.OnWorkerFired -= RemoveWorker;
+        WorkerBase.OnWorkerSpawned -= AddNewWorker;
+        WorkerBase.OnWorkerFired -= RemoveWorker;
         PickStash.OnPickStashSpawned -= AddNewPickStash;
         OrdersStation.OnStationSpawned -= AddOrderStation;
     }
@@ -63,19 +63,19 @@ public class PickPackStationsManager : MonoBehaviour
         packStations.Add(packStation);
     }
 
-    void RemoveWorker(Worker worker)
+    void RemoveWorker(WorkerBase worker)
     {
+        
         if (worker.stats.workerType == WorkerData.WorkerType.Pack)
         {
-            
-
+            PackWorker packWorker = worker.GetComponent<PackWorker>();
             for (int i = 0; i < packStations.Count; i++)
             {
-                if (packStations[i].havePackWorker && worker.packStationTile == packStations[i].tileWithStation)
+                if (packStations[i].havePackWorker && packWorker.packStationTile == packStations[i].tileWithStation)
                 {
                     packStations[i].havePackWorker = false;
-                    worker.packStationTile = null;
-                    packWorkers.Remove(worker);
+                    packWorker.packStationTile = null;
+                    packWorkers.Remove(packWorker);
                     break;
                 }
             }
@@ -84,7 +84,8 @@ public class PickPackStationsManager : MonoBehaviour
         }
         else if (worker.stats.workerType == WorkerData.WorkerType.Pick)
         {
-            pickWorkers.Remove(worker);
+            PickWorker pickWorker = worker.GetComponent<PickWorker>();
+            pickWorkers.Remove(pickWorker);
             return;
         }
         else
@@ -93,19 +94,20 @@ public class PickPackStationsManager : MonoBehaviour
         }
     }
 
-    void AddNewWorker(Worker worker)
+    void AddNewWorker(WorkerBase worker)
     {
         if(worker.stats.workerType == WorkerData.WorkerType.Pack)
         {
-            packWorkers.Add(worker);
+            PackWorker packWorker = worker.GetComponent<PackWorker>();
+            packWorkers.Add(packWorker);
             
             for(int i = 0; i < packStations.Count; i++)
             {
                 if(!packStations[i].havePackWorker)
                 {
                     packStations[i].havePackWorker = true;
-                    worker.packStationTile = packStations[i].tileWithStation;
-                    worker.GoToStation();
+                    packWorker.packStationTile = packStations[i].tileWithStation;
+                    packWorker.GoToStation();
                     break;
                 }
             }
@@ -113,10 +115,11 @@ public class PickPackStationsManager : MonoBehaviour
             return;
         }else if(worker.stats.workerType == WorkerData.WorkerType.Pick)
         {
-            pickWorkers.Add(worker);
+            PickWorker pickWorker = worker.GetComponent<PickWorker>();
+            pickWorkers.Add(pickWorker);
             if(ordersStation != null)
             {
-                worker.GoToStation();
+                pickWorker.GoToStation();
             }            
             return;
         }else

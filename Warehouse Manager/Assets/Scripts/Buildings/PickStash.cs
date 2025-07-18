@@ -51,13 +51,13 @@ public class PickStash : MonoBehaviour
 
     void OnEnable()
     {
-        Worker.OnBuildingEnded += CheckIfIsInRoom;
+        BuildingWorker.OnBuildingEnded += CheckIfIsInRoom;
         SavingManager.OnSave += SavePickStashData;
     }
 
     void OnDisable()
     {
-        Worker.OnBuildingEnded -= CheckIfIsInRoom;
+        BuildingWorker.OnBuildingEnded -= CheckIfIsInRoom;
         SavingManager.OnSave -= SavePickStashData;
     }
 

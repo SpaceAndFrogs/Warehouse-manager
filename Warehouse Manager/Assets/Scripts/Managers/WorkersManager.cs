@@ -18,7 +18,7 @@ public class WorkersManager : MonoBehaviour
     WorkersPanel workersPanel;
     bool isSettingWorkersSpawn = false;
     [SerializeField]
-    List<Worker> workers = new List<Worker>();
+    List<WorkerBase> workers = new List<WorkerBase>();
     [SerializeField]
     WorkerData workerData;
 
@@ -107,7 +107,7 @@ public class WorkersManager : MonoBehaviour
         }
     }
 
-    void MakeEmployedRecord(Worker.Stats stats, Worker worker)
+    void MakeEmployedRecord(WorkerBase.Stats stats, WorkerBase worker)
     {
 
         WorkerRecordScript workerRecordScript = WorkerRecordsPool.instance.GetRecord(worker.stats.workerType,false).Item1;
@@ -124,7 +124,7 @@ public class WorkersManager : MonoBehaviour
     void MakeCandidateRecord(int index, WorkerData.WorkerType workerType)
     {
 
-        (WorkerRecordScript, Worker.Stats) workerRecordScript = WorkerRecordsPool.instance.GetRecord(workerType,true);
+        (WorkerRecordScript, WorkerBase.Stats) workerRecordScript = WorkerRecordsPool.instance.GetRecord(workerType,true);
  
         workersPanel.candidates.records.Add(workerRecordScript.Item1);
         workerRecordScript.Item1.transform.SetParent(workersPanel.candidates.content.transform);
@@ -132,7 +132,7 @@ public class WorkersManager : MonoBehaviour
         AddListenerToRecord(false, workerRecordScript.Item2, workerRecordScript.Item1, index);
     }
 
-    void SetValuesToRecord(WorkerRecordScript workerRecordScript, Worker.Stats stats)
+    void SetValuesToRecord(WorkerRecordScript workerRecordScript, WorkerBase.Stats stats)
     {
         workerRecordScript.nameTMP.text = stats.name;
         workerRecordScript.moveSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);
@@ -141,7 +141,7 @@ public class WorkersManager : MonoBehaviour
         workerRecordScript.workerTypeTMP.text = stats.workerType.ToString();
     }
 
-    void AddListenerToRecord(bool isEmployed, Worker.Stats stats, WorkerRecordScript workerRecordScript,int index)
+    void AddListenerToRecord(bool isEmployed, WorkerBase.Stats stats, WorkerRecordScript workerRecordScript,int index)
     {
         if(isEmployed)
         {
@@ -304,10 +304,10 @@ public class WorkersManager : MonoBehaviour
 
         foreach (SaveData.WorkerData data in workersData)
         {
-            Worker.Stats stats = new Worker.Stats(data.moveSpeed, data.workSpeed, data.salary, (WorkerData.WorkerType)Enum.Parse(typeof(WorkerData.WorkerType), data.type), 
+            WorkerBase.Stats stats = new WorkerBase.Stats(data.moveSpeed, data.workSpeed, data.salary, (WorkerData.WorkerType)Enum.Parse(typeof(WorkerData.WorkerType), data.type), 
                 workerData.proxyMargin, workerData.proxyMarginOfFinalTile, data.name);
 
-            Worker worker = WorkersPool.instance.GetWorker(stats.workerType, stats);
+            WorkerBase worker = WorkersPool.instance.GetWorker(stats.workerType, stats);
             worker.transform.position = data.position;
             worker.HireWorker();
             workers.Add(worker);

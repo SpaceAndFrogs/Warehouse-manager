@@ -42,13 +42,13 @@ public class PackStation : MonoBehaviour
 
     void OnEnable()
     {
-        Worker.OnBuildingEnded += CheckIfIsInRoom;
+        BuildingWorker.OnBuildingEnded += CheckIfIsInRoom;
         SavingManager.OnSave += SavePackStationData;
     }
 
     void OnDisable()
     {
-        Worker.OnBuildingEnded -= CheckIfIsInRoom;
+        BuildingWorker.OnBuildingEnded -= CheckIfIsInRoom;
         SavingManager.OnSave -= SavePackStationData;
     }
 

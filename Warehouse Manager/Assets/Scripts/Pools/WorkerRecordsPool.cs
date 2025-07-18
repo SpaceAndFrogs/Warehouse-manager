@@ -18,7 +18,7 @@ public class WorkerRecordsPool : MonoBehaviour
     [SerializeField]
     List<Record> recordsInPool = new List<Record>();
 
-    public (WorkerRecordScript, Worker.Stats) GetRecord(WorkerData.WorkerType workerType, bool candidate)
+    public (WorkerRecordScript, WorkerBase.Stats) GetRecord(WorkerData.WorkerType workerType, bool candidate)
     {
         foreach(Record record in recordsInPool)
         {
@@ -80,7 +80,7 @@ public class WorkerRecordsPool : MonoBehaviour
         GameObject recordsPanel;
         Queue<WorkerRecordScript> records = new Queue<WorkerRecordScript>();
 
-        public (WorkerRecordScript,Worker.Stats) GetRecord(List<string> firstNames, List<string> lastNames)
+        public (WorkerRecordScript,WorkerBase.Stats) GetRecord(List<string> firstNames, List<string> lastNames)
         {
             if(records == null)
             {
@@ -93,14 +93,14 @@ public class WorkerRecordsPool : MonoBehaviour
             }
 
             WorkerRecordScript workerRecordScript = records.Dequeue();
-            Worker.Stats stats = MakeDataForRecord(firstNames, lastNames);
+            WorkerBase.Stats stats = MakeDataForRecord(firstNames, lastNames);
 
             SetValuesToRecord(workerRecordScript,stats);
 
             return (workerRecordScript,stats);
         }
 
-        Worker.Stats MakeDataForRecord(List<string> firstNames, List<string> lastNames)
+        WorkerBase.Stats MakeDataForRecord(List<string> firstNames, List<string> lastNames)
         {
 
             int indexOfFirstName = UnityEngine.Random.Range(0, firstNames.Count);
@@ -114,10 +114,10 @@ public class WorkerRecordsPool : MonoBehaviour
 
             float salary = moveSpeed - workSpeed;
 
-            return new Worker.Stats(moveSpeed, workSpeed, salary, workerType, proxyMargin, proxyMarginOfFinalTile, name);
+            return new WorkerBase.Stats(moveSpeed, workSpeed, salary, workerType, proxyMargin, proxyMarginOfFinalTile, name);
         }
 
-        void SetValuesToRecord(WorkerRecordScript workerRecordScript, Worker.Stats stats)
+        void SetValuesToRecord(WorkerRecordScript workerRecordScript, WorkerBase.Stats stats)
         {
             workerRecordScript.nameTMP.text = stats.name;
             workerRecordScript.moveSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);

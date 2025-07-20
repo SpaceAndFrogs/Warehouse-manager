@@ -54,7 +54,7 @@ public class PickPackStationsManager : MonoBehaviour
         {
             if(packWorkers[i].packStationTile == null)
             {
-                packWorkers[i].packStationTile = packStation.tileWithStation;
+                packWorkers[i].packStationTile = packStation.tileWithBuilding;
                 packStation.havePackWorker = true;
                 packWorkers[i].GoToStation();
                 break;
@@ -71,7 +71,7 @@ public class PickPackStationsManager : MonoBehaviour
             PackWorker packWorker = worker.GetComponent<PackWorker>();
             for (int i = 0; i < packStations.Count; i++)
             {
-                if (packStations[i].havePackWorker && packWorker.packStationTile == packStations[i].tileWithStation)
+                if (packStations[i].havePackWorker && packWorker.packStationTile == packStations[i].tileWithBuilding)
                 {
                     packStations[i].havePackWorker = false;
                     packWorker.packStationTile = null;
@@ -106,7 +106,7 @@ public class PickPackStationsManager : MonoBehaviour
                 if(!packStations[i].havePackWorker)
                 {
                     packStations[i].havePackWorker = true;
-                    packWorker.packStationTile = packStations[i].tileWithStation;
+                    packWorker.packStationTile = packStations[i].tileWithBuilding;
                     packWorker.GoToStation();
                     break;
                 }

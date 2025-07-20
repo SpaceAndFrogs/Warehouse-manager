@@ -5,13 +5,21 @@ using UnityEngine;
 public class PickWorker : WorkerBase
 {
     public Tile pickStashTile;
+    void Start()
+    {
+        GoToStation();
+    }
     public override void GoToStation()
     {
-        endNode = PickPackStationsManager.instance.ordersStation.tileWithStation;
-        if (endNode != null)
+        if(PickPackStationsManager.instance.ordersStation == null)
         {
-            GetPathToTarget();
+            Debug.LogWarning("Orders Station is not set in PickPackStationsManager.");
+            return;
         }
+        endNode = PickPackStationsManager.instance.ordersStation.tileWithBuilding;
+
+        GetPathToTarget();
+        
     }
 
     protected override void FindPickStash()
@@ -29,17 +37,23 @@ public class PickWorker : WorkerBase
             }
         }
 
-        pickStashTile = pickStashWithLeastOrders.tileWithStash;
+        pickStashTile = pickStashWithLeastOrders.tileWithBuilding;
     }
 
     protected override void StartTask()
     {
-        endNode = currentTask.order.racksWithItems.Peek().tileWithRack;
+        endNode = currentTask.order.racksWithItems.Peek().tileWithBuilding;
         GetPathToTarget();
     }
 
     protected override void OnPathCompleted()
     {
+        if(currentTask == null || currentTask.task.taskClass != TasksTypes.TaskClass.Pick)
+        {
+            Debug.LogWarning("Current task is null or task type is None.");
+            return;
+        }
+
         StopCoroutine(PathCompleted());
         StartCoroutine(PathCompleted());      
     }
@@ -67,7 +81,7 @@ public class PickWorker : WorkerBase
         if (currentTask.order.racksWithItems.Count > 0)
         {
 
-            endNode = currentTask.order.racksWithItems.Peek().tileWithRack;
+            endNode = currentTask.order.racksWithItems.Peek().tileWithBuilding;
 
         }
         else if (endNode == pickStashTile)

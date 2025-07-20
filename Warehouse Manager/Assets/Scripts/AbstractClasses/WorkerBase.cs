@@ -44,6 +44,7 @@ public abstract class WorkerBase : MonoBehaviour
 
         if(path == null)
         {
+            Debug.LogWarning("Path not found from");
             TaskManager.instance.DropTask(currentTask);
             currentTask = null;
             endNode = null;
@@ -149,6 +150,8 @@ public abstract class WorkerBase : MonoBehaviour
     void SaveTask()
     {
         if(currentTask == null)
+            return;
+        if (currentTask.task.taskType == TasksTypes.TaskType.None)
             return;
 
         if (currentTask.task.taskClass == TasksTypes.TaskClass.Build)

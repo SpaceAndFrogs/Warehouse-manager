@@ -2,22 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingScript : MonoBehaviour
+public class BuildingScript : BuildingBase
 {
-    public BuildingsPool.Building building = null;
-
-    private void OnEnable()
+    protected override void EnableFinishHook()
     {
-        SavingManager.OnSave += OnSave;
     }
-
-    private void OnDisable()
+    protected override void DisableFinishHook()
     {
-        SavingManager.OnSave -= OnSave;
     }
-
-    void OnSave()
-    { 
+    protected override void StartFinishHook()
+    {
+    }
+    protected override void OnSave()
+    {
         SavingManager.instance.saveData.buildings.Add(new SaveData.BuildingData(building.buildingType.ToString(), transform.position, transform.rotation));
     }
 }

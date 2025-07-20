@@ -3,53 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Rack : MonoBehaviour
+public class Rack : BuildingBase
 {
     public Items.Item itemOnRack;
 
     public int amountOfItems = 0;
 
     public int reservedAmountOfItems = 0;
-
-    public Tile tileWithRack;
     public int desiredAmountOfItems = 0;
     public int maxAmountOfItems = 0;
-    #nullable enable
+#nullable enable
     public static event Action<Rack>? OnRackSpawned;
-    #nullable disable
-    public bool isInRoom = false;
+#nullable disable
 
     void Update()
     {
         CheckAmountOfItems();
     }
-
-    void Start()
+    protected override void StartFinishHook()
     {
-        if(tileWithRack == null)
-        {
-            tileWithRack = GetTile(transform.position);
-        }
-        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithRack);
         OnRackSpawned?.Invoke(this);
     }
 
     void CheckAmountOfItems()
     {
-        if(amountOfItems < desiredAmountOfItems)
+        if (amountOfItems < desiredAmountOfItems)
         {
             int amountOfItemsToBuy = desiredAmountOfItems - amountOfItems;
             PayForItems(amountOfItemsToBuy);
-            amountOfItems += amountOfItemsToBuy; 
+            amountOfItems += amountOfItemsToBuy;
         }
     }
 
     void PayForItems(int amountOfItems)
     {
         float priceOfItem = 0;
-        for(int i = 0; i < PricesManager.instance.itemPricesScripts.Count; i++)
+        for (int i = 0; i < PricesManager.instance.itemPricesScripts.Count; i++)
         {
-            if(PricesManager.instance.itemPricesScripts[i].itemType == itemOnRack.itemType)
+            if (PricesManager.instance.itemPricesScripts[i].itemType == itemOnRack.itemType)
             {
                 string buyPrice = PricesManager.instance.itemPricesScripts[i].buyPrice.text;
                 buyPrice = buyPrice.Substring(0, buyPrice.Length - 1);
@@ -66,45 +57,14 @@ public class Rack : MonoBehaviour
         reservedAmountOfItems -= amountOfItemsToGive;
     }
 
-    void OnEnable()
+    protected override void OnSave()
     {
-        BuildingWorker.OnBuildingEnded += CheckIfIsInRoom;
-        SavingManager.OnSave += SaveRack;
+        SavingManager.instance.saveData.racks.Add(new SaveData.RackData(itemOnRack.itemType.ToString(), amountOfItems, reservedAmountOfItems, desiredAmountOfItems, maxAmountOfItems, transform.position, transform.rotation, isInRoom));
     }
-
-    void OnDisable()
+    protected override void EnableFinishHook()
     {
-        BuildingWorker.OnBuildingEnded -= CheckIfIsInRoom;
-        SavingManager.OnSave -= SaveRack;
     }
-
-    Tile GetTile(Vector3 position)
+    protected override void DisableFinishHook()
     {
-        Ray ray = new Ray(position + new Vector3(0f, 100f, 0f), Vector3.down);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        foreach (RaycastHit hit in hits)
-        {
-            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
-            if (tile != null)
-            {
-                return tile;
-            }
-        }
-        return null;
-    }
-
-    void CheckIfIsInRoom()
-    {
-        if(tileWithRack == null)
-        {
-            tileWithRack = GetTile(transform.position);
-        }
-        isInRoom = PathFinder.instance.IsBuildingSurrounded(tileWithRack);
-    }
-
-    void SaveRack()
-    {
-        SavingManager.instance.saveData.racks.Add(new SaveData.RackData(itemOnRack.itemType.ToString(), amountOfItems, reservedAmountOfItems, desiredAmountOfItems, maxAmountOfItems, transform.position, transform.rotation, isInRoom));       
     }
 }

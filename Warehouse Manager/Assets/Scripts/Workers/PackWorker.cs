@@ -8,14 +8,22 @@ public class PackWorker : WorkerBase
     public Tile pickStashTile;
     public bool goingToPickStash = true;
 
+    void Start()
+    {
+        GoToStation();
+    }    
+
     public override void GoToStation()
     {
+        if (packStationTile == null)
+        {
+            Debug.LogWarning("Pack Station is not set.");
+            return;
+        }
         endNode = packStationTile;
 
-        if (endNode != null)
-        {
-            GetPathToTarget();
-        }
+        GetPathToTarget();
+
     }
 
     protected override void FindPickStash()
@@ -29,7 +37,7 @@ public class PackWorker : WorkerBase
             }
         }
 
-        pickStashTile = pickStashWithLeastOrders.tileWithStash;
+        pickStashTile = pickStashWithLeastOrders.tileWithBuilding;
     }
 
     protected override void StartTask()

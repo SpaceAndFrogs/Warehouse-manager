@@ -3,51 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class OrdersStation : MonoBehaviour
+public class OrdersStation : BuildingBase
 {
-    public Tile tileWithStation;
-
-    #nullable enable
+#nullable enable
     public static event Action<OrdersStation>? OnStationSpawned;
-    #nullable disable
-
-    void Start()
+#nullable disable
+    protected override void StartFinishHook()
     {
-        if (tileWithStation== null)
-        {
-            tileWithStation = GetTile(transform.position);
-        }
         OnStationSpawned?.Invoke(this);
     }
-    
 
-    Tile GetTile(Vector3 position)
+    protected override void OnSave()
     {
-        Ray ray = new Ray(position+new Vector3(0f,100f,0f), Vector3.down);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        foreach (RaycastHit hit in hits)
-        {
-            Tile tile = hit.collider.gameObject.GetComponent<Tile>();
-            if (tile != null)
-            {
-                return tile;
-            }
-        }
-        return null;
+        SavingManager.instance.saveData.buildings.Add(new SaveData.BuildingData(Buildings.BuildingType.OrdersStation.ToString(), transform.position, transform.rotation));
     }
-
-    void OnEnable()
+    protected override void EnableFinishHook()
     {
-        SavingManager.OnSave += SaveOrdersStationData;
     }
-    void OnDisable()
+    protected override void DisableFinishHook()
     {
-        SavingManager.OnSave -= SaveOrdersStationData;
-    }
-
-    void SaveOrdersStationData()
-    {
-        SavingManager.instance.saveData.buildings.Add(new SaveData.BuildingData(Buildings.BuildingType.OrdersStation.ToString(),transform.position, transform.rotation));
     }
 }

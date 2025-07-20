@@ -67,7 +67,7 @@ public class BuildingWorker : WorkerBase
         Rack rack = building.GetComponent<Rack>();
         if (rack != null)
         {
-            rack.tileWithRack = currentTask.tileWithTask;
+            rack.tileWithBuilding = currentTask.tileWithTask;
         }
     }
 
@@ -76,7 +76,7 @@ public class BuildingWorker : WorkerBase
         OrdersStation ordersStation = building.GetComponent<OrdersStation>();
         if (ordersStation != null)
         {
-            ordersStation.tileWithStation = currentTask.tileWithTask;
+            ordersStation.tileWithBuilding = currentTask.tileWithTask;
         }
     }
 
@@ -85,7 +85,7 @@ public class BuildingWorker : WorkerBase
         PackStation packStation = building.GetComponent<PackStation>();
         if (packStation != null)
         {
-            packStation.tileWithStation = currentTask.tileWithTask;
+            packStation.tileWithBuilding = currentTask.tileWithTask;
         }
     }
     void CheckIfBuildingIsPickStash(GameObject building)
@@ -93,7 +93,7 @@ public class BuildingWorker : WorkerBase
         PickStash pickStash = building.GetComponent<PickStash>();
         if (pickStash != null)
         {
-            pickStash.tileWithStash = currentTask.tileWithTask;
+            pickStash.tileWithBuilding = currentTask.tileWithTask;
         }
     }
     

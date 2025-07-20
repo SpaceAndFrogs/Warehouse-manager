@@ -79,7 +79,7 @@ public class BuildingsPool : MonoBehaviour
                 PickStash pickStash= building.buildingObject.GetComponent<PickStash>();
                 if(pickStash != null)
                 {
-                    pickStash.tileWithStash = tile;
+                    pickStash.tileWithBuilding = tile;
                 } 
             }
         }
@@ -108,7 +108,7 @@ public class BuildingsPool : MonoBehaviour
                 PackStation packStation = building.buildingObject.GetComponent<PackStation>();
                 if (packStation != null)
                 {
-                    packStation.tileWithStation = tile;
+                    packStation.tileWithBuilding = tile;
                     packStation.isInRoom = data.isInRoom;
                 }
                 else
@@ -137,7 +137,7 @@ public class BuildingsPool : MonoBehaviour
                 Rack rack = building.buildingObject.GetComponent<Rack>();
                 if (rack != null)
                 {
-                    rack.tileWithRack = tile;
+                    rack.tileWithBuilding = tile;
                     rack.isInRoom = data.isInRoom;
                     rack.amountOfItems = data.amountOfItems;
                     rack.reservedAmountOfItems = data.reservedAmountOfItems;

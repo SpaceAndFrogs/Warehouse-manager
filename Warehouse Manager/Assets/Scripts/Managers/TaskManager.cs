@@ -766,9 +766,31 @@ public class TaskManager : MonoBehaviour
         
         CashManager.instance.SpendCash(currentBuilding.cost);
         currentTask.tileTypeAfterTask = TileTypeAfterTask();   
-        tile.haveTask = true;     
+        tile.haveTask = true;
 
-        buildingTasks.Enqueue(new Task(currentTask, tile, currentBuilding, rotationTransform, indicator,null, null, null));
+        // Clone the currentTask to avoid shared reference bugs
+        TasksTypes.Task taskCopy = new TasksTypes.Task(currentTask.taskClass)
+        {
+            taskTime = currentTask.taskTime,
+            cost = currentTask.cost,
+            taskType = currentTask.taskType,
+            taskClass = currentTask.taskClass,
+            buttonSprite = currentTask.buttonSprite,
+            nameOfButton = currentTask.nameOfButton,
+            tileTypeAfterTask = TileTypeAfterTask()
+        };    
+
+    // Store a copy of the building type, not the reference
+        Buildings.Building buildingCopy = new Buildings.Building()
+        {
+            buildingType = currentBuilding.buildingType,
+            buildingSprite = currentBuilding.buildingSprite,
+            nameOfButton = currentBuilding.nameOfButton,
+            buildingTime = currentBuilding.buildingTime,
+            cost = currentBuilding.cost
+        };     
+
+        buildingTasks.Enqueue(new Task(taskCopy, tile, buildingCopy, rotationTransform, indicator,null, null, null));
     }
 
     void MakeBuildTask(Tile tile)
@@ -796,9 +818,21 @@ public class TaskManager : MonoBehaviour
         
         CashManager.instance.SpendCash(currentTask.cost);
 
-        tile.haveTask = true;  
+        tile.haveTask = true;
 
-        buildingTasks.Enqueue(new Task(currentTask, tile, null, null, null, indicator, null, null));
+        // Clone the currentTask to avoid shared reference bugs
+        TasksTypes.Task taskCopy = new TasksTypes.Task(currentTask.taskClass)
+        {
+            taskTime = currentTask.taskTime,
+            cost = currentTask.cost,
+            taskType = currentTask.taskType,
+            taskClass = currentTask.taskClass,
+            buttonSprite = currentTask.buttonSprite,
+            nameOfButton = currentTask.nameOfButton,
+            tileTypeAfterTask = TileTypeAfterTask()
+        };     
+
+        buildingTasks.Enqueue(new Task(taskCopy, tile, null, null, null, indicator, null, null));
     }
 
     void GiveTasksToBuilders()
@@ -891,6 +925,7 @@ public class TaskManager : MonoBehaviour
             return TileTypes.TileType.Door;
         }
 
+        Debug.LogWarning("Unexpected building type: " + currentBuilding.buildingType);
         return TileTypes.TileType.Other;
     }
 

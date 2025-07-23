@@ -83,6 +83,7 @@ public abstract class WorkerBase : MonoBehaviour
                 TaskManager.instance.DropTask(currentTask);
                 currentTask = null;
                 endNode = null;
+                ReturnWorker();
                 yield break;
             }
 

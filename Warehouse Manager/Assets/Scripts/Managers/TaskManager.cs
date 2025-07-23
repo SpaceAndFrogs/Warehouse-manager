@@ -722,6 +722,15 @@ public class TaskManager : MonoBehaviour
 
     public void DropTask(Task task)
     {
+        Debug.Log($"DropTask: task={task}, task.task={task?.task}, tileWithTask={task?.tileWithTask}, building={task?.building}");
+        if (task == null || task.task == null || task.tileWithTask == null)
+        {
+            Debug.LogError("DropTask received a null field!");
+            return;
+        }
+
+        
+
         switch(task.task.taskClass)
         {
             case TasksTypes.TaskClass.Build:
@@ -882,8 +891,12 @@ public class TaskManager : MonoBehaviour
                 break;
 
             WorkerBase workerForTask = freePickWorkers.Dequeue();
+
+            Task task = pickTasks.Dequeue();
+
+            Task copyOfTask = new Task(task.task, task.tileWithTask, task.building, task.rotationTransform, task.buildingIndicator, task.taskIndicator, task.order, task.tileOfPickStashWithOrder);
                 
-            workerForTask.GetTask(pickTasks.Dequeue());
+            workerForTask.GetTask(copyOfTask);
         }   
     }
 
@@ -901,8 +914,12 @@ public class TaskManager : MonoBehaviour
                 break;
 
             WorkerBase workerForTask = freePackWorkers.Dequeue();
+
+            Task task = packTasks.Dequeue();
+
+            Task copyOfTask = new Task(task.task, task.tileWithTask, task.building, task.rotationTransform, task.buildingIndicator, task.taskIndicator, task.order, task.tileOfPickStashWithOrder);
                 
-            workerForTask.GetTask(packTasks.Dequeue());
+            workerForTask.GetTask(copyOfTask);
         }
 
     }

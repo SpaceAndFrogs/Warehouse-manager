@@ -5,7 +5,7 @@ using TMPro;
 
 public class NotificationsManager : MonoBehaviour
 {
-    public static NotificationsManager Instance;
+    public static NotificationsManager instance;
     public List<NotificationsData> notificationsList;
     public NotificationScript notificationScript;
 
@@ -16,9 +16,9 @@ public class NotificationsManager : MonoBehaviour
 
     void Init()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else

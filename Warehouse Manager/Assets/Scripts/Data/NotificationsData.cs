@@ -7,9 +7,8 @@ public class NotificationsData : ScriptableObject
 {
     public enum NotificationType
     {
-        Info,
-        Warning,
-        Error
+        SaveGameNameNeeded,
+        SaveAlreadyExists,
     }
 
     public NotificationType notificationType;

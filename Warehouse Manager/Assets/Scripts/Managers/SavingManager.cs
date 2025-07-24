@@ -80,6 +80,17 @@ public class SavingManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        if (string.IsNullOrWhiteSpace(saveNameText.text.Replace("\u200B", "")))
+        {
+            NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.SaveGameNameNeeded);
+            return;
+        }
+
+        if (CheckIfSaveExists(saveNameText.text))
+        {
+            NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.SaveAlreadyExists);
+            return;
+        }
         newGame = true;
         saveData = new SaveData();
         currentSaveFileName = saveNameText.text + ".json";
@@ -89,6 +100,11 @@ public class SavingManager : MonoBehaviour
         StartCoroutine(NewGame());
     }
 
+    bool CheckIfSaveExists(string saveName)
+    {
+        string filePath = System.IO.Path.Combine(Path.Combine(Application.persistentDataPath, saveDirectoryName), saveName + ".json");
+        return System.IO.File.Exists(filePath);
+    }
 
     public void SaveGame()
     {

@@ -45,6 +45,11 @@ public class WorkersManager : MonoBehaviour
 
     public void SpawnWorker(WorkerBase.Stats stats, WorkerRecordScript workerRecordScript)
     {
+        if(tileToSpawnWorker == null)
+        {
+            NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.NewWorkersPointNotSet);
+            return;    
+        }
         WorkerBase worker = WorkersPool.instance.GetWorker(stats.workerType,stats);
         worker.transform.position = posToSpawnWorkers;
         worker.HireWorker();
@@ -109,7 +114,6 @@ public class WorkersManager : MonoBehaviour
 
     void MakeEmployedRecord(WorkerBase.Stats stats, WorkerBase worker)
     {
-
         WorkerRecordScript workerRecordScript = WorkerRecordsPool.instance.GetRecord(worker.stats.workerType,false).Item1;
         workerRecordScript.worker = worker;
         workerRecordScript.transform.SetParent(workersPanel.employed.content.transform);

@@ -115,6 +115,8 @@ public class SavingManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(saveData, true);
         System.IO.File.WriteAllText(System.IO.Path.Combine(Path.Combine(Application.persistentDataPath, saveDirectoryName), currentSaveFileName), json);
+
+        NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.GameSaved);
     }
 
     void MakeLoadRows()

@@ -9,6 +9,8 @@ public class NotificationsData : ScriptableObject
     {
         SaveGameNameNeeded,
         SaveAlreadyExists,
+        NewWorkersPointNotSet,
+        GameSaved
     }
 
     public NotificationType notificationType;

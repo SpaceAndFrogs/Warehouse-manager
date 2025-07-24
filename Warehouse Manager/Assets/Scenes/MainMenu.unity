@@ -2881,7 +2881,7 @@ GameObject:
   - component: {fileID: 1374582361}
   - component: {fileID: 1374582360}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Notifications
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2901,6 +2901,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notificationsList:
   - {fileID: 11400000, guid: e326f67b3f54e4b4dbb9c10ffd4d09d2, type: 2}
+  - {fileID: 11400000, guid: 8f09adf4775bb534baa1c185872430bd, type: 2}
+  - {fileID: 11400000, guid: d0dc0927d39d30c45a0a97f5cd4ac96a, type: 2}
+  - {fileID: 11400000, guid: e1db8291b0c424344aa8e3b5301524bd, type: 2}
   notificationScript: {fileID: 1934004888}
 --- !u!114 &1374582361
 MonoBehaviour:

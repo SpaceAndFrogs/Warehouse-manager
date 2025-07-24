@@ -160,6 +160,7 @@ public class PricesManager : MonoBehaviour
             float percentageOfDemand = UnityEngine.Random.Range(itemsData.items[i].minMaxPercentageOfDemandPrice.x, itemsData.items[i].minMaxPercentageOfDemandPrice.y)/100;           
             newItemPriceScript.demandPrice.text = (priceOfItem + (priceOfItem*percentageOfDemand)).ToString("F2") + "$";
             newItemPriceScript.sellPriceInput.text = (priceOfItem + (priceOfItem*percentageOfDemand)).ToString("F2") + "$";
+            newItemPriceScript.sellPriceInput.onValueChanged.AddListener(newItemPriceScript.OnValueChanged);
             newItemPriceScript.lockSellingButton.onClick.AddListener(() => LockSelling(newItemPriceScript));
             newItemPriceScript.itemType = itemsData.items[i].itemType;
             itemPricesScripts.Add(newItemPriceScript);

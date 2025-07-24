@@ -10,7 +10,9 @@ public class NotificationsData : ScriptableObject
         SaveGameNameNeeded,
         SaveAlreadyExists,
         NewWorkersPointNotSet,
-        GameSaved
+        GameSaved,
+        PriceLowerThenZero,
+        InvalidPriceFormat
     }
 
     public NotificationType notificationType;

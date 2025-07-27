@@ -2906,6 +2906,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e1db8291b0c424344aa8e3b5301524bd, type: 2}
   - {fileID: 11400000, guid: e7f98abe1907c1b4680010b9c5e1255e, type: 2}
   - {fileID: 11400000, guid: cec62d1226e51a549ad12a159e9ecded, type: 2}
+  - {fileID: 11400000, guid: 9258506f66f8f8e4394a6948c1d26c23, type: 2}
+  - {fileID: 11400000, guid: c9242e53896aa5145ad9ca96f5bdd7cc, type: 2}
   notificationScript: {fileID: 1934004888}
 --- !u!114 &1374582361
 MonoBehaviour:

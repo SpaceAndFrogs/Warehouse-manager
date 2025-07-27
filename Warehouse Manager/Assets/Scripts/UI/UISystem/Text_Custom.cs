@@ -3,33 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Text_Custom : MonoBehaviour
+public class Text_Custom : CustomUIComponent
 {
     public TextSO textData;
     public Style style;
     private TextMeshProUGUI textMeshProUGUI;
-    void Awake()
-    {
-        Init();
-    }
 
-    void OnValidate()
-    {
-        Init();
-    }
-
-    void Init()
-    {
-        Setup();
-        Configure();
-    }
-
-    void Setup()
+    protected override void Setup()
     {
         textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    void Configure()
+    protected override void Configure()
     {
         textMeshProUGUI.color = textData.theme.GetTextColor(style);
         textMeshProUGUI.font = textData.font;

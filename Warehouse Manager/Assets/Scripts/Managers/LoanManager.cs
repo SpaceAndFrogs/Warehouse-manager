@@ -93,13 +93,18 @@ public class LoanManager : MonoBehaviour
 
     public void PayOffLoan(int index)
     {
+        if(CashManager.instance.AmountOfCash() < takenLoans[index].amountOfCashToPayOff)
+        {
+            NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.NotEnoughCash);
+            return;
+        }
         CashManager.instance.SpendCash(takenLoans[index].amountOfCashToPayOff);
         RemoveLoanFromList(index);
     }
 
     public void PayOffMultipleLoans()
     {
-        int indexOfLastLoanToPayOff = 0;
+        int indexOfLastLoanToPayOff = -1;
         for(int i = 0; i < takenLoans.Count; i++)
         {
             if(takenLoans[i].amountOfCashToPayOff >= CashManager.instance.AmountOfCash())
@@ -112,10 +117,17 @@ public class LoanManager : MonoBehaviour
             }
         }
 
-        for(int i = indexOfLastLoanToPayOff; i >= 0; i--)
+        if (indexOfLastLoanToPayOff == -1)
         {
-            RemoveLoanFromList(i);
+            NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.NotEnoughCash);
+            return;
         }
+
+
+        for (int i = indexOfLastLoanToPayOff; i >= 0; i--)
+            {
+                RemoveLoanFromList(i);
+            }
     }
 
     void RemoveLoanFromList(int index)

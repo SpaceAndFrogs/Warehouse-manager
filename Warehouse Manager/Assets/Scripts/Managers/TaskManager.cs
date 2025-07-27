@@ -768,8 +768,12 @@ public class TaskManager : MonoBehaviour
         if(!IsTileCompatibleWithTask(tile))
             return;
 
-        if(currentBuilding.cost > CashManager.instance.AmountOfCash())
-        return;
+        if (currentBuilding.cost > CashManager.instance.AmountOfCash())
+        {
+            NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.NotEnoughCash);
+            return;
+        }
+        
 
         IndicatorsPool.BuildingIndicator indicator = MakeBuildingIndicator(tile);
         
@@ -808,20 +812,24 @@ public class TaskManager : MonoBehaviour
             return;
 
         if(currentTask.cost > CashManager.instance.AmountOfCash())
-        return;
-
-        if(currentTask.taskType == TasksTypes.TaskType.Destroy)
         {
-            if(tile.tileType == TileTypes.TileType.Floor)
-            {
-                currentTask.tileTypeAfterTask = TileTypes.TileType.Ground;
-            }
-            else
-            {
-                currentTask.tileTypeAfterTask = TileTypes.TileType.Floor;
-            }
-            
+            NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.NotEnoughCash);
+            return;
         }
+        
+
+        if (currentTask.taskType == TasksTypes.TaskType.Destroy)
+            {
+                if (tile.tileType == TileTypes.TileType.Floor)
+                {
+                    currentTask.tileTypeAfterTask = TileTypes.TileType.Ground;
+                }
+                else
+                {
+                    currentTask.tileTypeAfterTask = TileTypes.TileType.Floor;
+                }
+
+            }
 
         IndicatorsPool.TaskIndicator indicator = MakeTaskIndicator(tile);
         

@@ -12,7 +12,9 @@ public class NotificationsData : ScriptableObject
         NewWorkersPointNotSet,
         GameSaved,
         PriceLowerThenZero,
-        InvalidPriceFormat
+        InvalidPriceFormat,
+        NotEnoughCash,
+        TimeLowerThenZero
     }
 
     public NotificationType notificationType;

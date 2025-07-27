@@ -86,6 +86,12 @@ public class TimeManager : MonoBehaviour
             }
 
             Time.timeScale += timeScale;
+            if (Time.timeScale < 0)
+            {
+                Time.timeScale = 0;
+                NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.TimeLowerThenZero);
+            }
+
             currentTimeScale = Time.timeScale;
             currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }

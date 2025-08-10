@@ -140,7 +140,7 @@ public class WorkersManager : MonoBehaviour
     {
         workerRecordScript.nameTMP.text = stats.name;
         workerRecordScript.moveSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);
-        workerRecordScript.workSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);
+        workerRecordScript.workSpeedTMP.text = (stats.workSpeed.ToString()).Substring(0, 3);
         workerRecordScript.salaryTMP.text = (stats.salary.ToString()).Substring(0, 3);
         workerRecordScript.workerTypeTMP.text = stats.workerType.ToString();
     }

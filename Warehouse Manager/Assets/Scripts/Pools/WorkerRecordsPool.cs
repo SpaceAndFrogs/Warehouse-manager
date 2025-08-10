@@ -112,17 +112,41 @@ public class WorkerRecordsPool : MonoBehaviour
             float proxyMargin = workerData.proxyMargin;
             float proxyMarginOfFinalTile = workerData.proxyMarginOfFinalTile;
 
-            float salary = moveSpeed - workSpeed;
+            float salary = CalculateSalary(workSpeed, moveSpeed);
 
             return new WorkerBase.Stats(moveSpeed, workSpeed, salary, workerType, proxyMargin, proxyMarginOfFinalTile, name);
         }
 
+        float CalculateSalary(float workSpeed, float moveSpeed)
+        {
+            float minWorkSpeed = workerData.minMaxWorkSpeed.x; 
+            float maxWorkSpeed = workerData.minMaxMoveSpeed.y;
+            float minMoveSpeed = workerData.minMaxMoveSpeed.x;
+            float maxMoveSpeed = workerData.minMaxMoveSpeed.y;
+
+            float workScore = 1f - Normalize(workSpeed, minWorkSpeed, maxWorkSpeed);
+            float moveScore = Normalize(moveSpeed, minMoveSpeed, maxMoveSpeed);
+
+            float weightWork = 0.7f;
+            float weightMove = 0.3f;
+
+            float performanceScore = (workScore * weightWork) + (moveScore * weightMove);
+
+            return performanceScore * 1000f;
+        }
+
+        float Normalize(float value, float min, float max)
+        {
+            return Mathf.Clamp01((value - min) / (max - min));
+        }
+        
+
         void SetValuesToRecord(WorkerRecordScript workerRecordScript, WorkerBase.Stats stats)
         {
             workerRecordScript.nameTMP.text = stats.name;
-            workerRecordScript.moveSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);
-            workerRecordScript.workSpeedTMP.text = (stats.moveSpeed.ToString()).Substring(0, 3);
-            workerRecordScript.salaryTMP.text = (stats.salary.ToString()).Substring(0, 3);
+            workerRecordScript.moveSpeedTMP.text = stats.moveSpeed.ToString().Substring(0, 3);
+            workerRecordScript.workSpeedTMP.text = stats.workSpeed.ToString().Substring(0, 3);
+            workerRecordScript.salaryTMP.text = stats.salary.ToString().Substring(0, 3);
             workerRecordScript.workerTypeTMP.text = stats.workerType.ToString();
         }
 

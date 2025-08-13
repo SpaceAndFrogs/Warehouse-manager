@@ -177,9 +177,9 @@ public class SavingManager : MonoBehaviour
 
     void FindObjectsInGame()
     {
-        saveButton = FindObjectOfType<SaveButton>().GetComponent<Button>();
+        saveButton = FindObjectOfType<SaveButton>(true).GetComponent<Button>();
         saveButton.onClick.AddListener(SaveGame);
-        mainMenuButton = FindObjectOfType<MainMenuButton>().GetComponent<Button>();
+        mainMenuButton = FindObjectOfType<MainMenuButton>(true).GetComponent<Button>();
         mainMenuButton.onClick.AddListener(LoadMenu);
         Debug.Log("Found SaveButton and MainMenuButton in the scene.");
     }

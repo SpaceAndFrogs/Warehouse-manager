@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 
 public class WorkersManager : MonoBehaviour
@@ -21,6 +22,7 @@ public class WorkersManager : MonoBehaviour
     List<WorkerBase> workers = new List<WorkerBase>();
     [SerializeField]
     WorkerData workerData;
+    
 
     
     void Start()
@@ -253,6 +255,8 @@ public class WorkersManager : MonoBehaviour
             workersPanel.workersPanel.SetActive(true);
             workersPanel.employed.panel.SetActive(true);
             workersPanel.candidates.panel.SetActive(false);
+            workersPanel.switchButtonText.text = "Candidates";
+            workersPanel.panelTitle.text = "Employed";
         }
         else
         {
@@ -262,17 +266,21 @@ public class WorkersManager : MonoBehaviour
         }
     }
 
-    public void GoToCandidates(bool goTo)
+    public void SwitchPanels()
     {
-        if(goTo)
+        if(workersPanel.employed.panel.activeSelf)
         {
-            workersPanel.candidates.panel.SetActive(true);
             workersPanel.employed.panel.SetActive(false);
+            workersPanel.candidates.panel.SetActive(true);
+            workersPanel.switchButtonText.text = "Employed";
+            workersPanel.panelTitle.text = "Candidates";
         }
         else
         {
-            workersPanel.candidates.panel.SetActive(false);
             workersPanel.employed.panel.SetActive(true);
+            workersPanel.candidates.panel.SetActive(false);
+            workersPanel.switchButtonText.text = "Candidates";
+            workersPanel.panelTitle.text = "Employed";
         }
     }
 
@@ -287,8 +295,7 @@ public class WorkersManager : MonoBehaviour
         workersPanel.employed.panel.SetActive(true);
         workersPanel.candidates.panel.SetActive(true);
 
-        workersPanel.employed.goToNext.onClick.AddListener(() => GoToCandidates(true));
-        workersPanel.candidates.goToNext.onClick.AddListener(() => GoToCandidates(false));
+        workersPanel.switchButton.onClick.AddListener(() => SwitchPanels());
 
         workersPanel.employed.panel.SetActive(false);
         workersPanel.candidates.panel.SetActive(false);
@@ -354,12 +361,14 @@ public class WorkersManager : MonoBehaviour
         public Button setSpawnPoint;
         public Button close;
         public Button openPanel;
+        public Button switchButton;
+        public TextMeshProUGUI switchButtonText;
+        public TextMeshProUGUI panelTitle;
         
         [System.Serializable]
         public class Panels
         {
             public GameObject panel;
-            public Button goToNext;
             public GameObject content;
             public WorkerRecordScript recordObjectPrefab;
             public List<WorkerRecordScript> records = new List<WorkerRecordScript>();

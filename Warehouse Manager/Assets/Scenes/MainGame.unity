@@ -670,7 +670,7 @@ MonoBehaviour:
   tasksContentPanel: {fileID: 1499479852}
   buildingsPanel: {fileID: 679205789}
   buildingsContentPanel: {fileID: 1335410073}
-  buttonPrefab: {fileID: 5868433578665138198, guid: 63ccb4e02c53d998e898afd32bc5dd2d,
+  buttonPrefab: {fileID: 6572671481914575943, guid: afb352846332a1343aba0cf1d3f0b844,
     type: 3}
   tasksTypes: {fileID: 11400000, guid: ffe43324f5864b296a9e74bf9145e0dd, type: 2}
   buildings: {fileID: 11400000, guid: 6c8d33d2306978ae380791e4bc2c7c88, type: 2}

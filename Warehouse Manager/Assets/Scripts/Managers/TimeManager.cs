@@ -23,16 +23,17 @@ public class TimeManager : MonoBehaviour
     {
         currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         currentTimeScale = Time.timeScale;
+        AddListeners();
     }
 
-    void Update()
+    void AddListeners()
     {
-        CheckForPauseInput();
+        HotkeysManager.OnKeyPressed += CheckForPauseInput;
     }
 
-    void CheckForPauseInput()
+    void CheckForPauseInput(KeyCode kcode)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (kcode == KeyCode.Space)
             TogglePause();
     }
 
@@ -72,26 +73,20 @@ public class TimeManager : MonoBehaviour
     {
         if (timeScale != 0)
         {
+            // If paused, unpause and apply change
             if (Time.timeScale == 0)
             {
-                if (isPaused)
-                {
-                    isPaused = false;
-                    Time.timeScale = currentTimeScale;
-                }
-                else
-                {
-                    return;
-                }
+                Time.timeScale = currentTimeScale;
+                isPaused = false;
             }
 
-            Time.timeScale += timeScale;
-            if (Time.timeScale < 0)
+            float newTimeScale = Time.timeScale + timeScale;
+            if (newTimeScale < 0)
             {
-                Time.timeScale = 0;
-                NotificationsManager.instance.ShowNotification(NotificationsData.NotificationType.TimeLowerThenZero);
+                newTimeScale = 0;
             }
 
+            Time.timeScale = newTimeScale;
             currentTimeScale = Time.timeScale;
             currentSpeedTMP.text = Time.timeScale.ToString() + " " + "X";
         }

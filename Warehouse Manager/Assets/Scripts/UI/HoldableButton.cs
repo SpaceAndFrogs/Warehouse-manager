@@ -12,7 +12,22 @@ public class HoldableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     public enum Mode { Increase, Decrease, Stop }
     public Mode mode;
+    void Start()
+    {
+        AddListeners();
+    }
+    void AddListeners()
+    {
+        HotkeysManager.OnKeyPressed += CheckForChangeButtonInput;
+    }
 
+    void CheckForChangeButtonInput(KeyCode kcode)
+    {
+        if (kcode == KeyCode.KeypadPlus && mode == Mode.Increase)
+            TimeManager.instance.ChangeTimeScale(timeScaleChangeAmount);
+        else if (kcode == KeyCode.KeypadMinus && mode == Mode.Decrease)
+            TimeManager.instance.ChangeTimeScale(-timeScaleChangeAmount);
+    }
     public void OnPointerDown(PointerEventData eventData)
     {
         isHolding = true;

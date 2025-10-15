@@ -1,14 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class HotkeysManager : MonoBehaviour
 {
-    
     public static HotkeysManager instance { get; private set; } = null!;
-    
+    public float keyRepeatDelay = 0.3f; // Delay in seconds
+
+    private Dictionary<KeyCode, float> lastInvokeTime = new Dictionary<KeyCode, float>();
+
     void Awake()
     {
         if (instance == null)
@@ -21,19 +22,26 @@ public class HotkeysManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     void Update()
     {
-        if (Input.anyKeyDown)
+        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
         {
-            foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+            if (Input.GetKey(kcode))
             {
-                if (Input.GetKeyDown(kcode))
+                float currentTime = Time.unscaledTime;
+                if (!lastInvokeTime.ContainsKey(kcode) || currentTime - lastInvokeTime[kcode] >= keyRepeatDelay)
                 {
                     OnKeyPressed?.Invoke(kcode);
-                    UnityEngine.Debug.Log("KeyCode down: " + kcode);
-                    break;
+                    UnityEngine.Debug.Log("KeyCode held: " + kcode);
+                    lastInvokeTime[kcode] = currentTime;
                 }
+            }
+            else
+            {
+                // Reset timer when key is released
+                if (lastInvokeTime.ContainsKey(kcode))
+                    lastInvokeTime.Remove(kcode);
             }
         }
     }

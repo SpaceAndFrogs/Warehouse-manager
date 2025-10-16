@@ -33,11 +33,12 @@ public class GameMenuManager : MonoBehaviour
     {
         menuObject.SetActive(true);
         menuPanel.SetActive(true);
+        settingsMenu.SetActive(false);
         menuTitle.text = "Menu";
     }
     void OpenSettingsMenu(bool open)
     {
-        if(open)
+        if (open)
         {
             settingsMenu.SetActive(true);
             menuPanel.SetActive(false);
@@ -50,6 +51,26 @@ public class GameMenuManager : MonoBehaviour
             menuTitle.text = "Menu";
         }
     }
+    
+    void CheckPressedKey(KeyCode key)
+    {
+        switch(key)
+        {
+            case KeyCode.Escape:
+                if (menuObject.activeSelf)
+                {
+                    CloseGameMenu();
+                }
+                else
+                {
+                    OpenGameMenu();
+                }
+                break;
+            default:
+                break;
+        }
+        
+    }
 
     void Awake()
     {
@@ -61,6 +82,7 @@ public class GameMenuManager : MonoBehaviour
     {
         close.onClick.AddListener(CloseGameMenu);
         open.onClick.AddListener(OpenGameMenu);
+        HotkeysManager.OnKeyPressed += CheckPressedKey;
         settingsMenuButton.onClick.AddListener(() => OpenSettingsMenu(true));
         backFromSettingsMenu.onClick.AddListener(() => OpenSettingsMenu(false));
     }

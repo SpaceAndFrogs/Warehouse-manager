@@ -95,6 +95,12 @@ public class TaskManager : MonoBehaviour
     void Start()
     {
         CreateButtons();
+        AddListeners();
+    }
+
+    void AddListeners()
+    {
+        HotkeysManager.OnKeyPressed += HandleKeyPress;
     }
 
     private void Update()
@@ -175,11 +181,16 @@ public class TaskManager : MonoBehaviour
     {
         currentTask = tasksTypes.tasks[indexOfTask];
 
-        if(tasksTypes.tasks[indexOfTask].taskType == TasksTypes.TaskType.Build)
+        if (tasksTypes.tasks[indexOfTask].taskType == TasksTypes.TaskType.Build)
         {
-            tasksPanel.SetActive(false);
-            buildingsPanel.SetActive(true);
+            EnableBuildingPanel();
         }
+    }
+    
+    void EnableBuildingPanel()
+    {
+        tasksPanel.SetActive(false);
+        buildingsPanel.SetActive(true);
     }
 
     public void SetCurrentBuilding(int indexOfBuilding)
@@ -1059,19 +1070,20 @@ public class TaskManager : MonoBehaviour
 
     void CheckForRotationInput()
     {
-        if(currentBuilding.buildingType == Buildings.BuildingType.None)
+        if (currentBuilding.buildingType == Buildings.BuildingType.None)
             return;
 
-        if(Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             RotateBuilding(false);
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             RotateBuilding(true);
         }
     }
+
     void CheckForInput()
     {
         CheckForRotationInput();
@@ -1219,14 +1231,14 @@ public class TaskManager : MonoBehaviour
         int currentClosestPath = MapGenerator.instance.GetAmountOfAllTiles();
         WorkerBase currentClosestWorker = null;
 
-        foreach(WorkerBase worker in freeBuilders)
+        foreach (WorkerBase worker in freeBuilders)
         {
             Queue<Tile> path = PathFinder.instance.FindPath(worker.startNode, endTile);
 
-            if(path == null)
+            if (path == null)
                 continue;
 
-            if(path.Count < currentClosestPath)
+            if (path.Count < currentClosestPath)
             {
                 currentClosestWorker = worker;
                 currentClosestPath = path.Count;
@@ -1238,9 +1250,47 @@ public class TaskManager : MonoBehaviour
             BuildingWorker worker = currentClosestWorker.GetComponent<BuildingWorker>();
             return worker;
         }
-            
+
 
         return null;
     }
+    #endregion
+
+    #region Keys Handling
+    void HandleKeyPress(KeyCode key)
+    {
+        if (key == KeyCode.Q)
+        {
+            RotateBuilding(false);
+        }
+
+        if (key == KeyCode.E)
+        {
+            RotateBuilding(true);
+        }
+
+        if (key == KeyCode.T)
+        {
+            BackToTaskButtons();
+            SetCurrentBuilding(0);
+            SetCurrentTask(0);
+        }
+        if(key == KeyCode.B)
+        {
+            for(int i = 0; i < tasksTypes.tasks.Count; i++)
+            {
+                if(tasksTypes.tasks[i].taskType == TasksTypes.TaskType.Build)
+                {
+                    EnableBuildingPanel();
+                    break;
+                }
+            }
+            SetCurrentBuilding(0);
+            SetCurrentTask(0);
+        }
+    }
+
+
+
     #endregion   
 }

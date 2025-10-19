@@ -50,6 +50,7 @@ public class SavingManager : MonoBehaviour
     {
         Debug.Log("SavingManager started.");
         MakeLoadRows();
+        AddListeners();
     }
 
     public void EnableNewGamePanel()
@@ -290,8 +291,21 @@ public class SavingManager : MonoBehaviour
         OnTasksLoad?.Invoke();
 
         yield return null;
-    
+
         FindObjectsInGame();
+    }
+
+    void AddListeners()
+    {
+        HotkeysManager.OnKeyPressed += HandleKeyPress;
+    }
+    
+    void HandleKeyPress(KeyCode key)
+    {
+        if (key == KeyCode.F5)
+        {
+            SaveGame();
+        }
     }
 
 #nullable enable

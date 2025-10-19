@@ -172,6 +172,20 @@ public class PricesManager : MonoBehaviour
     {
         pricesPanel.closePanelButton.onClick.AddListener(() => GoToPanel(false));
         pricesPanel.goToPanelButton.onClick.AddListener(() => GoToPanel(true));
+        HotkeysManager.OnKeyPressed += HandleHotkey;
+    }
+
+    void HandleHotkey(KeyCode keyCode)
+    {
+        if (keyCode == KeyCode.P)
+        {
+            GoToPanel(!pricesPanel.isGoingToPanel);
+        }
+        
+        if (keyCode == KeyCode.Escape && pricesPanel.isGoingToPanel)
+        {
+            GoToPanel(false);
+        }
     }
 
     void GoToPanel(bool toPanel)

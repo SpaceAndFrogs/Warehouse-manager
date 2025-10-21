@@ -34,8 +34,32 @@ public class LoanManager : MonoBehaviour
         loanPanel.closePanelButton.onClick.AddListener(() => GoToPanel(false));
         loanPanel.takeLoan.onClick.AddListener(() => TakeLoan());
         loanPanel.payOffMultipleLoansButton.onClick.AddListener(() => PayOffMultipleLoans());
+        HotkeysManager.OnKeyPressed += HandleKeyPress;
 
         loanPanel.panel.SetActive(false);
+    }
+
+    void HandleKeyPress(KeyCode key)
+    {
+        if (key == KeyCode.L)
+        {
+            GoToPanel(true);
+        }
+
+        if (key == KeyCode.P)
+        {
+            PayOffMultipleLoans();
+        }
+
+        if (key == KeyCode.T && loanPanel.panel.activeSelf)
+        {
+            TakeLoan();
+        }
+        
+        if((key == KeyCode.Escape || key == KeyCode.L) && loanPanel.panel.activeSelf)
+        {
+            GoToPanel(false);
+        }
     }
     void AddListenerToLoan(Loan newLoanScript)
     {

@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using System.Security.Cryptography;
+using System.Diagnostics;
 
 
 public class WorkersManager : MonoBehaviour
@@ -304,10 +306,52 @@ public class WorkersManager : MonoBehaviour
         workersPanel.employed.panel.SetActive(false);
         workersPanel.candidates.panel.SetActive(false);
 
+        HotkeysManager.OnKeyPressed += HandleKeyPress;
+
         workersPanel.workersPanel.SetActive(false);
 
         StartCoroutine(MakeCandidates());
     }
+
+    void HandleKeyPress(KeyCode key)
+    {
+        if (key == KeyCode.O)
+        {
+            if(workersPanel.workersPanel.activeSelf)
+                OpenPanel(false);
+            else
+                OpenPanel(true);
+        }
+
+        if (key == KeyCode.Escape && workersPanel.workersPanel.activeSelf)
+        {
+            OpenPanel(false);
+        }
+
+        if (key == KeyCode.S && workersPanel.workersPanel.activeSelf)
+        {
+            StartSettingSpawnPoint();
+        }
+
+        if(key ==  KeyCode.Mouse1 && isSettingWorkersSpawn)
+        {
+            isSettingWorkersSpawn = false;
+            workersPanel.workersPanel.SetActive(true);
+
+            IndicatorsPool.instance.workerSpawnerIndicators.ReturnIndicator(currentWorkersSpawnerIndicator);
+        }
+
+        if (key == KeyCode.C && workersPanel.workersPanel.activeSelf)
+        {
+            SwitchPanels();
+        }
+
+        if (key == KeyCode.E && workersPanel.workersPanel.activeSelf)
+        {
+            SwitchPanels();
+        }
+    }
+    
 
     void LoadWorkers()
     {

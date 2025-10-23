@@ -43,10 +43,13 @@ public class LoanManager : MonoBehaviour
     {
         if (key == KeyCode.L)
         {
-            GoToPanel(true);
+            if (!loanPanel.panel.activeSelf)
+                GoToPanel(true);
+            else
+                GoToPanel(false);
         }
 
-        if (key == KeyCode.P)
+        if (key == KeyCode.P && loanPanel.panel.activeSelf)
         {
             PayOffMultipleLoans();
         }
@@ -56,7 +59,7 @@ public class LoanManager : MonoBehaviour
             TakeLoan();
         }
         
-        if((key == KeyCode.Escape || key == KeyCode.L) && loanPanel.panel.activeSelf)
+        if(key == KeyCode.Escape && loanPanel.panel.activeSelf)
         {
             GoToPanel(false);
         }

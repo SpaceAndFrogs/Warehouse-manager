@@ -1,26 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     float horizontalVerticalSpeed;
-
     [SerializeField]
     float scrollSpeed;
-
     [SerializeField]
     float rotationSpeed;
-
     [SerializeField]
     float minDistanceToAnchor;
-
     [SerializeField]
     Transform cameraTransform;
-
-
+    Coroutine movementLeft = null;
+    Coroutine movementRight = null;
+    Coroutine movementForward = null;
+    Coroutine movementBackward = null;
+    enum MovementDirection
+    {
+        Left,
+        Right,
+        Forward,
+        Backward
+    }
     Vector2 lastMousePosition;
+    void Start()
+    {
+        HotkeysManager.OnKeyPressed += HandleKeyPress;
+        HotkeysManager.OnKeyReleased += HandleKeyRelease;
+    }   
     void Update()
     {
         CheckForInputs();
@@ -28,8 +39,6 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckForInputs()
     {
-        CheckAxisMovement();
-
         CheckScroll();
 
         CheckRotation();
@@ -39,24 +48,101 @@ public class PlayerMovement : MonoBehaviour
     {
         return endPoint - startPoint;
     }
-
-    void CheckAxisMovement()
+    void HandleKeyRelease(KeyCode kcode)
     {
-        if(Input.GetKey(KeyCode.W))
+        if(kcode == KeyCode.A)
         {
-            transform.position += Vector3.forward*horizontalVerticalSpeed*Time.unscaledDeltaTime;
+            if(movementLeft != null)
+            {
+                StopCoroutine(movementLeft);
+                movementLeft = null;
+            }
         }
-        if(Input.GetKey(KeyCode.S))
+        else if(kcode == KeyCode.D)
         {
-            transform.position += Vector3.back*horizontalVerticalSpeed*Time.unscaledDeltaTime;
+            if(movementRight != null)
+            {
+                StopCoroutine(movementRight);
+                movementRight = null;
+            }
         }
-        if(Input.GetKey(KeyCode.A))
+        else if(kcode == KeyCode.W)
         {
-            transform.position += Vector3.left*horizontalVerticalSpeed*Time.unscaledDeltaTime;
+            if(movementForward != null)
+            {
+                StopCoroutine(movementForward);
+                movementForward = null;
+            }
         }
-        if(Input.GetKey(KeyCode.D))
+        else if(kcode == KeyCode.S)
         {
-            transform.position += Vector3.right*horizontalVerticalSpeed*Time.unscaledDeltaTime;
+            if(movementBackward != null)
+            {
+                StopCoroutine(movementBackward);
+                movementBackward = null;
+            }
+        }
+    }
+    void HandleKeyPress(KeyCode kcode)
+    {
+        if(kcode == KeyCode.A)
+        {
+            if(movementLeft == null)
+            {
+                movementLeft = StartCoroutine(MoveInDirection(MovementDirection.Left));
+            }
+        }
+        else if(kcode == KeyCode.D)
+        {
+            if(movementRight == null)
+            {
+                movementRight = StartCoroutine(MoveInDirection(MovementDirection.Right));
+            }
+        }
+        else if(kcode == KeyCode.W)
+        {
+            if(movementForward == null)
+            {
+                movementForward = StartCoroutine(MoveInDirection(MovementDirection.Forward));
+            }
+        }
+        else if(kcode == KeyCode.S)
+        {
+            if(movementBackward == null)
+            {
+                movementBackward = StartCoroutine(MoveInDirection(MovementDirection.Backward));
+            }
+        }
+    }
+    
+    IEnumerator MoveInDirection(MovementDirection direction)
+    {
+        while (true)
+        {
+            // movement relative to camera's local axes, flattened to XZ so vertical camera tilt doesn't affect movement
+            Vector3 camRight = transform.right;
+            Vector3 camForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+
+            Vector3 move = Vector3.zero;
+            switch (direction)
+            {
+                case MovementDirection.Left:
+                    move = -camRight;
+                    break;
+                case MovementDirection.Right:
+                    move = camRight;
+                    break;
+                case MovementDirection.Forward:
+                    move = camForward;
+                    break;
+                case MovementDirection.Backward:
+                    move = -camForward;
+                    break;
+            }
+
+            transform.position += move * horizontalVerticalSpeed * Time.unscaledDeltaTime;
+
+            yield return new WaitForEndOfFrame();
         }
     }
 
@@ -85,18 +171,21 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckRotation()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse2))
+        // set the last mouse position once when the middle button is pressed
+        if (Input.GetMouseButtonDown(2))
         {
             lastMousePosition = Input.mousePosition;
         }
 
-        if (Input.GetKey(KeyCode.Mouse2))
+        // while middle mouse button is held, rotate based on horizontal mouse delta
+        if (Input.GetMouseButton(2))
         {
             Vector2 currentMousePosition = Input.mousePosition;
+            Vector2 delta = currentMousePosition - lastMousePosition;
 
-            if (currentMousePosition.x != lastMousePosition.x)
+            if (Mathf.Abs(delta.x) > 0f)
             {
-                transform.eulerAngles += new Vector3(0, currentMousePosition.x - lastMousePosition.x, 0) * rotationSpeed * Time.unscaledDeltaTime;
+                transform.eulerAngles += new Vector3(0f, delta.x, 0f) * rotationSpeed * Time.unscaledDeltaTime;
             }
 
             lastMousePosition = currentMousePosition;

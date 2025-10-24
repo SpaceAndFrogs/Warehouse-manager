@@ -10,6 +10,9 @@ public class HotkeysManager : MonoBehaviour
 
     private Dictionary<KeyCode, float> lastInvokeTime = new Dictionary<KeyCode, float>();
 
+    // new: track which keys were down in the previous frame
+    private HashSet<KeyCode> keysDown = new HashSet<KeyCode>();
+
     void Awake()
     {
         if (instance == null)
@@ -25,9 +28,12 @@ public class HotkeysManager : MonoBehaviour
 
     void Update()
     {
+        // iterate all possible KeyCodes
         foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
         {
-            if (Input.GetKey(kcode))
+            bool isDown = Input.GetKey(kcode);
+
+            if (isDown)
             {
                 float currentTime = Time.unscaledTime;
                 if (!lastInvokeTime.ContainsKey(kcode) || currentTime - lastInvokeTime[kcode] >= keyRepeatDelay)
@@ -36,9 +42,20 @@ public class HotkeysManager : MonoBehaviour
                     UnityEngine.Debug.Log("KeyCode held: " + kcode);
                     lastInvokeTime[kcode] = currentTime;
                 }
+
+                // mark key as currently down for release detection next frame
+                keysDown.Add(kcode);
             }
             else
             {
+                // if key was down previous frame and now is up -> release event
+                if (keysDown.Contains(kcode))
+                {
+                    OnKeyReleased?.Invoke(kcode);
+                    UnityEngine.Debug.Log("KeyCode released: " + kcode);
+                    keysDown.Remove(kcode);
+                }
+
                 // Reset timer when key is released
                 if (lastInvokeTime.ContainsKey(kcode))
                     lastInvokeTime.Remove(kcode);
@@ -46,7 +63,8 @@ public class HotkeysManager : MonoBehaviour
         }
     }
 
-    #nullable enable
+#nullable enable
     public static event Action<KeyCode>? OnKeyPressed;
+    public static event Action<KeyCode>? OnKeyReleased;
     #nullable disable
 }

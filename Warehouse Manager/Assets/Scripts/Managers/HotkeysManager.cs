@@ -10,7 +10,7 @@ public class HotkeysManager : MonoBehaviour
 
     private Dictionary<KeyCode, float> lastInvokeTime = new Dictionary<KeyCode, float>();
 
-    // new: track which keys were down in the previous frame
+    private Dictionary<KeyCode, KeyCode> hotkeys = new Dictionary<KeyCode, KeyCode>();
     private HashSet<KeyCode> keysDown = new HashSet<KeyCode>();
 
     void Awake()
@@ -26,39 +26,51 @@ public class HotkeysManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        AddHotkeysToDictionary();
+    }
+
+    void AddHotkeysToDictionary()
+    {
+        foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
+        {
+            hotkeys[key] = key;
+        }
+
+        Debug.Log($"Zainicjalizowano {hotkeys.Count} skrótów klawiszowych.");
+    }
+
     void Update()
     {
-        // iterate all possible KeyCodes
-        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+        foreach (KeyCode inputKey in Enum.GetValues(typeof(KeyCode)))
         {
-            bool isDown = Input.GetKey(kcode);
+            KeyCode mappedKey = hotkeys.TryGetValue(inputKey, out var mk) ? mk : inputKey;
 
-            if (isDown)
+            if (Input.GetKey(inputKey))
             {
                 float currentTime = Time.unscaledTime;
-                if (!lastInvokeTime.ContainsKey(kcode) || currentTime - lastInvokeTime[kcode] >= keyRepeatDelay)
+
+                if (!lastInvokeTime.ContainsKey(mappedKey) || currentTime - lastInvokeTime[mappedKey] >= keyRepeatDelay)
                 {
-                    OnKeyPressed?.Invoke(kcode);
-                    UnityEngine.Debug.Log("KeyCode held: " + kcode);
-                    lastInvokeTime[kcode] = currentTime;
+                    OnKeyPressed?.Invoke(mappedKey);
+                    Debug.Log($"Key held: {inputKey} → mapped to {mappedKey}");
+                    lastInvokeTime[mappedKey] = currentTime;
                 }
 
-                // mark key as currently down for release detection next frame
-                keysDown.Add(kcode);
+                keysDown.Add(mappedKey);
             }
             else
             {
-                // if key was down previous frame and now is up -> release event
-                if (keysDown.Contains(kcode))
+                if (keysDown.Contains(mappedKey))
                 {
-                    OnKeyReleased?.Invoke(kcode);
-                    UnityEngine.Debug.Log("KeyCode released: " + kcode);
-                    keysDown.Remove(kcode);
+                    OnKeyReleased?.Invoke(mappedKey);
+                    Debug.Log($"Key released: {inputKey} → mapped to {mappedKey}");
+                    keysDown.Remove(mappedKey);
                 }
 
-                // Reset timer when key is released
-                if (lastInvokeTime.ContainsKey(kcode))
-                    lastInvokeTime.Remove(kcode);
+                if (lastInvokeTime.ContainsKey(mappedKey))
+                    lastInvokeTime.Remove(mappedKey);
             }
         }
     }

@@ -12,6 +12,13 @@ public class HotkeysManager : MonoBehaviour
 
     private Dictionary<KeyCode, KeyCode> hotkeys = new Dictionary<KeyCode, KeyCode>();
     private HashSet<KeyCode> keysDown = new HashSet<KeyCode>();
+    HashSet<HotkeyScript> hotkeyScripts = new HashSet<HotkeyScript>();
+    [SerializeField]
+    HotkeysData hotkeysData;
+    [SerializeField]
+    HotkeyScript hotkeyRecordPrefab;
+    [SerializeField]
+    Transform hotkeysPanelTransform;
 
     void Awake()
     {
@@ -29,6 +36,32 @@ public class HotkeysManager : MonoBehaviour
     void Start()
     {
         AddHotkeysToDictionary();
+        MakeHotkeysRecords();
+    }
+
+    void MakeHotkeysRecords()
+    {
+        foreach(HotkeysData.Hotkey hotkeyData in hotkeysData.hotkeys)
+        {
+            HotkeyScript hotkeyScript = Instantiate(hotkeyRecordPrefab, hotkeysPanelTransform);
+            hotkeyScript.labelTMP.text = hotkeyData.label;
+            hotkeyScript.inputField.text = hotkeyData.defaultKeyCode.ToString();
+            hotkeyScripts.Add(hotkeyScript);
+        }
+    }
+
+    void AddListenersToInputFields()
+    {
+        foreach(HotkeyScript hotkeyScript in hotkeyScripts)
+        {
+            hotkeyScript.inputField.onValueChanged.AddListener(ChangeHotkey);
+        }
+    }
+
+    void ChangeHotkey(string newHotkeyString) 
+    {
+
+
     }
 
     void AddHotkeysToDictionary()

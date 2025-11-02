@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2298.4006, g: 2488.848, b: 3744.0396, a: 1}
+  m_IndirectSpecularColor: {r: 2257.3708, g: 2398.0793, b: 3492.944, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -12385,6 +12385,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyRepeatDelay: 0.3
+  hotkeysData: {fileID: 11400000, guid: 0551a109e58b196428d7a92df7b783cc, type: 2}
+  hotkeyRecordPrefab: {fileID: 0}
+  hotkeysPanelTransform: {fileID: 0}
 --- !u!4 &1932676371
 Transform:
   m_ObjectHideFlags: 0
